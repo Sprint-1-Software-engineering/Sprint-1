@@ -36,3 +36,7 @@
 | **Software Testing & QA** | **A / I** | C | R | I | R | I |
 | **Code Review & Pull Requests** | **A / R** | C | I | I | I | I |
 | **Documentation & Release** | **A / R** | C | I | I | I | I |
+
+## Tasks Done 
+None Currently
+Change after every successful commit
