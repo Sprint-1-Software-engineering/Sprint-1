@@ -12,12 +12,6 @@
 
 ---
 
-## GitHub Repository
-
-* **Repository URL:** [https://github.com/Sprint-1-Software-engineering/Sprint-1](https://github.com/Sprint-1-Software-engineering/Sprint-1)
-
----
-
 ## Member Responsibilities Summary
 
 | Member Name | Student ID | Core Responsibilities | RACI Role(s) |
