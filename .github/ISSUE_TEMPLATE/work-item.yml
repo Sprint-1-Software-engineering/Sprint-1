@@ -1,0 +1,30 @@
+name: Work item
+description: A story, task or document change
+title: "[Task] "
+body:
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose and value
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Owner
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and evidence
+    validations:
+      required: true
+  - type: input
+    id: estimate
+    attributes:
+      label: Estimate and unit
+  - type: input
+    id: dependencies
+    attributes:
+      label: Parent and dependencies

@@ -1,222 +1,141 @@
-# TutorBridge — Project Proposal and System Vision & Boundary
+# TutorBridge: Proposal and System Vision
 
-**Course:** SENG 321  
-**Deliverable:** Sprint 1 — Project Foundation  
-**Status:** Draft for team review  
-**Repository:** https://github.com/Sprint-1-Software-engineering/Sprint-1
+SENG 321 · Sprint 1 · Team review draft
 
-This document develops the original project vision around the agreed MVP: managing existing teacher–student relationships, scheduling lessons, and sharing assignments. AI question generation and a parent dashboard are future features.
+## Project proposal
 
-# Part I — Project Proposal
+### Problem and current process
 
-## 1. Problem Statement
+Private tutors arrange lessons and send homework to their existing students. Our starting hypothesis is that using separate messages, calendars and files makes this work hard to track. A changed lesson time can be missed. Students may struggle to find their latest homework.
 
-Private tutors and their existing students may use separate messaging, calendar, and file-sharing tools to arrange lessons and exchange homework. This can fragment information: a schedule change may remain in a conversation, an assignment may be difficult to locate, and a student's access to learning materials may not be clearly organized.
+We have not interviewed teachers or students yet. The frequency of these problems and the time spent resolving them are unknown. We do not claim measured results.
 
-TutorBridge addresses this coordination problem through a shared workspace for each teacher and their connected students.
+For context, [OECD TALIS 2024](https://www.oecd.org/en/publications/results-from-talis-2024_90df6235-en/full-report/the-demands-of-teaching_0e941e2f.html) reports that about half of teachers across OECD education systems identify excessive administrative work as a source of stress. This is school-teacher evidence, not a survey of private tutors. It supports investigating administrative burden; it does not prove our scheduling hypothesis.
 
-**Evidence status:** These statements are problem hypotheses based on the proposed workflow. The supplied project files contain no documented interviews, survey results, or measured outcomes. The team should validate the problem with actual teachers and students and record the date, method, and findings. No empirical results are claimed here.
+Before implementation, Toprak and Arda will arrange short conversations with teachers and students. They will ask how lessons are scheduled, how often changes happen and how homework is shared. Findings will go in [Problem Validation](Problem-Validation.md).
 
-## 2. Target Users and Stakeholders
+### Stakeholders
 
-| Stakeholder | Needs and interests |
+| Stakeholder | Need | Influence |
+|---|---|---|
+| Teacher | Organize current students, lessons and homework | High: defines the tutoring workflow |
+| Student | Find lesson times and assigned materials | High: uses the main student journey |
+| Team | Agree a feasible scope and deliver working increments | High: owns product decisions |
+| Application operator | Maintain storage, access and backups | Medium: sets operating limits |
+| Course staff | Review the project and individual evidence | High: assesses the work |
+| Hosting provider, when chosen | Supply hosting within its limits | Medium: external infrastructure dependency |
+
+Parents are a possible future stakeholder. They have no account in the MVP.
+
+### Solution and intended value
+
+TutorBridge is a small web application for existing teacher-student relationships. A teacher invites a student, publishes available lesson slots and assigns PDF/image homework. Students accept invitations, request lessons and access their own materials. Teachers approve or reject requests.
+
+The intended value is clearer schedules and easier access to assignments. We will test these targets:
+
+| Target | How to check it |
 |---|---|
-| Private tutor / teacher | Manage existing student relationships, publish available lesson slots, handle lesson requests, and assign learning materials. |
-| Student | Connect with their teacher, request an available lesson, view booking status, and access their own assignments. |
-| Development team | Maintain a consistent and feasible scope, implement and test the workflows, and document contributions. |
-| Application operator | Maintain application availability, storage, configuration, and access controls. This is an operational responsibility, not a proposed MVP administrator dashboard. |
-| Infrastructure provider, if selected | Supply application hosting and storage under the chosen deployment arrangement. No provider has been selected in the supplied materials. |
+| A logged-in, connected student requests a lesson within two minutes | Timed usability task |
+| A teacher never has two overlapping approved lessons | Sequential and concurrent booking tests |
+| Students cannot access another student's assignments | Negative API tests |
+| A teacher shares a permitted file and the student retrieves it | End-to-end assignment test |
 
-Parents are potential stakeholders for a future version; they are not MVP application users.
+These are targets. They are not completed test results.
 
-## 3. Proposed Solution
+### Feasibility
 
-TutorBridge is a web application for teachers and students who already have a tutoring relationship. It supports three connected workflows:
-
-1. **Teacher–student connection:** A teacher creates an invitation. A student accepts a valid invitation, establishing a relationship used by the access-control rules.
-2. **Lesson scheduling:** A teacher publishes available slots. A connected student requests a slot. The teacher approves or rejects the request, and participants can view their own lesson calendar and cancel permitted bookings.
-3. **Assignment sharing:** A teacher uploads a PDF or image and assigns it to a connected student. The student can view and download materials assigned to them.
-
-The platform is intended to organize an existing tutoring practice. Teacher discovery, matching, and payment processing are outside the first release.
-
-## 4. Expected Benefits and Proposed Success Criteria
-
-Expected benefits include a single place to find lesson details and assignments, clearer booking status, and reduced manual coordination. These are intended benefits, not measured results.
-
-The following are proposed acceptance targets for team review:
-
-| Area | Proposed measurable target |
+| Area | Plan and constraint |
 |---|---|
-| Booking workflow | A connected student who is already logged in can submit a request for an available slot within two minutes in a representative usability task. |
-| Conflict prevention | Automated tests show that two overlapping bookings cannot both become approved for the same teacher, including concurrent approval attempts. |
-| Access control | Tests reject access to another student's private assignments and a teacher's unrelated records. |
-| Assignment sharing | A teacher can upload a permitted PDF/image, assign it to a connected student, and the student can retrieve it in an end-to-end test. |
-| Calendar consistency | Approved, rejected, and cancelled states are reflected in the participants' lesson lists after the relevant action completes. |
+| Frontend | Plain HTML, CSS and JavaScript. The repository already has placeholders for these files. |
+| Backend | Node.js with Express. One language can serve the browser and API work. |
+| Database | SQLite for the small course deployment. It needs no separate database server. Only the backend opens the database file. |
+| Concurrent bookings | Check availability and write the approval in one transaction. Test simultaneous approvals. SQLite's single-writer limit suits a small evaluation, not a high-traffic service. |
+| Files | Store assignment files outside the public web directory. Validate type and size. Authorize every download. |
+| Integrations | No AI, email or external calendar API is required. Users share invitation codes themselves. |
+| Skills and schedule | Six members share product, process, architecture, quality, DevOps and implementation work. Estimates and dependencies are in the backlog. The team still needs to confirm capacity. |
+| Cost and operations | Local development needs no paid service. A hosting provider, storage budget and backup process must be chosen before deployment. |
+| Legal and ethical constraints | Use test or authorized data. Minimize personal data and control file access. MIT covers code, not ownership of uploaded learning materials. |
 
-No tests or usability measurements are claimed as completed in Sprint 1.
+This is the planned stack, not an implemented backend. Hosting and implementation package versions are not selected yet.
 
-## 5. Feasibility Assessment
-
-### Technical feasibility
-
-The proposed architecture consists of a web client, a backend API, persistent storage for users and bookings, and controlled storage for assignment files. The core workflows are conventional authenticated data-management operations. A maintained authentication solution and database transactions can support identity management and conflict prevention, but these capabilities must be implemented and tested.
-
-The exact frameworks, database, authentication mechanism, and deployment provider have not been established in the supplied files. The team must record its selections and justify them against its skills and course constraints before implementation. This draft does not treat a technology proposal as an implemented system.
-
-### Schedule and team feasibility
-
-The team contains six students. Focusing on three workflows limits integration work and avoids adding an AI provider, payments, video infrastructure, and a third user role to the MVP. Actual capacity, estimates, dependencies, and ownership must be recorded in the initial product backlog and RACI matrix. Course deadlines must be taken from Teams and the official assignment; this draft does not invent dates.
-
-### Cost and operational feasibility
-
-No paid external AI service is needed for the agreed MVP. Hosting and file storage may incur costs depending on the selected deployment. A feasible initial environment should support a small evaluation dataset, bounded uploads, and a reproducible application setup. Provider quotas, expected storage, and any budget remain decisions for the team to verify.
-
-### Validation still required
-
-The team should validate the user problem, choose the technology stack and deployment arrangement, test the concurrency approach, and agree upload limits. These are outstanding feasibility checks rather than completed evidence.
-
-## 6. MVP Scope
-
-### Included
+### First release
 
 - Teacher and student registration and login.
-- Teacher-created invitations and student acceptance.
-- Listing the students connected to a teacher.
-- Creating, listing, and removing teacher availability, subject to booking rules.
-- Requesting a lesson and approving, rejecting, or cancelling an authorized booking.
-- Viewing each participant's own lessons and their statuses.
-- Uploading PDF/image assignment materials and assigning them to a connected student.
-- Viewing and downloading authorized assignment materials.
-- Enforcing authentication, role checks, and teacher–student relationship checks.
+- Teacher invitations and student acceptance.
+- A teacher's connected student list.
+- Creating, viewing and removing available lesson slots.
+- Lesson requests, approval, rejection, cancellation and calendar lists.
+- PDF/image assignment upload and access by the assigned student.
+- Server-side role and relationship checks.
 
-### Excluded from the MVP
+### Outside the first release
 
-- AI-generated questions or automatic AI tutoring.
-- Parent accounts, parent feedback, and parent progress dashboards.
-- Public teacher discovery and matching.
-- Online payments and billing.
-- Built-in video conferencing and real-time chat.
-- External calendar synchronization.
-- Native mobile applications.
-- Advanced grading and learning analytics.
-- Student homework submission and teacher feedback workflows; these may be prioritized for a later release.
+AI question generation; parent accounts; teacher discovery; payments; built-in video; chat; external calendar sync; native mobile apps; advanced analytics; student homework submissions and teacher feedback.
 
-## 7. Assumptions
+### Assumptions
 
-- Teachers bring their existing students to the platform rather than acquiring them through a marketplace.
-- Users can access a supported web browser and an internet connection.
-- Each booking has a defined start and end time; stored and exchanged timestamps include an explicit time-zone convention.
-- A student may be connected to more than one teacher; access is evaluated per relationship.
-- Initial course evaluation uses a small dataset and controlled assignment uploads; production-scale capacity is not claimed.
-- The team will use test or appropriately authorized data for demonstrations.
+- Teachers bring their existing students.
+- Each user registers as a teacher or a student.
+- A student can connect to several teachers.
+- Users have a browser and internet access.
+- The first deployment has a small evaluation dataset.
+- All API times include an offset. Times are stored in UTC and displayed in the user's local zone.
 
-These assumptions must be reviewed with the stakeholders and reflected in the backlog and API design.
+### Main risks
 
-## 8. Risks and Mitigations
+| Risk | Mitigation | Owner |
+|---|---|---|
+| Overlapping approvals | Use a transaction and test concurrent requests | Mehmet Ali |
+| Wrong access to student data | Check role, relationship and record ownership on every request | Mehmet Ali, Berat |
+| Unsafe or excessive files | Permit PDF/JPEG/PNG, limit files to 10 MiB and protect downloads | Osman Berke, Kemal Efe |
+| Too much scope | Keep deferred features out of the API and first-release stories | Toprak |
+| Integration or uneven workload | Small Issues and reviewed PRs; record each member's actual work | Arda |
+| Unvalidated user problem | Conduct and record real interviews before claiming user evidence | Toprak, Arda |
 
-| Risk | Consequence | Proposed mitigation | Ownership to assign in RACI |
-|---|---|---|---|
-| Concurrent booking approvals | Overlapping approved lessons | Enforce the conflict rule transactionally and test concurrent requests. | Backend owner and QA reviewer |
-| Incorrect relationship or role checks | Unauthorized disclosure or modification | Check role and relationship on the server for every protected operation; include negative authorization tests. | Backend owner and QA reviewer |
-| Unsafe or excessive uploads | Storage exhaustion or unsafe file access | Restrict file types and sizes, generate storage identifiers, and authorize retrieval. Exact limits require agreement. | Assignment/API owner |
-| Scope growth | Incomplete core workflows | Keep AI, parent access, payments, and advanced analytics outside the MVP; prioritize backlog dependencies. | Scope/backlog owner |
-| Team integration and uneven workload | Late defects and unclear contributions | Assign deliverables, use Issues and reviewed PRs, and record actual contribution links. | Workflow owner and all members |
-| Time-zone inconsistencies | Incorrect lesson times | Define timestamp conventions in the API and test displayed times. | Scheduling owner and QA reviewer |
-| Hosting/storage constraints | Unavailable evaluation environment | Verify quotas, bound test data, and document a reproducible local setup. | Deployment/workflow owner |
+### License
 
-Role descriptions here identify work that needs ownership. They do not claim that particular students have accepted those responsibilities; the team must map them to named members in RACI.
+We use [MIT](../LICENSE.md). It permits reuse, modification and redistribution with the required notice. This suits a course project that others may extend. MIT does not require derivatives to use MIT and does not add a separate explicit patent grant. We will check dependency licenses and third-party notices before implementation.
 
-## 9. Open-Source License
+Sources for the planned tools: [Express](https://expressjs.com/) and [SQLite use cases](https://sqlite.org/whentouse.html).
 
-The repository uses the MIT License. The proposed rationale is to allow straightforward reuse, modification, and redistribution of the project code while retaining the required copyright and license notice. The team must review dependency licenses when selecting its implementation stack.
+## System vision and boundary
 
-Code licensing, repository visibility, and access to user data are separate decisions. Choosing MIT does not make student records or assignment content public. The repository's existing license file remains the source of the license text.
+### Vision
 
-# Part II — System Vision & Boundary
+Give tutors and their existing students one place to manage lesson requests and homework. Keep the first release focused on these everyday tasks.
 
-## 10. System Vision
+### Actors and responsibilities
 
-TutorBridge provides a shared web workspace in which private tutors organize lessons and assignments for their existing students. It aims to make each student's next lesson and assigned learning materials easy to find while giving teachers control over relationships, availability, booking decisions, and assignment access.
-
-## 11. Actors and Core Workflows
-
-| Actor | System interactions |
+| Actor | Actions |
 |---|---|
-| Teacher | Authenticate; invite students; view connected students; manage availability; review lesson requests; view/cancel permitted lessons; upload and assign materials. |
-| Student | Authenticate; accept invitations; view connected teachers' availability; request/cancel permitted lessons; view their own bookings and assignments. |
+| Teacher | Invite students, manage availability, decide lesson requests, assign files and view own lessons |
+| Student | Accept an invitation, see connected teachers' slots, request/cancel lessons and access own assignments |
 
-The application operator maintains the deployment. Operational maintenance does not require an additional MVP product role or dashboard.
+The application owns authentication, relationship records, availability, booking rules, assignment records and protected file access. Teaching, payment collection and live lesson delivery remain outside it.
 
-## 12. System Responsibilities
+### Context diagram
 
-The TutorBridge boundary includes:
+![TutorBridge system boundary](diagrams/system-boundary.svg)
 
-- The application interface and backend API.
-- Authentication and authorization enforcement, using the team's chosen implementation.
-- Invitation and teacher–student relationship records.
-- Availability, lesson requests, state transitions, and conflict prevention.
-- Assignment metadata and controlled access to assignment files.
-- Application-managed persistence and storage responsibilities.
+Actors and browsers are outside the service boundary. The backend, database and application-managed file storage are inside it. No external application integration is required for the MVP. If hosting or storage is outsourced, update the provider boundary and exchanged data before implementation. GitHub and Teams support development and submission; they are not tutoring-system runtime services.
 
-The system is responsible for validating requests and enforcing access rules. A client interface hiding a control is not sufficient authorization.
+### Agreed design rules for review
 
-## 13. Responsibilities Outside the Boundary
+1. A protected action requires a valid access token. The server also checks role and ownership.
+2. Only a teacher can create an invitation. It contains the intended student's email, expires after seven days and can be used once.
+3. Only a student with that email can accept it. An existing relationship cannot be duplicated.
+4. A student can view availability and request lessons only from connected teachers.
+5. A booking references one availability slot. Its start and end come from that slot. The end is exclusive, so adjacent lessons do not overlap.
+6. A request starts as `pending`. Only the relevant teacher can approve or reject it.
+7. Pending requests do not exclusively hold a slot. Approval rechecks conflicts in the same transaction. Two overlapping lessons for the same teacher cannot both be approved.
+8. Either participant may cancel their own pending or approved booking before it starts. Rejected or cancelled bookings cannot change state again.
+9. A slot with pending or approved bookings cannot be removed. Cancel permitted bookings first.
+10. Teachers can assign files only to connected students. Students can access only files assigned to them.
+11. Uploads accept PDF, JPEG or PNG, up to 10 MiB. Files stay outside public static storage. Downloads require authorization.
+12. Dates use RFC 3339 timestamps with a timezone offset. Invalid or past booking intervals are rejected.
 
-- Users decide lesson suitability and what learning materials to share.
-- Teachers conduct the lessons and provide academic instruction outside the application.
-- Payment collection, live lesson delivery, AI-generated content, parent monitoring, and third-party calendar synchronization are outside the MVP.
-- Infrastructure operation may be supplied by a hosting provider; no external runtime provider or integration has yet been selected in the supplied documents.
+The API and backlog use these rules. They remain subject to the team's peer review before implementation.
 
-## 14. Context and Boundary Diagram
+### Constraints and next checks
 
-The following diagram shows logical responsibilities, not a finalized deployment. The web browsers and human actors are outside the TutorBridge service boundary. Persistent data and file storage are application-managed resources; a hosting vendor's physical infrastructure would remain outside the team's operational control.
-
-```mermaid
-flowchart LR
-    Teacher["Teacher — web browser"]
-    Student["Student — web browser"]
-
-    subgraph TutorBridge["TutorBridge system boundary"]
-        App["Web interface and backend API"]
-        Data[("Users, relationships, availability, bookings and assignments")]
-        Files[("Protected assignment file storage")]
-        App -->|"Read/write application records"| Data
-        App -->|"Store/retrieve authorized files"| Files
-    end
-
-    Teacher -->|"Invitations, availability, booking decisions and assignments"| App
-    App -->|"Connected students, booking status and calendar"| Teacher
-    Student -->|"Invitation acceptance and lesson requests"| App
-    App -->|"Available slots, booking status and own assignments"| Student
-```
-
-There is no required external application-to-application integration in the agreed MVP. If the team later selects hosted authentication, object storage, or notification delivery, it must update this diagram and describe the provider boundary, data exchanged, and failure handling. GitHub and Teams support development/submission; they are not runtime tutoring-system integrations.
-
-## 15. Proposed Business Rules
-
-These rules are a proposed specification for team review and must be kept consistent with the OpenAPI contract and backlog acceptance criteria.
-
-1. Only authenticated users may access protected resources; invitation acceptance requires an authenticated student.
-2. An invitation creates a teacher–student relationship only when it is valid and accepted. Expiry and reuse rules must be finalized in the API/backlog.
-3. A student may request a lesson only from a teacher with whom they have an active relationship.
-4. Requested start/end times must be valid and contained within the teacher's available time. End time must be after start time.
-5. A new booking request starts as `pending`. The relevant teacher may approve or reject it.
-6. Two overlapping bookings for the same teacher must not both become approved, including when approvals happen concurrently.
-7. **Proposed pending policy:** A pending request does not reserve the slot exclusively. Approval rechecks availability and conflicts; competing requests cannot create overlapping approved lessons. The team must confirm this policy.
-8. A teacher manages only their own availability, connected students, bookings, and assignments.
-9. A student can retrieve only assignments addressed to them. File access must obey the same rule as assignment metadata access.
-10. **Proposed cancellation policy:** Either participant may cancel their own pending or approved booking before its start time. Unrelated users cannot change it. Any different deadline or rule must be agreed and documented consistently.
-11. Approved bookings must not silently disappear when availability is changed. The change must be rejected or the permitted cancellation process applied explicitly.
-12. Timestamp representation and display conventions must be stated in the OpenAPI contract. The API must not rely on an ambiguous local time without a time-zone convention.
-
-## 16. Remaining Sprint 1 Alignment Work
-
-- Confirm the proposed business policies, technology choices, success targets, and named ownership with the team.
-- Complete `Team-Members-and-RACI.md` for the six Sprint 1 deliverables and peer-review responsibilities.
-- Replace the empty OpenAPI path entries with validated operations, schemas, and errors for the agreed MVP; move AI and parent APIs outside the first-release contract.
-- Create the initial Epic–Feature–Story–Task backlog with priorities, acceptance criteria, estimates, dependencies, and assignees.
-- Maintain a separate `CONTRIBUTIONS.md` with actual Issue, PR, and commit evidence for each member.
-- Validate this draft against the official Project Foundation PDF and Examples file, which were not available for this review.
-- Complete the repository workflow, effective branch protections, peer reviews, Sprint 1 release tag, evaluator access, and Teams ZIP/repository-link submission requirements.
-
-The existence of this draft does not mark those outstanding tasks as completed.
+This Sprint 1 contract does not implement the application. Interviews, hosting, team capacity and implementation tests remain outstanding. Review this document with the API, RACI and backlog before merging. The official foundation PDF and the assistant announcement are the submission baseline; the separate Examples file has not been supplied.
