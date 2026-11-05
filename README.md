@@ -1,39 +1,20 @@
-# TutorBridge
+# TutorBridge: Sprint 1
 
-SENG 321 · Sprint 1
+A web platform for private tutors and their existing students. The first release covers connections, lesson scheduling and assignment sharing.
 
-A web application for private tutors and their existing students. The first release covers student invitations, lesson scheduling and assignment sharing.
-
-## Sprint 1 documents
+## Documents
 
 - [Project Proposal and System Vision](docs/Project-Proposal-and-System-Vision.md)
-- [System Boundary Diagram](docs/diagrams/system-boundary.svg)
-- [Team Members and RACI](docs/Team-Members-and-RACI.md)
+- [System Boundary](docs/diagrams/system-boundary.svg)
+- [Roles and RACI](docs/Team-Members-and-RACI.md)
 - [OpenAPI Draft](docs/Openapi.yaml)
-- [Initial Product Backlog](docs/Initial-Product-Backlog.md)
 - [Git-Flow Workflow](docs/Git-Flow-Workflow.md)
+- [Initial Product Backlog](docs/Initial-Product-Backlog.md)
 - [Individual Contributions](CONTRIBUTIONS.md)
-- [Submission Status](docs/Submission.md)
+- [MIT License](LICENSE.md)
 
-## Planned stack
+This revision is based on the team's three original drafts and awaits peer review. Previous snapshot: [v0.1.0-sprint1](https://github.com/Sprint-1-Software-engineering/Sprint-1/tree/v0.1.0-sprint1). This ZIP contains nine files in total; the combined Proposal/Vision counts as one file.
 
-HTML, CSS and JavaScript; Node.js with Express; SQLite. This is a planning submission. The files in `src/` are placeholders, not a working application.
+Validation tools stay in the repository. The backend and working screens are not implemented. AI and parent features are deferred.
 
-AI features, parent accounts, payments, video and teacher discovery are outside the MVP.
-
-## Validate the documents
-
-Use Python 3.12 or newer in a virtual environment:
-
-```sh
-python -m pip install -r requirements-docs.txt
-python scripts/check_submission.py
-```
-
-The same check runs on PRs and pushes. Passing it validates the contract and document structure, not user research or runtime behavior.
-
-## Submission
-
-The six foundation documents are prepared for team review. Branch protection is active. Interviews, each member's real contribution evidence, named evaluator access and the reviewed main release still need completion before submission. See [Submission Status](docs/Submission.md).
-
-License: [MIT](LICENSE.md).
+Before Teams submission: finish the missing member work links, collect tutor-specific problem evidence and confirm `goksuyldrm` access. Then submit the reviewed version's ZIP and repository URL. Open tasks are tracked in [Issue #5](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/5).

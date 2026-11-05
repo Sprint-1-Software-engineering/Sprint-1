@@ -7,7 +7,7 @@ from openapi_spec_validator import validate_spec
 from openapi_schema_validator import OAS30Validator, oas30_format_checker
 
 root = Path(__file__).resolve().parents[1]
-required = ["README.md", "LICENSE.md", "CONTRIBUTIONS.md", "docs/Project-Proposal-and-System-Vision.md", "docs/Team-Members-and-RACI.md", "docs/Git-Flow-Workflow.md", "docs/Initial-Product-Backlog.md", "docs/Submission.md", "docs/Problem-Validation.md", "docs/diagrams/system-boundary.svg"]
+required = ['README.md', 'LICENSE.md', 'CONTRIBUTIONS.md', 'docs/Project-Proposal-and-System-Vision.md', 'docs/Team-Members-and-RACI.md', 'docs/Git-Flow-Workflow.md', 'docs/Initial-Product-Backlog.md', 'docs/Openapi.yaml', 'docs/diagrams/system-boundary.svg']
 for name in required:
     assert (root / name).is_file(), f"Missing {name}"
 

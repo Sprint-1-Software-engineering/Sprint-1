@@ -1,49 +1,29 @@
-# Git-Flow workflow
+# Repository Workflow and Git-Flow
+
+Repository: https://github.com/Sprint-1-Software-engineering/Sprint-1
 
 ## Branches
 
-- `main`: assessed releases. Each Sprint submission gets a tag here.
+- `main`: reviewed release snapshots. Each Sprint submission gets a tag here.
 - `develop`: integrates completed work for the next release.
-- `feature/<issue>-<short-name>`: one Issue or small task, created from current `develop`.
-- `release/*` and `hotfix/*` are optional. We will create them only when needed.
+- `feature/<issue>-<name>`: a short branch from current `develop` for one Issue.
+- `release/*` and `hotfix/*`: optional; create them only when needed.
 
-## Change process
+## Working rules
 
-1. Open an Issue with purpose, owner, acceptance criteria and dependencies.
-2. Update from `develop` and create a short feature branch.
-3. Make meaningful commits using your own account. Reference the Issue.
-4. Open a PR into `develop`. Link the Issue and include validation evidence.
-5. A teammate reviews the change. Resolve feedback and rerun checks.
-6. Merge after at least one valid approval and passing required checks.
-7. For a submission, review a PR from `develop` to `main`.
-8. Tag the assessed `main` commit, prepare the ZIP and update submission links.
+1. Open an Issue with purpose, owner, acceptance criteria, estimate and dependencies.
+2. Create a feature branch and commit meaningful work from your own account.
+3. Open a PR into `develop`. Link the Issue and actual validation evidence.
+4. A teammate reviews the change. Resolve feedback and pass `Sprint 1 checks`.
+5. Merge the reviewed work. For submission, review a PR from `develop` to `main`.
+6. Tag that main commit and build the matching ZIP. Do not move an existing release tag after changes.
 
-Use a merge commit when integrating release history. Preserve authorship. Do not force-push shared integration branches. Keep Issues open until their actual criteria are met. Closing keywords may not close an Issue when the target is not the default branch; check its state.
+Both `main` and `develop` enforce PRs, one approving review and passing checks. Administrators follow these rules too. New changes dismiss stale approvals. The latest push needs another person's approval. Resolve conversations; force pushes and branch deletion are blocked.
 
-## Required rules for main and develop
+Members without Write access can use a fork and open a PR into `develop`. Keep authorship and dates accurate. Earlier direct commits remain visible in history; do not describe them as reviewed PR work.
 
-- Require a PR and one approving teammate review.
-- Dismiss stale approvals when new commits change the diff.
-- Require the `Sprint 1 checks` status check.
-- Resolve review conversations.
-- Apply rules to administrators as well.
-- Block force pushes and branch deletion.
+## Evidence
 
-The automation validates the OpenAPI contract, examples and required submission files. It does not prove that the application works.
+Use [CONTRIBUTIONS.md](../CONTRIBUTIONS.md) for each member's actual Issue, PR, commit and review links. The validator checks the API and document structure, not runtime behavior or interviews. GitHub keeps the check logs. ZIP delivery is handled separately.
 
-## Current configuration
-
-The repository is public following the owner's approval on 5 November 2026. GitHub API checks confirm active protection on both `main` and `develop`:
-
-- One approving teammate review is required, including for administrators.
-- New changes dismiss stale approvals; the most recent push needs another person's approval.
-- The `Sprint 1 checks` status must pass, and the branch must be current with its base.
-- Review conversations must be resolved. Force pushes and branch deletion are blocked.
-
-Members without Write access can contribute through a fork and a feature branch, then open a PR into this repository's `develop`. They must use their own accounts. No collaborator invitations or existing roles were changed during the visibility update.
-
-## Traceability and past work
-
-Link Issues, commits, PRs, diagrams and the release in [CONTRIBUTIONS.md](../CONTRIBUTIONS.md) and [Submission](Submission.md). Earlier direct commits remain in history. They are not re-labelled as reviewed PR work.
-
-PR #2 was merged from `main` into `develop`. The API returned no submitted reviews for that PR at the audit. A merge alone is not evidence of a review. Current PRs must use the review process above.
+Existing snapshot: [v0.1.0-sprint1](https://github.com/Sprint-1-Software-engineering/Sprint-1/tree/v0.1.0-sprint1). This rewrite is a new review revision and does not replace that tag. Review it before creating a new release version.
