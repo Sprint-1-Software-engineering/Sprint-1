@@ -4,11 +4,22 @@
 
 Teachers need time to teach, prepare lessons and manage their students. Students need lesson times that fit their schedules and a clear place to find homework. TutorBridge brings these tasks into one web application for private tutors and their existing students.
 
-Our starting assumption is that separate messages, calendars and shared files make changes hard to track. A lesson update can be missed, or a homework file can be difficult to find. We have not interviewed users yet, so the frequency and time cost are not measured.
+Our starting assumption is that arranging lessons and sharing homework through separate messages makes these tasks hard to organize.
 
-[OECD TALIS 2024](https://www.oecd.org/en/publications/results-from-talis-2024_90df6235-en/full-report/the-demands-of-teaching_0e941e2f.html) reports that about half of teachers across OECD education systems identify excessive administrative work as a source of stress. This is school-teacher evidence. It does not prove the same problem exists for our private-tutor users.
+### User conversation: 3 November 2026
 
-Toprak and Arda will ask tutors and students how they arrange lessons, handle changes and share homework. They will record real examples and use the findings to revise the scope.
+The team spoke with one private tutor who gives mathematics and software lessons. We refer to this person as T1, without recording their name or contact details.
+
+| Topic | What T1 reported |
+|---|---|
+| Current lesson process | Arrange the time with each student on WhatsApp, then give the lesson through Google Meet. |
+| Current homework process | Send homework to students individually on WhatsApp. |
+| Problem | Repeated communication is needed to arrange lessons. T1 handles planning manually and finds individual homework messages complicated to organize. |
+| Response to the proposal | T1 said they would be willing to use the proposed system. This is stated interest, not evidence of actual use. |
+
+These findings support our focus on availability, lesson requests and one place for assignments. Google Meet can remain the tutor's separate lesson tool; the MVP does not need video or a Meet integration.
+
+This is one qualitative conversation, reported by the team. Problem frequency and time spent were not measured. The findings do not establish how common the problem is. After a prototype is available, test the lesson-request and homework-access tasks and measure the success targets below.
 
 ## 2. Users and stakeholders
 
@@ -50,7 +61,7 @@ Assumptions: users have a browser and internet access; teachers bring their exis
 | Access to another student's records | Check role, relationship and ownership on the server | Mehmet Ali, Berat |
 | Unsafe or large files | Permit PDF/JPEG/PNG up to 10 MiB; authorize downloads | Osman Berke, Kemal Efe |
 | Too much scope or uneven work | Use small Issues, clear owners and reviewed PRs | Toprak, Arda |
-| Wrong assumptions about users | Collect actual tutor/student examples before claiming benefits | Toprak, Arda |
+| Wrong assumptions about users | Check the first tutor findings with more users and prototype tasks | Toprak, Arda |
 
 ## 5. Success criteria and license
 
@@ -68,7 +79,7 @@ The system manages relationships, lesson requests and assignments. Teachers cond
 
 ![System boundary](diagrams/system-boundary.svg)
 
-The arrows show the information exchanged. Human actors and browsers are outside the service boundary. The application, database and protected file storage are inside. There is no required external runtime API in the MVP. Update the diagram if a hosted identity, storage or notification service is later selected.
+The arrows show the information exchanged. Human actors and browsers are outside the service boundary. The application, database and protected file storage are inside. T1's Google Meet lessons remain outside the system, with no application-to-application integration. Update the diagram if a hosted identity, storage or notification service is later selected.
 
 ## 7. Main rules and constraints
 
@@ -83,4 +94,4 @@ The arrows show the information exchanged. Human actors and browsers are outside
 - Use PDF/JPEG/PNG files up to 10 MiB. Check their actual type and use safe filenames.
 - API dates include a timezone offset. Store UTC; display local time. Reject invalid or past intervals.
 
-The API and backlog use these rules. Hosting and actual user findings remain open decisions.
+The API and backlog use these rules. Hosting is not selected. The first tutor conversation is recorded above; broader user validation and usability tests remain planned.

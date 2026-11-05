@@ -11,7 +11,7 @@ Evidence: [initial API commit](https://github.com/Sprint-1-Software-engineering/
 ## Toprak Daldal
 Student ID: 260201315 · GitHub: [@toprakdaldal](https://github.com/toprakdaldal)
 Role: Product. Responsibilities: Backend & frontend; scope and backlog.
-Recorded work: student-ID fixes, document separation, proposal, API/backlog/workflow preparation and this concise revision.
+Recorded work: student-ID fixes, document separation, proposal, API/backlog/workflow preparation and this concise revision. Incorporated the team's reported 3 November tutor conversation into the proposal; no individual interviewer is attributed here.
 Evidence: [Issue #1](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/1), [#3](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/3), [#5](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/5), [#52](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/52); [ID-fix commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/253ca8428f853da3a712d7ebd397558c0d7b0f18); [foundation PR #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43) and [release PR #48](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48). Latest revision commits are linked from Issue #52.
 
 ## Berat Erdem Yalçın
