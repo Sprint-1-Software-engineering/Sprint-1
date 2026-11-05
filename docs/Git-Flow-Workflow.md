@@ -33,3 +33,6 @@ Existing snapshot: [v0.1.0-sprint1](https://github.com/Sprint-1-Software-enginee
 One member uploads one complete ZIP in Teams and adds the working repository URL to the submission description. Use the documents from the assessed release tag. Include the contribution file and check that all files and the diagram open.
 
 In Settings → Collaborators / Collaborators and teams, keep `mhmttemin` and `goksuyldrm`, and add `nedima68`. Give all three at least Read access and verify accepted invitations. Public visibility does not replace this explicit named-account requirement. The ZIP does not need to be published as a public GitHub release attachment.
+
+### Branch Protection Status
+As of 5 November 2026, both main and develop require a pull request, at least one approval, and successful Sprint 1 checks. New changes dismiss previous approvals. The latest push requires approval from someone other than its pusher. These rules also apply to administrators.
