@@ -142,3 +142,6 @@ Each task inherits its parent story's owner, priority and dependencies. It passe
 Ready: the user/value, criteria, dependencies, API impact and owner are clear, and the work fits one sprint. Done: criteria pass, checks and teammate review are recorded, and contribution links are updated. All implementation items here remain planned.
 
 AI, parent access, payments, teacher discovery, video, chat, analytics and homework submission/feedback remain outside the MVP.
+
+### API and Backlog Consistency
+The API and backlog specify 409 for booking conflicts and 403 for unauthorized assignment access. Oversized files return 413, and unsupported file types return 415. These cases are consistent across both documents. This is a document review; application behavior has not been tested.
