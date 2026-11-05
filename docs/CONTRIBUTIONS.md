@@ -19,8 +19,8 @@
 | **Mehmet Ali Demircioğlu** | 230201010 | Backend & Frontend | **A**, **R**, **I** |
 | **Toprak Daldal** | 260201315 | Backend & Frontend | **R**, **C** |
 | **Berat Erdem Yalçın** | 220201052 | Backend & Testing | **R** |
-| **Osman Berke Özdemir** | 2202050 | Backend | **R** |
-| **Kemal Efe Bilgisiçok** | 23020106617 | Frontend & Testing | **R** |
+| **Osman Berke Özdemir** | 220205017 | Backend | **R** |
+| **Kemal Efe Bilgisiçok** | 230201066 | Frontend & Testing | **R** |
 | **Arda Demir** | 230201033 | Frontend | **R** |
 
 ---
