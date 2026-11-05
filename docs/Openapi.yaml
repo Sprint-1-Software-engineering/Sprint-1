@@ -2,508 +2,316 @@ openapi: 3.0.3
 info:
   title: TutorBridge API
   version: 0.1.0
-  description: Sprint 1 design contract. Teacher-student connections, lesson scheduling and assignment sharing.
-    No AI or parent APIs. Times use RFC 3339 with offsets; store UTC. Not an implemented service.
-  license:
-    name: MIT
-    url: https://github.com/Sprint-1-Software-engineering/Sprint-1/blob/develop/LICENSE.md
+  description: Design draft for connections, lessons and assignments. Use offset timestamps and store UTC. No AI or
+    parent API. Not an implemented service.
+  license: {name: MIT, url: 'https://github.com/Sprint-1-Software-engineering/Sprint-1/blob/develop/LICENSE.md'}
 servers:
-- url: http://localhost:3000/api/v1
-  description: Planned local development server; not deployed.
+- {url: 'http://localhost:3000/api/v1', description: Planned local development server; not deployed.}
 security:
-- bearerAuth: []
+- {bearerAuth: []}
 tags:
-- name: Accounts
-- name: Connections
-- name: Availability
-- name: Bookings
-- name: Assignments
+- {name: Accounts}
+- {name: Connections}
+- {name: Availability}
+- {name: Bookings}
+- {name: Assignments}
 paths:
   /auth/register:
     post:
       operationId: registerUser
-      tags:
-      - Accounts
+      tags: [Accounts]
       summary: Register a teacher or student
-      description: Creates one account. Reject duplicate email; hash passwords before storage. The client cannot
-        register an administrator.
+      description: One account per email. Only teacher/student roles. Store a password hash; never return the password.
       responses:
         '201':
           description: Register a teacher or student
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          $ref: '#/components/responses/Conflict'
+            application/json: {schema: {$ref: '#/components/schemas/User'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '409': {$ref: '#/components/responses/Conflict'}
       security: []
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Register'
+          application/json: {schema: {$ref: '#/components/schemas/Register'}}
   /auth/login:
     post:
       operationId: loginUser
-      tags:
-      - Accounts
+      tags: [Accounts]
       summary: Sign in
-      description: Return a bearer access token valid for one hour. Invalid credentials use the same generic 401
-        error. Use HTTPS outside localhost.
+      description: Return a one-hour bearer token. Wrong credentials use a generic 401. Require HTTPS outside localhost.
       responses:
         '200':
           description: Sign in
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Token'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+            application/json: {schema: {$ref: '#/components/schemas/Token'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
       security: []
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
+          application/json: {schema: {$ref: '#/components/schemas/Login'}}
   /invitations:
     post:
       operationId: createInvitation
-      tags:
-      - Connections
+      tags: [Connections]
       summary: Invite a student
-      description: Teacher only. The invitation is tied to the student email, expires after seven days and is single-use.
-        The teacher shares the code outside the application. Reject an existing connection.
+      description: 'Teacher only. Single-use code, bound to the student email, valid for seven days. The teacher shares
+        it outside the app. Existing connection: 409.'
       responses:
         '201':
           description: Invite a student
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invitation'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '409':
-          $ref: '#/components/responses/Conflict'
+            application/json: {schema: {$ref: '#/components/schemas/Invitation'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/Conflict'}
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewInvitation'
+          application/json: {schema: {$ref: '#/components/schemas/NewInvitation'}}
   /invitations/accept:
     post:
       operationId: acceptInvitation
-      tags:
-      - Connections
+      tags: [Connections]
       summary: Accept an invitation
-      description: 'Student only. The signed-in email must match the invitation email. Invalid or unknown code:
-        404. Expired, consumed or already-connected invitation: 409. Creation and consumption are atomic.'
+      description: 'Student only; email must match. Unknown code: 404. Expired/used code or existing relationship:
+        409. Consume the code and create the relationship atomically.'
       responses:
         '201':
           description: Accept an invitation
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Relationship'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
+            application/json: {schema: {$ref: '#/components/schemas/Relationship'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/Conflict'}
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AcceptInvitation'
+          application/json: {schema: {$ref: '#/components/schemas/AcceptInvitation'}}
   /teachers/me/students:
     get:
       operationId: listConnectedStudents
-      tags:
-      - Connections
+      tags: [Connections]
       summary: List connected students
-      description: Teacher only. Return only students connected to the signed-in teacher, sorted by name. At most
-        200 items in the MVP.
+      description: Teacher only. List their connected students by name. At most 200 items.
       responses:
         '200':
           description: List connected students
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Users'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+            application/json: {schema: {$ref: '#/components/schemas/Users'}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
   /students/me/teachers:
     get:
       operationId: listConnectedTeachers
-      tags:
-      - Connections
+      tags: [Connections]
       summary: List connected teachers
-      description: Student only. Return only teachers connected to the signed-in student, sorted by name. At most
-        200 items in the MVP.
+      description: Student only. List their connected teachers by name. At most 200 items.
       responses:
         '200':
           description: List connected teachers
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Teachers'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+            application/json: {schema: {$ref: '#/components/schemas/Teachers'}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
   /availability:
     get:
       operationId: listAvailability
-      tags:
-      - Availability
+      tags: [Availability]
       summary: List available lesson slots
-      description: teacherId is required. Teachers may query themselves; students may query connected teachers.
-        Return future slots without overlapping approved lessons, ordered by startTime. Pending requests do not
-        hide a slot. At most 200 items.
+      description: teacherId is required. Teacher can query self; student can query a connected teacher. Return future
+        slots without approved overlaps, ordered by start. Pending requests do not hide a slot. At most 200 items.
       responses:
         '200':
           description: List available lesson slots
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AvailabilityList'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
+            application/json: {schema: {$ref: '#/components/schemas/AvailabilityList'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
       parameters:
-      - name: teacherId
-        in: query
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: from
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date-time
-      - name: to
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date-time
+      - {name: teacherId, in: query, required: true, schema: {type: string, format: uuid}}
+      - {name: from, in: query, required: false, schema: {type: string, format: date-time}}
+      - {name: to, in: query, required: false, schema: {type: string, format: date-time}}
     post:
       operationId: createAvailability
-      tags:
-      - Availability
+      tags: [Availability]
       summary: Publish a lesson slot
-      description: Teacher only; teacher identity comes from the token. Require future startTime, endTime after
-        startTime, and an explicit timezone. Reject overlapping slots for the same teacher.
+      description: Teacher only; identity comes from the token. Require a future interval with timezone, and end after
+        start. Reject overlapping own availability with 409.
       responses:
         '201':
           description: Publish a lesson slot
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Availability'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '409':
-          $ref: '#/components/responses/Conflict'
+            application/json: {schema: {$ref: '#/components/schemas/Availability'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/Conflict'}
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewAvailability'
+          application/json: {schema: {$ref: '#/components/schemas/NewAvailability'}}
   /availability/{id}:
     delete:
       operationId: deleteAvailability
-      tags:
-      - Availability
+      tags: [Availability]
       summary: Remove an available slot
-      description: Teacher may remove only their own slot. A slot with pending or approved bookings cannot be removed;
-        cancel permitted bookings first.
+      description: Teacher may remove only their own slot. Pending/approved bookings block removal with 409; cancel
+        permitted bookings first.
       responses:
-        '204':
-          description: Deleted; no response body.
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
+        '204': {description: Deleted; no response body.}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/Conflict'}
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
+      - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
   /bookings:
     post:
       operationId: createBooking
-      tags:
-      - Bookings
+      tags: [Bookings]
       summary: Request a lesson
-      description: Student only, connected to the slot owner. Times come from the referenced availability. The slot
-        must be in the future. Return pending. Pending requests do not hold slots. Reject duplicate active requests
-        by this student or an already-approved overlapping lesson with 409.
+      description: 'Student must be connected to the slot owner. Use the future slot''s stored times; return pending.
+        Pending requests do not reserve the slot. Duplicate active request or an approved overlap: 409.'
       responses:
         '201':
           description: Request a lesson
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
+            application/json: {schema: {$ref: '#/components/schemas/Booking'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/Conflict'}
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewBooking'
+          application/json: {schema: {$ref: '#/components/schemas/NewBooking'}}
     get:
       operationId: listBookings
-      tags:
-      - Bookings
+      tags: [Bookings]
       summary: List own lessons
-      description: Teachers see their own lessons; students see their own bookings. Optional date range filters
-        by interval overlap, using inclusive from and exclusive to. Sort by startTime; at most 200 items. This list
-        supplies the calendar.
+      description: 'Return only the user''s own bookings for the calendar, sorted by start. Date filters use interval
+        overlap: from inclusive, to exclusive. At most 200 items.'
       responses:
         '200':
           description: List own lessons
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bookings'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+            application/json: {schema: {$ref: '#/components/schemas/Bookings'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
       parameters:
-      - name: from
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date-time
-      - name: to
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date-time
-      - name: status
-        in: query
-        required: false
-        schema:
-          $ref: '#/components/schemas/BookingStatus'
+      - {name: from, in: query, required: false, schema: {type: string, format: date-time}}
+      - {name: to, in: query, required: false, schema: {type: string, format: date-time}}
+      - {name: status, in: query, required: false, schema: {$ref: '#/components/schemas/BookingStatus'}}
   /bookings/{id}/status:
     patch:
       operationId: changeBookingStatus
-      tags:
-      - Bookings
+      tags: [Bookings]
       summary: Approve, reject or cancel a booking
-      description: Only its teacher may change pending to approved/rejected. Either participant may change pending/approved
-        to cancelled before startTime. Check role before state. Rejected/cancelled states are terminal. Approval
-        checks availability and teacher time overlap in one transaction. Compare intervals as start < otherEnd and
-        end > otherStart; adjacent lessons are allowed. Failed transitions or concurrent conflicting approvals return
-        409.
+      description: 'Only the teacher changes pending to approved/rejected. Either participant can cancel pending/approved
+        before start. Check ownership first. Terminal or invalid transitions return 409. Approval checks availability
+        and conflicts in one transaction: start < otherEnd and end > otherStart. Adjacent intervals are allowed.'
       responses:
         '200':
           description: Approve, reject or cancel a booking
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
+            application/json: {schema: {$ref: '#/components/schemas/Booking'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/Conflict'}
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
+      - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeBookingStatus'
+          application/json: {schema: {$ref: '#/components/schemas/ChangeBookingStatus'}}
   /assignments:
     post:
       operationId: createAssignment
-      tags:
-      - Assignments
+      tags: [Assignments]
       summary: Assign a PDF or image
-      description: Teacher only; studentId must be connected. Require multipart file content, title and studentId.
-        PDF/JPEG/PNG only, at most 10 MiB. Check actual type and sanitize the filename. Store outside public static
-        files; do not return an unrestricted storage URL.
+      description: Teacher only; student must be connected. Require multipart studentId, title and file. Accept PDF/JPEG/PNG
+        up to 10 MiB. Check actual type, sanitize names and store outside public static files. Do not expose an unrestricted
+        URL.
       responses:
         '201':
           description: Assign a PDF or image
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Assignment'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '413':
-          $ref: '#/components/responses/TooLarge'
-        '415':
-          $ref: '#/components/responses/UnsupportedMedia'
+            application/json: {schema: {$ref: '#/components/schemas/Assignment'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '413': {$ref: '#/components/responses/TooLarge'}
+        '415': {$ref: '#/components/responses/UnsupportedMedia'}
       requestBody:
         required: true
         content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/NewAssignment'
+          multipart/form-data: {schema: {$ref: '#/components/schemas/NewAssignment'}}
     get:
       operationId: listAssignments
-      tags:
-      - Assignments
+      tags: [Assignments]
       summary: List authorized assignments
-      description: Teacher sees only assignments they created; student sees only assignments addressed to them.
-        Sort newest first. At most 200 items.
+      description: Teacher sees own created assignments; student sees assignments addressed to them. Newest first;
+        at most 200 items.
       responses:
         '200':
           description: List authorized assignments
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Assignments'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+            application/json: {schema: {$ref: '#/components/schemas/Assignments'}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
   /assignments/{id}:
     get:
       operationId: getAssignment
-      tags:
-      - Assignments
+      tags: [Assignments]
       summary: Read an assignment
-      description: Only its teacher or assigned student may read it. Return 403 for a different user.
+      description: Only the creating teacher and assigned student may read it. Other users get 403.
       responses:
         '200':
           description: Read an assignment
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Assignment'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
+            application/json: {schema: {$ref: '#/components/schemas/Assignment'}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
+      - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
   /assignments/{id}/file:
     get:
       operationId: downloadAssignment
-      tags:
-      - Assignments
+      tags: [Assignments]
       summary: Download an assignment file
-      description: Only its teacher or assigned student may retrieve the file. Stream the protected file with the
-        correct media type and a safe Content-Disposition filename. Never expose a public storage path.
+      description: Use the same ownership checks as assignment metadata. Stream the protected file with its media
+        type and a safe Content-Disposition filename. Never expose a public storage path.
       responses:
         '200':
           description: Download an assignment file
           headers:
-            Content-Disposition:
-              description: Attachment with a sanitized filename.
-              schema:
-                type: string
-              example: attachment; filename="fractions.pdf"
+            Content-Disposition: {description: Attachment with a sanitized filename., schema: {type: string}, example: attachment;
+                filename="fractions.pdf"}
           content:
-            application/pdf:
-              schema:
-                type: string
-                format: binary
-            image/jpeg:
-              schema:
-                type: string
-                format: binary
-            image/png:
-              schema:
-                type: string
-                format: binary
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
+            application/pdf: {schema: {type: string, format: binary}}
+            image/jpeg: {schema: {type: string, format: binary}}
+            image/png: {schema: {type: string, format: binary}}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
+      - {name: id, in: path, required: true, schema: {type: string, format: uuid}}
 components:
   securitySchemes:
     bearerAuth:
@@ -515,143 +323,55 @@ components:
     Register:
       type: object
       additionalProperties: false
-      required:
-      - name
-      - email
-      - password
-      - role
+      required: [name, email, password, role]
       properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 100
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        password:
-          type: string
-          format: password
-          minLength: 12
-          maxLength: 128
-          writeOnly: true
-        role:
-          type: string
-          enum:
-          - teacher
-          - student
-      example:
-        name: Sample Student
-        email: student@example.test
-        password: Example-only-123!
-        role: student
+        name: {type: string, minLength: 1, maxLength: 100}
+        email: {type: string, format: email, maxLength: 254}
+        password: {type: string, format: password, minLength: 12, maxLength: 128, writeOnly: true}
+        role: {type: string, enum: [teacher, student]}
+      example: {name: Sample Student, email: student@example.test, password: Example-only-123!, role: student}
     Login:
       type: object
       additionalProperties: false
-      required:
-      - email
-      - password
-      properties:
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        password:
-          type: string
-          format: password
-          writeOnly: true
-      example:
-        email: student@example.test
-        password: Example-only-123!
+      required: [email, password]
+      properties: {email: {type: string, format: email, maxLength: 254}, password: {type: string, format: password,
+          writeOnly: true}}
+      example: {email: student@example.test, password: Example-only-123!}
     User:
       type: object
       additionalProperties: false
-      required:
-      - id
-      - name
-      - email
-      - role
+      required: [id, name, email, role]
       properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-          maxLength: 254
-        role:
-          type: string
-          enum:
-          - teacher
-          - student
-      example:
-        id: 22222222-2222-4222-8222-222222222222
-        name: Sample Student
-        email: student@example.test
-        role: student
+        id: {type: string, format: uuid}
+        name: {type: string}
+        email: {type: string, format: email, maxLength: 254}
+        role: {type: string, enum: [teacher, student]}
+      example: {id: 22222222-2222-4222-8222-222222222222, name: Sample Student, email: student@example.test, role: student}
     Token:
       type: object
       additionalProperties: false
-      required:
-      - accessToken
-      - tokenType
-      - expiresIn
+      required: [accessToken, tokenType, expiresIn]
       properties:
-        accessToken:
-          type: string
-          description: Signed token. Do not log it.
-        tokenType:
-          type: string
-          enum:
-          - Bearer
-        expiresIn:
-          type: integer
-          enum:
-          - 3600
-      example:
-        accessToken: example-token-not-a-credential
-        tokenType: Bearer
-        expiresIn: 3600
+        accessToken: {type: string, description: Signed token. Do not log it.}
+        tokenType: {type: string, enum: [Bearer]}
+        expiresIn: {type: integer, enum: [3600]}
+      example: {accessToken: example-token-not-a-credential, tokenType: Bearer, expiresIn: 3600}
     NewInvitation:
       type: object
       additionalProperties: false
-      required:
-      - studentEmail
-      properties:
-        studentEmail:
-          type: string
-          format: email
-          maxLength: 254
-      example:
-        studentEmail: student@example.test
+      required: [studentEmail]
+      properties: {studentEmail: {type: string, format: email, maxLength: 254}}
+      example: {studentEmail: student@example.test}
     Invitation:
       type: object
       additionalProperties: false
-      required:
-      - id
-      - teacherId
-      - studentEmail
-      - code
-      - expiresAt
+      required: [id, teacherId, studentEmail, code, expiresAt]
       properties:
-        id:
-          type: string
-          format: uuid
-        teacherId:
-          type: string
-          format: uuid
-        studentEmail:
-          type: string
-          format: email
-          maxLength: 254
-        code:
-          type: string
-          description: Share privately. Do not put it in a URL.
-        expiresAt:
-          type: string
-          format: date-time
+        id: {type: string, format: uuid}
+        teacherId: {type: string, format: uuid}
+        studentEmail: {type: string, format: email, maxLength: 254}
+        code: {type: string, description: Share privately. Do not put it in a URL.}
+        expiresAt: {type: string, format: date-time}
       example:
         id: 66666666-6666-4666-8666-666666666666
         teacherId: 11111111-1111-4111-8111-111111111111
@@ -661,68 +381,30 @@ components:
     AcceptInvitation:
       type: object
       additionalProperties: false
-      required:
-      - code
-      properties:
-        code:
-          type: string
-          minLength: 16
-          maxLength: 128
-      example:
-        code: example-invitation-code
+      required: [code]
+      properties: {code: {type: string, minLength: 16, maxLength: 128}}
+      example: {code: example-invitation-code}
     Relationship:
       type: object
       additionalProperties: false
-      required:
-      - teacherId
-      - studentId
-      properties:
-        teacherId:
-          type: string
-          format: uuid
-        studentId:
-          type: string
-          format: uuid
-      example:
-        teacherId: 11111111-1111-4111-8111-111111111111
-        studentId: 22222222-2222-4222-8222-222222222222
+      required: [teacherId, studentId]
+      properties: {teacherId: {type: string, format: uuid}, studentId: {type: string, format: uuid}}
+      example: {teacherId: 11111111-1111-4111-8111-111111111111, studentId: 22222222-2222-4222-8222-222222222222}
     NewAvailability:
       type: object
       additionalProperties: false
-      required:
-      - startTime
-      - endTime
-      properties:
-        startTime:
-          type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
-      example:
-        startTime: '2027-01-12T14:00:00+03:00'
-        endTime: '2027-01-12T15:00:00+03:00'
+      required: [startTime, endTime]
+      properties: {startTime: {type: string, format: date-time}, endTime: {type: string, format: date-time}}
+      example: {startTime: '2027-01-12T14:00:00+03:00', endTime: '2027-01-12T15:00:00+03:00'}
     Availability:
       type: object
       additionalProperties: false
-      required:
-      - id
-      - teacherId
-      - startTime
-      - endTime
+      required: [id, teacherId, startTime, endTime]
       properties:
-        id:
-          type: string
-          format: uuid
-        teacherId:
-          type: string
-          format: uuid
-        startTime:
-          type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
+        id: {type: string, format: uuid}
+        teacherId: {type: string, format: uuid}
+        startTime: {type: string, format: date-time}
+        endTime: {type: string, format: date-time}
       example:
         id: 33333333-3333-4333-8333-333333333333
         teacherId: 11111111-1111-4111-8111-111111111111
@@ -731,53 +413,22 @@ components:
     NewBooking:
       type: object
       additionalProperties: false
-      required:
-      - availabilityId
-      properties:
-        availabilityId:
-          type: string
-          format: uuid
-      example:
-        availabilityId: 33333333-3333-4333-8333-333333333333
-    BookingStatus:
-      type: string
-      enum:
-      - pending
-      - approved
-      - rejected
-      - cancelled
+      required: [availabilityId]
+      properties: {availabilityId: {type: string, format: uuid}}
+      example: {availabilityId: 33333333-3333-4333-8333-333333333333}
+    BookingStatus: {type: string, enum: [pending, approved, rejected, cancelled]}
     Booking:
       type: object
       additionalProperties: false
-      required:
-      - id
-      - teacherId
-      - studentId
-      - availabilityId
-      - startTime
-      - endTime
-      - status
+      required: [id, teacherId, studentId, availabilityId, startTime, endTime, status]
       properties:
-        id:
-          type: string
-          format: uuid
-        teacherId:
-          type: string
-          format: uuid
-        studentId:
-          type: string
-          format: uuid
-        availabilityId:
-          type: string
-          format: uuid
-        startTime:
-          type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
-        status:
-          $ref: '#/components/schemas/BookingStatus'
+        id: {type: string, format: uuid}
+        teacherId: {type: string, format: uuid}
+        studentId: {type: string, format: uuid}
+        availabilityId: {type: string, format: uuid}
+        startTime: {type: string, format: date-time}
+        endTime: {type: string, format: date-time}
+        status: {$ref: '#/components/schemas/BookingStatus'}
       example:
         id: 44444444-4444-4444-8444-444444444444
         teacherId: 11111111-1111-4111-8111-111111111111
@@ -789,77 +440,31 @@ components:
     ChangeBookingStatus:
       type: object
       additionalProperties: false
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          enum:
-          - approved
-          - rejected
-          - cancelled
-      example:
-        status: approved
+      required: [status]
+      properties: {status: {type: string, enum: [approved, rejected, cancelled]}}
+      example: {status: approved}
     NewAssignment:
       type: object
       additionalProperties: false
-      required:
-      - studentId
-      - title
-      - file
+      required: [studentId, title, file]
       properties:
-        studentId:
-          type: string
-          format: uuid
-        title:
-          type: string
-          minLength: 1
-          maxLength: 120
-        instructions:
-          type: string
-          maxLength: 2000
-        file:
-          type: string
-          format: binary
-          description: PDF/JPEG/PNG, at most 10 MiB.
+        studentId: {type: string, format: uuid}
+        title: {type: string, minLength: 1, maxLength: 120}
+        instructions: {type: string, maxLength: 2000}
+        file: {type: string, format: binary, description: 'PDF/JPEG/PNG, at most 10 MiB.'}
     Assignment:
       type: object
       additionalProperties: false
-      required:
-      - id
-      - teacherId
-      - studentId
-      - title
-      - instructions
-      - fileName
-      - mediaType
-      - sizeBytes
+      required: [id, teacherId, studentId, title, instructions, fileName, mediaType, sizeBytes]
       properties:
-        id:
-          type: string
-          format: uuid
-        teacherId:
-          type: string
-          format: uuid
-        studentId:
-          type: string
-          format: uuid
-        title:
-          type: string
-        instructions:
-          type: string
-        fileName:
-          type: string
-        mediaType:
-          type: string
-          enum:
-          - application/pdf
-          - image/jpeg
-          - image/png
-        sizeBytes:
-          type: integer
-          minimum: 1
-          maximum: 10485760
+        id: {type: string, format: uuid}
+        teacherId: {type: string, format: uuid}
+        studentId: {type: string, format: uuid}
+        title: {type: string}
+        instructions: {type: string}
+        fileName: {type: string}
+        mediaType: {type: string, enum: [application/pdf, image/jpeg, image/png]}
+        sizeBytes: {type: integer, minimum: 1, maximum: 10485760}
       example:
         id: 55555555-5555-4555-8555-555555555555
         teacherId: 11111111-1111-4111-8111-111111111111
@@ -872,45 +477,24 @@ components:
     Error:
       type: object
       additionalProperties: false
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-      example:
-        code: invalid_input
-        message: endTime must be after startTime.
+      required: [code, message]
+      properties: {code: {type: string}, message: {type: string}}
+      example: {code: invalid_input, message: endTime must be after startTime.}
     Users:
       type: object
       additionalProperties: false
-      required:
-      - items
+      required: [items]
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-          maxItems: 200
+        items: {type: array, items: {$ref: '#/components/schemas/User'}, maxItems: 200}
       example:
         items:
-        - id: 22222222-2222-4222-8222-222222222222
-          name: Sample Student
-          email: student@example.test
-          role: student
+        - {id: 22222222-2222-4222-8222-222222222222, name: Sample Student, email: student@example.test, role: student}
     AvailabilityList:
       type: object
       additionalProperties: false
-      required:
-      - items
+      required: [items]
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Availability'
-          maxItems: 200
+        items: {type: array, items: {$ref: '#/components/schemas/Availability'}, maxItems: 200}
       example:
         items:
         - id: 33333333-3333-4333-8333-333333333333
@@ -920,14 +504,9 @@ components:
     Bookings:
       type: object
       additionalProperties: false
-      required:
-      - items
+      required: [items]
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Booking'
-          maxItems: 200
+        items: {type: array, items: {$ref: '#/components/schemas/Booking'}, maxItems: 200}
       example:
         items:
         - id: 44444444-4444-4444-8444-444444444444
@@ -940,14 +519,9 @@ components:
     Assignments:
       type: object
       additionalProperties: false
-      required:
-      - items
+      required: [items]
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Assignment'
-          maxItems: 200
+        items: {type: array, items: {$ref: '#/components/schemas/Assignment'}, maxItems: 200}
       example:
         items:
         - id: 55555555-5555-4555-8555-555555555555
@@ -961,82 +535,46 @@ components:
     Teachers:
       type: object
       additionalProperties: false
-      required:
-      - items
+      required: [items]
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-          maxItems: 200
+        items: {type: array, items: {$ref: '#/components/schemas/User'}, maxItems: 200}
       example:
         items:
-        - id: 11111111-1111-4111-8111-111111111111
-          name: Sample Teacher
-          email: teacher@example.test
-          role: teacher
+        - {id: 11111111-1111-4111-8111-111111111111, name: Sample Teacher, email: teacher@example.test, role: teacher}
   responses:
     BadRequest:
       description: Invalid input, interval, role value or request fields.
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: invalid_input
-            message: endTime must be after startTime.
+        application/json: {schema: {$ref: '#/components/schemas/Error'}, example: {code: invalid_input, message: endTime
+              must be after startTime.}}
     Unauthorized:
       description: Missing, expired or invalid credentials.
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: unauthorized
-            message: Sign in again.
+        application/json: {schema: {$ref: '#/components/schemas/Error'}, example: {code: unauthorized, message: Sign
+              in again.}}
     Forbidden:
       description: The role, relationship, invitation email or record ownership does not permit this action.
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: forbidden
-            message: You cannot access this record.
+        application/json: {schema: {$ref: '#/components/schemas/Error'}, example: {code: forbidden, message: You cannot
+              access this record.}}
     NotFound:
       description: The requested resource does not exist.
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: not_found
-            message: Record not found.
+        application/json: {schema: {$ref: '#/components/schemas/Error'}, example: {code: not_found, message: Record
+              not found.}}
     Conflict:
       description: Duplicate relationship, invitation use, invalid state transition, unavailable slot or overlapping
         approved booking.
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: conflict
-            message: This lesson slot is no longer available.
+        application/json: {schema: {$ref: '#/components/schemas/Error'}, example: {code: conflict, message: This lesson
+              slot is no longer available.}}
     TooLarge:
       description: The uploaded file exceeds 10 MiB.
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: file_too_large
-            message: The file must be no larger than 10 MiB.
+        application/json: {schema: {$ref: '#/components/schemas/Error'}, example: {code: file_too_large, message: The
+              file must be no larger than 10 MiB.}}
     UnsupportedMedia:
       description: The upload is not a permitted PDF/JPEG/PNG file.
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: unsupported_media_type
-            message: Use a PDF, JPEG or PNG file.
+        application/json: {schema: {$ref: '#/components/schemas/Error'}, example: {code: unsupported_media_type, message: 'Use
+              a PDF, JPEG or PNG file.'}}
