@@ -1,7 +1,9 @@
 # Sprint 1 submission status
 
-Review branch: `feature/5-sprint1-foundation`  
-Review: [PR #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43)  
+Foundation: [PR #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43), approved and merged into `develop`
+
+Main release candidate: [PR #48](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48), awaiting review
+
 Repository: https://github.com/Sprint-1-Software-engineering/Sprint-1
 
 This is a review package, not a declaration that every submission condition is complete.
@@ -20,7 +22,7 @@ This is a review package, not a declaration that every submission condition is c
 | Vision, responsibilities, exclusions, assumptions and context diagram | [Vision](Project-Proposal-and-System-Vision.md), [diagram](diagrams/system-boundary.svg) | Prepared for review |
 | Valid API contract with resources, operations, schemas and errors | [OpenAPI](Openapi.yaml) | 16 operations; validation recorded separately |
 | Product, process, architecture, quality, DevOps and implementation owners | [RACI](Team-Members-and-RACI.md) | Named plan; team review pending |
-| Git-Flow, Issues, reviews and protected integration branches | [Workflow](Git-Flow-Workflow.md) | Written policy and CI prepared; enforcement blocked by current private/free plan |
+| Git-Flow, Issues, reviews and protected integration branches | [Workflow](Git-Flow-Workflow.md) | Active protection verified on both main and develop; PR and passing check required |
 | Prioritized Epic/Feature/Story/Task backlog | [Backlog](Initial-Product-Backlog.md) | Linked GitHub records; implementation remains planned |
 | Individual evidence for every student | [Contributions](../CONTRIBUTIONS.md) | Actual links recorded for two accounts; four members have review tasks #44-47 and still need evidence |
 
@@ -28,11 +30,11 @@ This is a review package, not a declaration that every submission condition is c
 
 - [ ] Record real teacher/student findings and review the scope against them. See [Problem Validation](Problem-Validation.md).
 - [ ] All six members confirm roles and estimates, and provide real individual work links.
-- [ ] Add missing team access; ensure contributors can create branches and PRs.
+- [x] Public access permits team members to contribute through forks. Each member must still provide actual work from their own account.
 - [ ] Give `mhmttemin` and `goksuyldrm` access; confirm accepted invitations. An organization repository needs at least Read.
-- [ ] Resolve the private/free-plan limitation and enforce PR, one approval and `Sprint 1 checks` on both `main` and `develop`.
+- [x] Repository is public; PR, one teammate approval and `Sprint 1 checks` are enforced on both `main` and `develop`, including for administrators.
 - [x] Pass local and GitHub checks on the prepared foundation. Recheck after later changes.
-- [ ] Obtain a teammate review of the final PR, then merge into `develop`.
+- [x] Foundation PR #43 was approved by `mehmetalidmrcgl-hue` and merged into `develop`. Later changes require their own review.
 - [ ] Review and merge the assessed version from `develop` into `main`.
 - [ ] Create the release tag `v0.1.0-sprint1` on that assessed `main` commit. The name is our convention, not a prescribed course tag.
 - [ ] Build the final ZIP from that tagged version; open and check it.
@@ -40,9 +42,9 @@ This is a review package, not a declaration that every submission condition is c
 
 ## Access audit
 
-The audit found accepted access for `toprakdaldal`, `mehmetalidmrcgl-hue` and `kbilgisicok`. The last account had Read only. No pending repository invitations were returned. The other three team members and both evaluator accounts were not listed.
+The repository is public. Existing collaborator roles remain unchanged: `toprakdaldal` and `mehmetalidmrcgl-hue` have Admin; `kbilgisicok` has Read. No pending invitations were returned. Other team members can use forks. Explicit evaluator invitations remain pending because the owner asked not to change access.
 
-Adding access, changing visibility or purchasing a plan needs an explicit team decision. Until then, these gates remain open.
+Public visibility and branch protections were explicitly authorized and completed. It does not count as sending or accepting evaluator invitations. The team must confirm that the announcement’s named-account access requirement is met before closing that gate.
 
 ## Release notes
 

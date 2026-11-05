@@ -34,6 +34,6 @@ The same check runs on PRs and pushes. Passing it validates the contract and doc
 
 ## Submission
 
-The six foundation documents are prepared for team review. Interviews, each member's real contribution evidence, effective branch protections, evaluator access and the reviewed release must be checked before submission. See [Submission Status](docs/Submission.md).
+The six foundation documents are prepared for team review. Branch protection is active. Interviews, each member's real contribution evidence, named evaluator access and the reviewed main release still need completion before submission. See [Submission Status](docs/Submission.md).
 
 License: [MIT](LICENSE.md).
