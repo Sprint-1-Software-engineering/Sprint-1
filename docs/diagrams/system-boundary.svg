@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600" style="max-width:100%;height:auto">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#334155"/></marker></defs>
+<rect width="1100" height="600" fill="#fff"/>
+<g font-family="Arial,sans-serif" fill="#0f172a">
+<text x="40" y="42" font-size="24" font-weight="bold">TutorBridge system boundary</text>
+<text x="40" y="70" font-size="14">First release: connections, lessons and assignments</text>
+<rect x="480" y="100" width="580" height="430" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+<text x="505" y="133" font-size="18" font-weight="bold">TutorBridge service</text>
+<rect x="40" y="155" width="165" height="90" rx="10" fill="#f1f5f9" stroke="#64748b"/>
+<text x="122" y="192" text-anchor="middle" font-size="18">Teacher</text><text x="122" y="218" text-anchor="middle" font-size="14">Web browser</text>
+<rect x="40" y="330" width="165" height="90" rx="10" fill="#f1f5f9" stroke="#64748b"/>
+<text x="122" y="367" text-anchor="middle" font-size="18">Student</text><text x="122" y="393" text-anchor="middle" font-size="14">Web browser</text>
+<rect x="520" y="165" width="490" height="255" rx="10" fill="#fff" stroke="#2563eb"/>
+<text x="765" y="210" text-anchor="middle" font-size="20">Web application and API</text>
+<text x="765" y="246" text-anchor="middle" font-size="15">Identity and relationship checks</text>
+<text x="765" y="280" text-anchor="middle" font-size="15">Availability and booking rules</text>
+<text x="765" y="314" text-anchor="middle" font-size="15">Assignment records and file access</text>
+<rect x="520" y="455" width="230" height="50" rx="8" fill="#fff" stroke="#64748b"/>
+<text x="635" y="486" text-anchor="middle" font-size="15">SQLite records</text>
+<rect x="780" y="455" width="230" height="50" rx="8" fill="#fff" stroke="#64748b"/>
+<text x="895" y="486" text-anchor="middle" font-size="15">Protected files</text>
+<g stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)">
+<path d="M205 179 H520"/><path d="M520 227 H205"/>
+<path d="M205 354 H520"/><path d="M520 402 H205"/>
+<path d="M635 420 V455"/><path d="M895 420 V455"/>
+</g>
+<g font-size="13" text-anchor="middle"><text x="355" y="166">Invites, slots, decisions, files</text><text x="355" y="216">Students and lesson status</text><text x="355" y="343">Accept invites, request lessons</text><text x="355" y="391">Own lessons and assignments</text></g>
+<text x="40" y="565" font-size="14">Outside: teaching, payments, AI, parent access and external calendar sync.</text>
+<text x="40" y="587" font-size="13" fill="#475569">No external runtime integration is required. Hosting provider is not selected.</text>
+</g></svg>
