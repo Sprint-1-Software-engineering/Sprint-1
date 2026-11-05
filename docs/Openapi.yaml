@@ -1,0 +1,22 @@
+openapi: 3.0.3
+info:
+  title: Online Lecture API
+  description: Online Lecture API v1
+  version: 1.0.0
+  
+
+servers:
+  - url:
+
+paths:
+  /auth/login:
+    
+
+  /schedules:
+    
+
+  /ai/generate-questions:
+    
+
+  /parent/student-progress/{studentId}:
+   
