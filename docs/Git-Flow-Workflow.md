@@ -27,3 +27,9 @@ Members without Write access can use a fork and open a PR into `develop`. Keep a
 Use [CONTRIBUTIONS.md](../CONTRIBUTIONS.md) for each member's actual Issue, PR, commit and review links. The validator checks the API and document structure, not runtime behavior or interviews. GitHub keeps the check logs. ZIP delivery is handled separately.
 
 Existing snapshot: [v0.1.0-sprint1](https://github.com/Sprint-1-Software-engineering/Sprint-1/tree/v0.1.0-sprint1). This rewrite is a new review revision and does not replace that tag. Review it before creating a new release version.
+
+## Submission and evaluator access
+
+One member uploads one complete ZIP in Teams and adds the working repository URL to the submission description. Use the documents from the assessed release tag. Include the contribution file and check that all files and the diagram open.
+
+In Settings → Collaborators / Collaborators and teams, keep `mhmttemin` and `goksuyldrm`, and add `nedima68`. Give all three at least Read access and verify accepted invitations. Public visibility does not replace this explicit named-account requirement. The ZIP does not need to be published as a public GitHub release attachment.

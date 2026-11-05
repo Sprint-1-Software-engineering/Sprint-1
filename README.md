@@ -17,4 +17,10 @@ This revision is based on the team's three original drafts and awaits peer revie
 
 Validation tools stay in the repository. The backend and working screens are not implemented. AI and parent features are deferred.
 
-Before Teams submission: finish the missing member work links, collect tutor-specific problem evidence and confirm `goksuyldrm` access. Then submit the reviewed version's ZIP and repository URL. Open tasks are tracked in [Issue #5](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/5).
+## Teams submission
+
+One team member submits one ZIP containing all Sprint 1 documents and includes the repository URL in the Teams description. Proposal and Vision share one file; the diagram, contribution records and license are included. Check that the ZIP opens and matches the reviewed release tag.
+
+Keep `mhmttemin` and `goksuyldrm` access, and add `nedima68` as required by the extra announcement. All three need at least Read access to this organization repository. Confirm that invitations are accepted, even though the repository is public.
+
+Before submission, finish the missing individual work links and tutor-specific problem evidence. At the latest access check, `mhmttemin` had Read; `goksuyldrm` and `nedima68` were not listed. No access changes are made by this document update. Open tasks: [Issue #5](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/5).
