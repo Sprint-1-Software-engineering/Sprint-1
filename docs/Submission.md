@@ -47,3 +47,5 @@ Adding access, changing visibility or purchasing a plan needs an explicit team d
 ## Release notes
 
 See [Release Notes](Release-Notes.md). The review ZIP is for checking content. It must not be described as the final assessed release while these gates remain open.
+
+Each successful CI run publishes `sprint1-review-documents` as an artifact. It contains a ZIP made from that run's commit. The final Teams ZIP must instead match the assessed, tagged `main` version.
