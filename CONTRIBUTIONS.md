@@ -29,7 +29,7 @@ Responsibilities: Acceptance criteria, contract checks and backend tests.
 
 Verified completed work: no linked authored commit, PR or submitted review found in the audited history. Add actual evidence after the member contributes.
 Planned work: QA acceptance review and contract validation.
-Completed Issue / PR / commit evidence: pending.
+Sprint 1 review task: [#44](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/44). Completed Issue / PR / commit evidence: pending.
 
 ## Osman Berke Özdemir
 Student ID: 220205017 · GitHub: [@makucheez](https://github.com/makucheez) · Role: DevOps
@@ -37,7 +37,7 @@ Responsibilities: Repository workflow, deployment plan and backend.
 
 Verified completed work: no linked authored commit, PR or submitted review found in the audited history. Add actual evidence after the member contributes.
 Planned work: [US-06](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/20), [US-08](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/22), [US-12](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/26).
-Completed Issue / PR / commit evidence: pending.
+Sprint 1 review task: [#45](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/45). Completed Issue / PR / commit evidence: pending.
 
 ## Kemal Efe Bilgisiçok
 Student ID: 230201066 · GitHub: [@kbilgisicok](https://github.com/kbilgisicok) · Role: Implementation
@@ -45,7 +45,7 @@ Responsibilities: Frontend integration and assignment screens.
 
 Verified completed work: no linked authored commit, PR or submitted review found in the audited history. Add actual evidence after the member contributes.
 Planned work: [US-11](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/25), [US-13](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/27), [US-14](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/28).
-Completed Issue / PR / commit evidence: pending.
+Sprint 1 review task: [#46](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/46). Completed Issue / PR / commit evidence: pending.
 
 ## Arda Demir
 Student ID: 230201033 · GitHub: [@ardmr26](https://github.com/ardmr26) · Role: Process
@@ -53,7 +53,7 @@ Responsibilities: Sprint tracking, contribution records and frontend.
 
 Verified completed work: no linked authored commit, PR or submitted review found in the audited history. Add actual evidence after the member contributes.
 Planned work: [US-05](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/19), [US-07](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/21).
-Completed Issue / PR / commit evidence: pending.
+Sprint 1 review task: [#47](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/47). Completed Issue / PR / commit evidence: pending.
 
 ## How to update this file
 

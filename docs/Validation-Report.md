@@ -24,6 +24,8 @@ Versions: openapi-spec-validator 0.7.2, PyYAML 6.0.3. Dependencies are pinned in
 
 The workflow uses the same validator. Its check name is `Sprint 1 checks`.
 
+The workflow passed on the reviewed diagram revision `56dbe0c`: [run 41995176953](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/41995176953). Later evidence-only edits are checked by the same workflow; use the latest run below.
+
 [Current workflow runs](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions?query=branch%3Afeature%2F5-sprint1-foundation)
 
 ## Limits

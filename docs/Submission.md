@@ -22,7 +22,7 @@ This is a review package, not a declaration that every submission condition is c
 | Product, process, architecture, quality, DevOps and implementation owners | [RACI](Team-Members-and-RACI.md) | Named plan; team review pending |
 | Git-Flow, Issues, reviews and protected integration branches | [Workflow](Git-Flow-Workflow.md) | Written policy and CI prepared; enforcement blocked by current private/free plan |
 | Prioritized Epic/Feature/Story/Task backlog | [Backlog](Initial-Product-Backlog.md) | Linked GitHub records; implementation remains planned |
-| Individual evidence for every student | [Contributions](../CONTRIBUTIONS.md) | Actual links recorded for two accounts; four members still need evidence |
+| Individual evidence for every student | [Contributions](../CONTRIBUTIONS.md) | Actual links recorded for two accounts; four members have review tasks #44-47 and still need evidence |
 
 ## Final gates
 
@@ -31,7 +31,7 @@ This is a review package, not a declaration that every submission condition is c
 - [ ] Add missing team access; ensure contributors can create branches and PRs.
 - [ ] Give `mhmttemin` and `goksuyldrm` access; confirm accepted invitations. An organization repository needs at least Read.
 - [ ] Resolve the private/free-plan limitation and enforce PR, one approval and `Sprint 1 checks` on both `main` and `develop`.
-- [ ] Pass local and GitHub checks on the final revision.
+- [x] Pass local and GitHub checks on the prepared foundation. Recheck after later changes.
 - [ ] Obtain a teammate review of the final PR, then merge into `develop`.
 - [ ] Review and merge the assessed version from `develop` into `main`.
 - [ ] Create the release tag `v0.1.0-sprint1` on that assessed `main` commit. The name is our convention, not a prescribed course tag.
