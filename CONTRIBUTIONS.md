@@ -11,6 +11,7 @@ Responsibilities: API design, backend and integration.
 Verified work: initial repository files, initial team/RACI and API draft, MIT license file, and merging the branch synchronization PR. These are repository preparations, not a working application.
 - Commits: [team information](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/4bd1af5b9e410d04d594550805ed5cda1b98b9c5), [initial API draft](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/64c108d59211a057da41a80237c72e89d48a19e7), [license](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/54c5279f944fef926f92dd8ee7191aca855d74c7).
 - PR: [#2](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/2), merged by this account. No submitted review was returned by the reviews API at the audit.
+- Completed peer reviews: [foundation PR #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43#pullrequestreview-5782968240) and [workflow-status PR #49](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/49#pullrequestreview-5783564271). Both approvals were submitted by this account and the PRs were merged.
 - Issue-first links for the earliest direct commits: not recorded. Do not rewrite their dates or authorship.
 
 ## Toprak Daldal
@@ -22,6 +23,7 @@ Verified work: correcting student IDs, separating the team document by name, pre
 - PRs: [original draft #4](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/4), [foundation revision #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43).
 - Commits: [ID corrections](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/253ca8428f853da3a712d7ebd397558c0d7b0f18), [document rename](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/c1b2173e690bf7ec4116087e2d5cc98639524dd3), [proposal draft](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/c1c90a02dcd94696cd5749ea14f64f846dcd235e).
 - Latest foundation commits and validation are visible in PR #43. This work is not attributed to other members.
+- Later work: workflow-status corrections in [PR #49](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/49) and the completed-review evidence update tracked in [Issue #50](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/50).
 
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@Sunseteva](https://github.com/Sunseteva) · Role: Quality
