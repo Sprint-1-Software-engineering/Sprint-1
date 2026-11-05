@@ -17,7 +17,8 @@ Evidence: [Issue #1](https://github.com/Sprint-1-Software-engineering/Sprint-1/i
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)
 Role: Quality. Responsibilities: Backend & testing; QA and acceptance criteria.
-Assigned work: contract and failure-case review, [Issue #44](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/44). Completed authored-work evidence is not linked yet.
+Recorded work: Reviewed the API response codes against backlog stories US-10, US-13 and US-14. Added a consistency note covering booking conflicts, unauthorized assignment access, oversized files and unsupported file types. This was a document review; application behavior was not tested.
+Evidence: [Issue #44](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/44), [Pull Request #54](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/54), [API review commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/2286df1).
 
 ## Osman Berke Özdemir
 Student ID: 220205017 · GitHub: [@makucheez](https://github.com/makucheez)
