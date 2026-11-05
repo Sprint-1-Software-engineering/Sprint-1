@@ -31,11 +31,16 @@ Use a merge commit when integrating release history. Preserve authorship. Do not
 
 The automation validates the OpenAPI contract, examples and required submission files. It does not prove that the application works.
 
-## Current limitation
+## Current configuration
 
-The organization currently uses GitHub Free with a private repository. GitHub reports that branch protections are not enforced on this plan. Written rules alone do not satisfy the enforced-workflow requirement.
+The repository is public following the owner's approval on 5 November 2026. GitHub API checks confirm active protection on both `main` and `develop`:
 
-The team must choose a supported private-repository plan or explicitly agree to make the repository public. A course-approved exception would need to be documented. Visibility and access will not be changed silently.
+- One approving teammate review is required, including for administrators.
+- New changes dismiss stale approvals; the most recent push needs another person's approval.
+- The `Sprint 1 checks` status must pass, and the branch must be current with its base.
+- Review conversations must be resolved. Force pushes and branch deletion are blocked.
+
+Members without Write access can contribute through a fork and a feature branch, then open a PR into this repository's `develop`. They must use their own accounts. No collaborator invitations or existing roles were changed during the visibility update.
 
 ## Traceability and past work
 
