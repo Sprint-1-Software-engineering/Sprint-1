@@ -23,8 +23,10 @@ Evidence: [Issue #44](https://github.com/Sprint-1-Software-engineering/Sprint-1/
 ## Osman Berke Özdemir
 Student ID: 220205017 · GitHub: [@makucheez](https://github.com/makucheez)
 Role: DevOps. Responsibilities: Backend; repository workflow and deployment plan.
-Recorded work: release review, [PR #48 approval](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48#pullrequestreview-5783969155). Workflow work is assigned in [Issue #45](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/45); authored commit/PR evidence is still pending.
+Recorded work: release review, [PR #48 approval](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48#pullrequestreview-5783969155). Reviewed the main and develop branch protection settings and added a status note to Git-Flow-Workflow.md. This was a settings and document review; no settings were changed.
+Evidence: [Issue #45](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/45), [Pull Request #55](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/55), [branch protection commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/b2f7482).
 
+  
 ## Kemal Efe Bilgisiçok
 Student ID: 230201066 · GitHub: [@kbilgisicok](https://github.com/kbilgisicok)
 Role: Implementation. Responsibilities: Frontend & testing; integration and assignment screens.
