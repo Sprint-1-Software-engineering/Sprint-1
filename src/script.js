@@ -225,7 +225,7 @@ if (menuToggle && obsSidebar && sidebarBackdrop) {
     setSidebarOpen(!obsSidebar.classList.contains("open"));
   });
   sidebarBackdrop.addEventListener("click", () => setSidebarOpen(false));
-  obsSidebar.querySelectorAll(".obs-nav-link").forEach((link) => {
+  obsSidebar.querySelectorAll(".nav-link").forEach((link) => {
     link.addEventListener("click", () => setSidebarOpen(false));
   });
 }
