@@ -52,6 +52,17 @@ paths:
         required: true
         content:
           application/json: {schema: {$ref: '#/components/schemas/Login'}}
+  /users/me:
+    get:
+      operationId: getCurrentUser
+      tags: [Accounts]
+      summary: Get the signed-in user's profile
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json: {schema: {$ref: '#/components/schemas/User'}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
   /invitations:
     post:
       operationId: createInvitation
