@@ -15,7 +15,17 @@ A web platform for private tutors and their existing students. The first release
 
 This revision is based on the team's three original drafts and awaits peer review. Previous snapshot: [v0.1.0-sprint1](https://github.com/Sprint-1-Software-engineering/Sprint-1/tree/v0.1.0-sprint1). This ZIP contains nine files in total; the combined Proposal/Vision counts as one file.
 
-Validation tools stay in the repository. The backend and working screens are not implemented. AI and parent features are deferred.
+## Yerel giriş ve kayıt sunucusu
+
+Frontend'i ve SQLite kullanıcı veritabanını çalıştırmak için proje kökünde:
+
+```powershell
+python src/server.py
+```
+
+Ardından `http://127.0.0.1:8000/register.html` veya `http://127.0.0.1:8000/login.html` adresini açın. Hesaplar `data/tutorbridge.db` dosyasındaki `users` tablosuna, oturumlar geçici olarak `auth_tokens` tablosuna kaydedilir.
+
+Validation tools stay in the repository. A local authentication backend, registration/login screens, and an example OBS-style student dashboard are implemented. Dashboard and announcement content is sample data and is not connected to the database. AI and parent features are deferred.
 
 ## Teams submission
 
