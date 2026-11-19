@@ -14,6 +14,10 @@ Role: Product. Responsibilities: Backend & frontend; scope and backlog.
 Recorded work: student-ID fixes, document separation, proposal, API/backlog/workflow preparation and this concise revision. Incorporated the team's reported 3 November tutor conversation into the proposal; no individual interviewer is attributed here.
 Evidence: [Issue #1](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/1), [#3](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/3), [#5](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/5), [#52](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/52); [ID-fix commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/253ca8428f853da3a712d7ebd397558c0d7b0f18); [foundation PR #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43) and [release PR #48](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48). Latest revision commits are linked from Issue #52.
 
+### Sprint 2 - Requirements preparation
+
+Prepared the detailed SRS, refined the existing backlog and added a stakeholder-validation guide under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). Linked the proposed own-profile behavior through [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61). Estimates remain initial; implementation acceptance and new user feedback are not claimed. Commit and PR evidence will be linked after publication. Technical and quality peer review is pending.
+
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)
 Role: Quality. Responsibilities: Backend & testing; QA and acceptance criteria.
