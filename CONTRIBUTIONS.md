@@ -26,6 +26,12 @@ Role: DevOps. Responsibilities: Backend; repository workflow and deployment plan
 Recorded work: release review, [PR #48 approval](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48#pullrequestreview-5783969155). Reviewed the main and develop branch protection settings and added a status note to Git-Flow-Workflow.md. This was a settings and document review; no settings were changed.
 Evidence: [Issue #45](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/45), [Pull Request #55](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/55), [branch protection commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/b2f7482).
 
+
+### Sprint 2 - DevOps and delivery preparation
+
+Authored the English local-development runbook, deployment/recovery handoff, submission gates and prepared release description; added Sprint 2 structural/hygiene CI, isolated auth environment smoke and exact-commit local packaging tooling. Preserved the existing Sprint 1 checks context and branch protections. Removed an empty tracked .env and documented that the prototype reads no environment settings.
+
+Actual local checks: 15 PR #58 reference environment/auth checks passed; two additional input acceptance probes failed (invalid email and null name). Synthetic SQLite backup/restore rehearsal passed. These are not full browser, product acceptance or coverage results. No independent teammate reproduction, release merge/tag or final submission is claimed. Details: [verification report](docs/sprint-2/Verification-Report.md). Tracking: [Issue #63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). Commit/PR/CI links are added after publication.
   
 ## Kemal Efe Bilgisiçok
 Student ID: 230201066 · GitHub: [@kbilgisicok](https://github.com/kbilgisicok)
