@@ -16,7 +16,7 @@ Evidence: [Issue #1](https://github.com/Sprint-1-Software-engineering/Sprint-1/i
 
 ### Sprint 2 - Requirements preparation
 
-Prepared the detailed SRS, refined the existing backlog and added a stakeholder-validation guide under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). Linked the proposed own-profile behavior through [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61). Estimates remain initial; implementation acceptance and new user feedback are not claimed. Commit and PR evidence will be linked after publication. Technical and quality peer review is pending.
+Prepared the detailed SRS, refined the existing backlog and added a stakeholder-validation guide under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). Linked the proposed own-profile behavior through [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61). Estimates remain initial; implementation acceptance and new user feedback are not claimed. Evidence: [requirements commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/182354e69448c3bc713e3d6bd80c207d48f29e83), [PR #62](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/62). Structural/API/link checks passed; technical and quality peer review is pending. The 39 live backlog records were synchronized and verified against the same SRS baseline; implementation acceptance remains open.
 
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)
