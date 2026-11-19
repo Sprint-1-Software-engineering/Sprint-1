@@ -1,7 +1,7 @@
 # DevOps Verification Report
 
 Owner/operator: Osman Berke Özdemir (@makucheez), with AI-assisted execution. Date: 19 November 2026. Tracking: [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63).
-Status: local findings recorded; CI links will be added after the DevOps branch is pushed. No teammate approval or independent run is claimed.
+Status: local and published CI evidence recorded for the implementation SHA below. No teammate approval or independent run is claimed.
 
 ## Sources and boundaries
 
@@ -75,3 +75,15 @@ Using authenticated makucheez / Write: both branch summaries report protected, r
 Accepted collaborators include mhmttemin with Read but do not list goksuyldrm/nedima68. No account invitations or permission changes were attempted. Live Teams/Figma access was not available or verified; only the supplied Teams text was reviewed.
 
 No complete Sprint 2 NFR/Figma/C4/UML/user-flow/traceability set exists in the reviewed trees. No Sprint 2 release/tag/final package or live deployment has been created. A prepared release description and explicit checklist gates are supplied. Missing artifacts and independent human review block final delivery.
+
+## Published implementation and CI evidence
+
+[PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64) targets develop and is authored by makucheez. GitHub maps [implementation commit 7b5cea90befd2336eaac6358c2eae4a07f1fb0e8](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7b5cea90befd2336eaac6358c2eae4a07f1fb0e8) to makucheez, with commit name Osman Berke Özdemir and the account's numeric noreply address.
+
+- [Sprint 1 workflow](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/44579543261): SUCCESS on that implementation SHA.
+- [Sprint 2 workflow](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/44579543410): SUCCESS on that implementation SHA. Structural/hygiene and eight tooling tests passed; the integrated-runtime job was SKIPPED because server.py is absent. Its explicit absence notice is not an application test result.
+- The separately labeled PR #58 reference smoke in that Sprint 2 run passed 15/15 checks on Ubuntu with Python 3.12.16. Its uploaded JSON artifact was downloaded and inspected; failed count 0, validation_probes false. That result covers pinned auth source 7f3fa7735987dc59bc54be5257f9e2145c529a1c, not an integrated backend in the DevOps PR.
+
+The two additional validation probes were run locally and failed as recorded above; they are not silently included in the successful basic CI smoke. Documentation-only evidence updates after the implementation commit have their own checks visible in [the PR checks](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64/checks); do not infer results for an untested later release SHA.
+
+At the PR inspection GitHub reported REVIEW_REQUIRED / BLOCKED. No self-approval, bypass or merge was attempted. The final release remains pending external artifacts, access decisions and genuine teammate reviews.

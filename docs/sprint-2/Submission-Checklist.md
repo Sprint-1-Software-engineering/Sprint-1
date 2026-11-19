@@ -1,6 +1,6 @@
 # Sprint 2 Submission Checklist
 
-Owner: Osman Berke Özdemir (@makucheez). Tracking: [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63).
+Owner: Osman Berke Özdemir (@makucheez). Tracking: [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). DevOps implementation: [PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64), independent review pending.
 Readiness: **not ready for final submission**. Review date: 19 November 2026. These unchecked items are gates, not claims of completion.
 
 ## Source and deadline

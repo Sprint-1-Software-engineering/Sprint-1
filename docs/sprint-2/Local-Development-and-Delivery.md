@@ -12,7 +12,7 @@ Status: verified local reference procedure; backend adoption and integration awa
 
 ## Requirements and dependencies
 
-Git, a browser and Python 3 are needed. The reference was actually verified with Python 3.9.6 / SQLite supplied by Python on macOS; CI tooling targets Python 3.12 on Ubuntu. See [actual results](Verification-Report.md) for the CI evidence and its scope. No supported-version matrix beyond tested environments is claimed. Python must include `sqlite3`; check with:
+Git, a browser and Python 3 are needed. The reference was actually verified with Python 3.9.6 / SQLite supplied by Python on macOS; The pinned reference smoke also passed in CI with Python 3.12.16 on Ubuntu; CI tooling targets Python 3.12. See [actual results](Verification-Report.md) for the CI evidence and its scope. No supported-version matrix beyond tested environments is claimed. Python must include `sqlite3`; check with:
 
 ```sh
 python3 --version
