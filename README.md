@@ -17,6 +17,14 @@ The Sprint 1 documents originated from the team's three original drafts. Histori
 
 Validation tools stay in the repository. The develop baseline does not yet include a backend. Unmerged PR #58 contains a local Python/SQLite authentication prototype and sample dashboard; it is not the complete MVP. AI and parent features are deferred.
 
+## Sprint 2 requirements draft
+
+- [Detailed SRS](docs/sprint-2/SRS.md)
+- [Refined product backlog](docs/Initial-Product-Backlog.md)
+- [Stakeholder validation guide](docs/sprint-2/Stakeholder-Validation-Guide.md)
+
+These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 remains a separate, unmerged implementation input. The profile addition and unresolved architecture decisions are identified in the SRS; NFR, Figma and architecture deliverables are not marked complete here.
+
 ## Sprint 2 environment and delivery
 
 - [Local Development and Delivery](docs/sprint-2/Local-Development-and-Delivery.md): exact reference setup, storage, commands and known gaps.
@@ -27,6 +35,7 @@ Validation tools stay in the repository. The develop baseline does not yet inclu
 The existing Sprint 1 checks validates documents/contracts. Sprint 2 structural validation and local auth smoke have separate scopes; an absent backend is not reported as tested. The supplied Sprint 2 Teams text does not mandate ZIP; confirm live instructions before submission.
 
 ## Sprint 1 Teams submission (historical)
+
 
 One team member submits one ZIP containing all Sprint 1 documents and includes the repository URL in the Teams description. Proposal and Vision share one file; the diagram, contribution records and license are included. Check that the ZIP opens and matches the reviewed release tag.
 

@@ -75,3 +75,9 @@ The unchanged `Sprint 1 checks` remains the existing required context. Sprint 2 
 ## Independent reproduction and delivery
 
 Mehmet should repeat the clean-start procedure and Berat should inspect the failed probes and smoke/acceptance boundary. No independent teammate run has yet been recorded. Record actual name, date, commit, environment and observations after it happens. Review [submission gates](Submission-Checklist.md) before release. Never publish a reference snapshot as the final Sprint 2 submission.
+
+## Artifact source checks
+
+`check_sprint2.py` distinguishes artifact purposes. Put architecture and user-flow exports in Sprint 2 subdirectories named `diagrams`, `architecture`, `flows` or `user-flows`; their PNG/SVG/PDF exports require a same-stem `.mmd`, `.puml` or `.drawio` source. Images embedded in Architecture.md or User-Flows.md are checked too. Ordinary linked PDF reports are not classified as diagrams.
+
+Put Figma exports in `figma`, `screens`, `screenshots`, `ui`, `ui-ux` or `prototypes`, or reference screen images from UI-UX.md. They do not need Mermaid/PlantUML/draw.io siblings. Instead UI-UX.md must link to an HTTPS `figma.com/design/<file-key>` or `figma.com/file/<file-key>` source (www is accepted), or to a nonempty local `.fig` file. A `/proto/` preview alone is insufficient. PDF screen exports belong in a Figma directory or may be embedded as such; a plain PDF report link is exempt. Release-ready mode also requires the Figma source reference when UI-UX.md exists. This is a structural source-reference check: permissions, actual editability and `.fig` validity still need human verification. These directory conventions make classification explicit; adapt them deliberately if the team reorganizes artifacts.

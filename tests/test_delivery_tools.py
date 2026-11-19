@@ -108,6 +108,78 @@ class DeliveryToolsTest(unittest.TestCase):
         self.assertNotEqual(release.returncode, 0)
         self.assertIn("integration is incomplete", release.stdout)
 
+    def write_artifact(self, name, content):
+        path = self.root / "docs/sprint-2" / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content)
+        return path
+
+    def test_architecture_and_flow_exports_require_editable_diagram_sources(self):
+        self.artifact_paths(include_team=False)
+        for name in ("diagrams/container.svg", "architecture/domain.png", "user-flows/booking.pdf"):
+            self.write_artifact(name, '<svg xmlns="http://www.w3.org/2000/svg"/>' if name.endswith('.svg') else 'synthetic export')
+        result = self.run_tool("check_sprint2.py")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout.count("diagram export needs same-stem editable source"), 3)
+        for name, content in (("diagrams/container.mmd", "flowchart LR\n A --> B"),
+                              ("architecture/domain.puml", "@startuml\nclass User\n@enduml"),
+                              ("user-flows/booking.drawio", "<mxfile/>")):
+            self.write_artifact(name, content)
+        result = self.run_tool("check_sprint2.py")
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_embedded_architecture_image_requires_source_outside_diagram_directory(self):
+        self.artifact_paths(include_team=False)
+        self.write_artifact("container.png", "synthetic image")
+        self.write_artifact("Architecture.md", "![Container](container.png)\n")
+        result = self.run_tool("check_sprint2.py")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("diagram export needs same-stem editable source", result.stdout)
+
+    def test_pdf_report_does_not_require_diagram_source(self):
+        self.artifact_paths(include_team=False)
+        self.write_artifact("reports/test-report.pdf", "synthetic PDF report")
+        self.write_artifact("Architecture.md", "[Supporting report](reports/test-report.pdf)\n")
+        self.write_artifact("UI-UX.md", "[Usability report](reports/test-report.pdf)\n")
+        result = self.run_tool("check_sprint2.py")
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_figma_exports_use_editable_figma_reference_instead_of_diagram_source(self):
+        self.artifact_paths(include_team=False)
+        for name in ("figma/login.png", "figma/screens.pdf", "figma/student.svg"):
+            self.write_artifact(name, '<svg xmlns="http://www.w3.org/2000/svg"/>' if name.endswith('.svg') else 'synthetic export')
+        for url in ("https://www.figma.com/design/SyntheticKey/TutorBridge",
+                    "https://figma.com/file/SyntheticKey/TutorBridge"):
+            with self.subTest(url=url):
+                self.write_artifact("UI-UX.md", f"[Editable source]({url})\n")
+                result = self.run_tool("check_sprint2.py")
+                self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_figma_export_without_source_or_with_prototype_only_fails(self):
+        self.artifact_paths(include_team=False)
+        self.write_artifact("figma/login.png", "synthetic export")
+        for source in ("", "https://www.figma.com/proto/SyntheticKey/Preview",
+                       "https://figma.com.example.test/design/SyntheticKey/Fake",
+                       "https://www.figma.com/design/"):
+            with self.subTest(source=source):
+                self.write_artifact("UI-UX.md", f"[Source]({source})\n" if source else "# UI\n")
+                result = self.run_tool("check_sprint2.py")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("Figma outputs need an editable", result.stdout)
+                self.assertNotIn("diagram export needs", result.stdout)
+
+    def test_ui_document_can_reference_root_screen_and_local_fig_source(self):
+        self.artifact_paths(include_team=False)
+        self.write_artifact("login.png", "synthetic export")
+        self.write_artifact("source.fig", "synthetic nonempty Figma fixture")
+        self.write_artifact("UI-UX.md", "![Login](login.png)\n[Editable source](source.fig)\n")
+        result = self.run_tool("check_sprint2.py")
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.write_artifact("source.fig", "")
+        result = self.run_tool("check_sprint2.py")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Figma outputs need an editable", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

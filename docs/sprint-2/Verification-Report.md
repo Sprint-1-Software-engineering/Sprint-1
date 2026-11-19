@@ -87,3 +87,11 @@ No complete Sprint 2 NFR/Figma/C4/UML/user-flow/traceability set exists in the r
 The two additional validation probes were run locally and failed as recorded above; they are not silently included in the successful basic CI smoke. Documentation-only evidence updates after the implementation commit have their own checks visible in [the PR checks](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64/checks); do not infer results for an untested later release SHA.
 
 At the PR inspection GitHub reported REVIEW_REQUIRED / BLOCKED. No self-approval, bypass or merge was attempted. The final release remains pending external artifacts, access decisions and genuine teammate reviews.
+
+## Review revision: artifact classification and requirements integration
+
+The original blanket PNG/SVG/PDF source-pair rule was narrowed: only architecture/flow exports in documented diagram directories or embedded in architecture/flow documents require diagram-source siblings. Figma outputs instead require an editable Figma file URL or linked nonempty .fig reference in UI-UX.md; prototype-only links are insufficient. General PDF report links are exempt. Source access and actual Figma editability are not tested by URL syntax.
+
+Added six regression tests (14 total): diagram-source failure/success across SVG/PNG/PDF, embedded architecture images, report-PDF exemptions (including UI/UX report links), Figma exports with design/file sources, missing/prototype-only/spoofed sources, and root-level UI images with local .fig sources. All 14 passed locally, as did both document validators and git diff --check. CI for this revision must be checked on its actual SHA.
+
+Merged the existing #62 head 50f42988f6a10d5f44f7095f0e1f377818e84cdc into this feature branch to resolve the README conflict while preserving its authored commits. README retains both SRS/refined-backlog/stakeholder-guide and environment/deployment/verification/submission navigation. #62 and #64 remain subject to independent review; no develop/main merge or team approval is claimed. Earlier baseline/readiness observations above are historical: this feature branch now contains the requirements draft, and six proposed team-document paths remain absent.
