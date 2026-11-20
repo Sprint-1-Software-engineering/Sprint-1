@@ -17,6 +17,14 @@ This revision is based on the team's three original drafts and awaits peer revie
 
 Validation tools stay in the repository. The backend and working screens are not implemented. AI and parent features are deferred.
 
+## Sprint 2 requirements draft
+
+- [Detailed SRS](docs/sprint-2/SRS.md)
+- [Refined product backlog](docs/Initial-Product-Backlog.md)
+- [Stakeholder validation guide](docs/sprint-2/Stakeholder-Validation-Guide.md)
+
+These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 remains a separate, unmerged implementation input. The profile addition and unresolved architecture decisions are identified in the SRS; NFR, Figma and architecture deliverables are not marked complete here.
+
 ## Teams submission
 
 One team member submits one ZIP containing all Sprint 1 documents and includes the repository URL in the Teams description. Proposal and Vision share one file; the diagram, contribution records and license are included. Check that the ZIP opens and matches the reviewed release tag.
