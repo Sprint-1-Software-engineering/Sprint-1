@@ -12,6 +12,7 @@ Evidence: [initial API commit](https://github.com/Sprint-1-Software-engineering/
 
 Prepared the architecture baseline and database-plan separation in [Architecture.md](docs/sprint-2/Architecture.md). Reconciled the local Python/SQLite implementation with the API draft and documented the random database-backed bearer token as the implemented auth choice; JWT adoption remains a separate team decision. Local HTTP API registration validation and UI password wording were corrected and focused auth regression tests were added.
 
+Evidence: [Sprint 2 architecture and auth commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/9bb15e7) and the open feature branch PR workflow remain pending teammate review.
 
 ## Toprak Daldal
 Student ID: 260201315 · GitHub: [@toprakdaldal](https://github.com/toprakdaldal)
