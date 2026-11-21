@@ -55,4 +55,4 @@ Each action moves to the named destination frame. Screens after the launcher als
 
 ## Follow-up review
 
-The original transition table remains the inventory of wired Figma screens. The [handoff](../UI-UX.md#pending-figma-states-and-entry-flows) lists the pending authentication, calendar, loading and access-recovery transitions. Use the [invitation](invitation-flow.svg), [lesson](lesson-flow.svg), and [homework](homework-flow.svg) diagrams to review the SRS decision paths.
+The original transition table remains the inventory of wired Figma screens. The [Figma construction instructions](Figma-Completion.md) define the pending frames, labels, buttons and destinations. The [handoff](../UI-UX.md#pending-figma-states-and-entry-flows) lists the pending authentication, calendar, loading and access-recovery transitions. Use the [invitation](invitation-flow.svg), [lesson](lesson-flow.svg), and [homework](homework-flow.svg) diagrams to review the SRS decision paths.
