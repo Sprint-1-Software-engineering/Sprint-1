@@ -20,6 +20,10 @@ Role: Product. Responsibilities: Backend & frontend; scope and backlog.
 Recorded work: student-ID fixes, document separation, proposal, API/backlog/workflow preparation and this concise revision. Incorporated the team's reported 3 November tutor conversation into the proposal; no individual interviewer is attributed here.
 Evidence: [Issue #1](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/1), [#3](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/3), [#5](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/5), [#52](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/52); [ID-fix commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/253ca8428f853da3a712d7ebd397558c0d7b0f18); [foundation PR #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43) and [release PR #48](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48). Latest revision commits are linked from Issue #52.
 
+### Sprint 2 - Requirements preparation
+
+Prepared the detailed SRS, refined the existing backlog and added a stakeholder-validation guide under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). Linked the proposed own-profile behavior through [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61). Estimates remain initial; implementation acceptance and new user feedback are not claimed. Evidence: [requirements commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/182354e69448c3bc713e3d6bd80c207d48f29e83), [PR #62](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/62). Structural/API/link checks passed; technical and quality peer review is pending. The 39 live backlog records were synchronized and verified against the same SRS baseline; implementation acceptance remains open.
+
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)
 Role: Quality. Responsibilities: Backend & testing; QA and acceptance criteria.
@@ -32,6 +36,12 @@ Role: DevOps. Responsibilities: Backend; repository workflow and deployment plan
 Recorded work: release review, [PR #48 approval](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/48#pullrequestreview-5783969155). Reviewed the main and develop branch protection settings and added a status note to Git-Flow-Workflow.md. This was a settings and document review; no settings were changed.
 Evidence: [Issue #45](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/45), [Pull Request #55](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/55), [branch protection commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/b2f7482).
 
+
+### Sprint 2 - DevOps and delivery preparation
+
+Authored the English local-development runbook, deployment/recovery handoff, submission gates and prepared release description; added Sprint 2 structural/hygiene CI, isolated auth environment smoke and exact-commit local packaging tooling. Preserved the existing Sprint 1 checks context and branch protections. Removed an empty tracked .env and documented that the prototype reads no environment settings.
+
+Actual local checks: 15 PR #58 reference environment/auth checks passed; two additional input acceptance probes failed (invalid email and null name). Synthetic SQLite backup/restore rehearsal passed. These are not full browser, product acceptance or coverage results. No independent teammate reproduction, release merge/tag or final submission is claimed. Details: [verification report](docs/sprint-2/Verification-Report.md). Tracking: [Issue #63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). Published evidence: [implementation commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7b5cea90befd2336eaac6358c2eae4a07f1fb0e8), [PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64), [Sprint 1 CI](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/44579543261), [Sprint 2 CI](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/44579543410). These runs tested that implementation SHA; the CI reference auth source is explicitly the unmerged PR #58 SHA. Review evidence is pending, not invented.
   
 ## Kemal Efe Bilgisiçok
 Student ID: 230201066 · GitHub: [@kbilgisicok](https://github.com/kbilgisicok)

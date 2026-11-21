@@ -215,7 +215,7 @@ sequenceDiagram
 - Assignment 404 means the referenced student or assignment resource is unknown where the operation documents that resource.
 - Cross-teacher student conflicts, pagination, hosting, retention and deployment remain open decisions.
 
-Editable diagram sources for this document are stored with the architecture diagrams in [docs/diagrams](../diagrams).
+Editable Mermaid sources and rendered SVG outputs are linked in the rendered-diagrams section below.
 
 ## 10. Rendered diagrams
 
