@@ -40,7 +40,11 @@ Actual local checks: 15 PR #58 reference environment/auth checks passed; two add
 ## Kemal Efe Bilgisiçok
 Student ID: 230201066 · GitHub: [@kbilgisicok](https://github.com/kbilgisicok)
 Role: Implementation. Responsibilities: Frontend & testing; integration and assignment screens.
-Assigned work: diagram and user-flow review, [Issue #46](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/46). Completed authored-work evidence is not linked yet.
+Assigned work: diagram and user-flow review, [Issue #46](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/46).
+
+### Sprint 2 - Teacher and student UI/UX
+
+Created the [Figma design](https://www.figma.com/design/sUCAuJ5j1WEXdGBJKSc8QJ) and clickable teacher/student prototype, authored the [UI/UX handoff](docs/sprint-2/UI-UX.md), and documented [screen transitions](docs/sprint-2/ui-ux/Screen-Flows.md). Tracking: [Issue #66](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/66). Initial delivery: [PR #67](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/67), [handoff commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/f735d3a0ae26a13a0baf00b3f6ab5192042f8d3f) and [transitions and export commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/19c31c9b9b8c1b8efff2a15c51ca71eba3a908e5). The follow-up adds invitation, lesson and homework decision diagrams, seven Figma PNGs and an updated review handoff. Mehmet approved the initial PR snapshot. Toprak's follow-up review is pending.
 
 ## Arda Demir
 Student ID: 230201033 · GitHub: [@ardmr26](https://github.com/ardmr26)

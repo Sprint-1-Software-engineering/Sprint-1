@@ -1,0 +1,16 @@
+flowchart TD
+  teacher["Teacher enters student email"]
+  create{"Can an invitation be created?"}
+  share["Teacher shares the single-use code"]
+  student["Student signs in and enters the code"]
+  accept{"Code valid for the signed-in account?"}
+  connected["Connection created and code consumed"]
+  invalidEmail["Correct the email or open the existing connection"]
+  invalidCode["Check the account email or ask for a fresh code"]
+  teacher --> create
+  create -->|"Yes"| share
+  share --> student
+  student --> accept
+  accept -->|"Yes"| connected
+  create -->|"Invalid or connected"| invalidEmail
+  accept -->|"Code rejected"| invalidCode
