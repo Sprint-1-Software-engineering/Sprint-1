@@ -4,7 +4,9 @@ Owner: Kemal Efe Bilgisiçok (@kbilgisicok). Tracking: [Sprint 2 Issue #66](http
 
 - [Editable Figma design](https://www.figma.com/design/sUCAuJ5j1WEXdGBJKSc8QJ)
 - [Figma prototype — Choose a journey](https://www.figma.com/proto/sUCAuJ5j1WEXdGBJKSc8QJ?page-id=0%3A1&node-id=1-3&starting-point-node-id=1%3A3&scaling=contain)
-- [Teacher workspace PNG](ui-ux/teacher-workspace.png)
+- Workspaces: [teacher](ui-ux/teacher-workspace.png), [student](ui-ux/student-workspace.png)
+- Lesson request and decision: [student request](ui-ux/student-lesson-request.png), [teacher review](ui-ux/teacher-lesson-request.png), [approved](ui-ux/teacher-lesson-approved.png), [rejected](ui-ux/teacher-lesson-rejected.png)
+- Homework: [teacher sharing](ui-ux/teacher-share-homework.png), [student detail](ui-ux/student-assignment-detail.png)
 - [Screen and transition index](ui-ux/Screen-Flows.md)
 
 ## User flow diagrams
@@ -15,7 +17,7 @@ Owner: Kemal Efe Bilgisiçok (@kbilgisicok). Tracking: [Sprint 2 Issue #66](http
 | Availability, lesson decisions and cancellation | [SVG](ui-ux/lesson-flow.svg) | [Mermaid](ui-ux/lesson-flow.mmd) |
 | Homework sharing and file access | [SVG](ui-ux/homework-flow.svg) | [Mermaid](ui-ux/homework-flow.mmd) |
 
-The diagrams describe the SRS decision paths. The transition index records the current Figma links.
+The diagrams describe the SRS decision paths. The homework flow checks access before showing metadata and checks it again before serving the file. The transition index records the current Figma links.
 
 ## Walkthroughs
 
@@ -46,6 +48,8 @@ Status is conveyed using text as well as color. The shared layout keeps the acto
 
 ## Pending Figma states and entry flows
 
+See the [frame construction and wiring instructions](ui-ux/Figma-Completion.md) for the exact English copy, layout and button destinations.
+
 Mehmet's [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58) contains login and registration forms. Its client uses an eight-character registration minimum, whereas FR-01 specifies 12–128 characters. The Figma launcher currently offers two demo shortcuts. In the sign-in design, the authenticated profile's stored role determines the destination (FR-02 and FR-15).
 
 | Frame to add | Entry and recovery |
@@ -60,7 +64,8 @@ Mehmet's [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull
 ## Verification and open work
 
 - Earlier Figma inspection confirmed 48 frames, three start points and 152 click destinations. In the follow-up, Present mode verified Teacher workspace → Review request → Approve → See student's approved state → Cancel lesson → Confirm cancellation.
-- The authenticated Figma connector hit its Starter quota and the browser editor displayed a sign-in prompt for editing. The states above remain unwired. Export the student workspace, lesson request/decision, and homework share/detail frames from Figma. The teacher workspace PNG predates this follow-up.
+- Exported seven PNGs at 1× from the signed-in Figma editor. In Present mode, clicked Teacher workspace → Share homework → Share assignment → See student's assignment → Preview download outcome. The last screen previews protected file access.
+- The Figma Starter automation quota blocked creation and wiring of the additional states. They remain pending. The teacher workspace PNG predates this follow-up.
 - Mehmet approved the original PR snapshot. Toprak's follow-up review is open. No backend test, accessibility test or user interview was performed in this follow-up.
 
 ### Toprak's review scenarios
