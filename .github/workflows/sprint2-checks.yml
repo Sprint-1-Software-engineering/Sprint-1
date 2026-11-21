@@ -1,0 +1,84 @@
+name: Sprint 2 validation
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main, 'feature/**']
+permissions:
+  contents: read
+jobs:
+  documents:
+    name: Sprint 2 document and hygiene checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/check_sprint2.py
+      - name: Delivery tooling safety and integrity tests (not application tests)
+        run: python -m unittest discover -s tests -v
+  runtime-availability:
+    name: Detect integrated auth runtime
+    runs-on: ubuntu-latest
+    outputs:
+      available: ${{ steps.runtime.outputs.available }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - id: runtime
+        shell: bash
+        run: |
+          if [[ -f src/server.py ]]; then
+            echo 'available=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'available=false' >> "$GITHUB_OUTPUT"
+            echo 'Auth backend absent from this commit; runtime tests were NOT run.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+  auth:
+    name: Integrated auth environment smoke
+    needs: runtime-availability
+    if: needs.runtime-availability.outputs.available == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/check_auth_environment.py --report /tmp/auth-environment.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integrated-auth-environment
+          path: /tmp/auth-environment.json
+          if-no-files-found: warn
+  reference-auth:
+    name: PR 58 reference auth smoke (not integrated product)
+    needs: runtime-availability
+    if: needs.runtime-availability.outputs.available == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          path: tooling
+      - uses: actions/checkout@v4
+        with:
+          ref: 7f3fa7735987dc59bc54be5257f9e2145c529a1c
+          persist-credentials: false
+          path: reference
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tooling/scripts/check_auth_environment.py --source-root reference --report /tmp/reference-auth.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr58-reference-auth-environment
+          path: /tmp/reference-auth.json
+          if-no-files-found: warn
