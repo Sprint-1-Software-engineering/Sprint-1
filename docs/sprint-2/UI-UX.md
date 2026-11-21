@@ -7,6 +7,16 @@ Owner: Kemal Efe Bilgisiçok (@kbilgisicok). Tracking: [Sprint 2 Issue #66](http
 - [Teacher workspace PNG](ui-ux/teacher-workspace.png)
 - [Screen and transition index](ui-ux/Screen-Flows.md)
 
+## User flow diagrams
+
+| Journey | Readable export | Editable source |
+| --- | --- | --- |
+| Invitation and connection | [SVG](ui-ux/invitation-flow.svg) | [Mermaid](ui-ux/invitation-flow.mmd) |
+| Availability, lesson decisions and cancellation | [SVG](ui-ux/lesson-flow.svg) | [Mermaid](ui-ux/lesson-flow.mmd) |
+| Homework sharing and file access | [SVG](ui-ux/homework-flow.svg) | [Mermaid](ui-ux/homework-flow.mmd) |
+
+The diagrams describe the SRS decision paths. The transition index records the current Figma links.
+
 ## Walkthroughs
 
 1. **Connect an existing student.** Teacher workspace → Students → Invite a student → Create invitation → Invitation ready. Share the sample code outside TutorBridge. Follow **Try the student journey** → Accept invitation → Invitation accepted; the invite scenario uses Noah's account. **Preview expired code** opens recovery instructions.
@@ -34,11 +44,27 @@ Owner: Kemal Efe Bilgisiçok (@kbilgisicok). Tracking: [Sprint 2 Issue #66](http
 
 Status is conveyed using text as well as color. The shared layout keeps the actor visible, presents the current task first and gives failed actions a recovery route. Demo dates and names are synthetic. Scenario jumps model separate actors and outcomes without shared runtime state. Dates use Europe/Istanbul. The prototype makes no cross-teacher conflict policy decision (SRS OD-06).
 
+## Pending Figma states and entry flows
+
+Mehmet's [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58) contains login and registration forms. Its client uses an eight-character registration minimum, whereas FR-01 specifies 12–128 characters. The Figma launcher currently offers two demo shortcuts. In the sign-in design, the authenticated profile's stored role determines the destination (FR-02 and FR-15).
+
+| Frame to add | Entry and recovery |
+| --- | --- |
+| Loading | Open either calendar or apply filters → show loading and disable duplicate submission → results or empty state. Keep filters for Retry if loading fails. |
+| Session expired (401) | Calendar or assignment action → Sign in. Recheck profile and authorization before restoring a permitted read-only destination. Do not replay a pending write. |
+| Forbidden (403) | Assignment detail or protected download → Access denied → Back to assignments. Hide protected details and file links. |
+| Calendar filters and empty results | Both calendars → From, To, Any status / Pending / Approved / Rejected / Cancelled → Apply or Clear. Show Europe/Istanbul, use offset-aware dates, require From before To, and offer Clear filters on empty results. |
+| Sign in | Launcher or expired session → email and password → progress → stored teacher/student workspace. Include generic invalid-credentials feedback and a Create account link. |
+| Register | Sign in → name, email, teacher/student role, and password → field errors or confirmation → sign in → role-specific workspace. Password reset is out of scope. |
+
 ## Verification and open work
 
-- Figma document inspection confirmed 48 editable frames, three flow starting points, and all 152 configured click destinations.
-- Rendered and visually inspected the teacher workspace PNG. The Figma Starter connector limit prevented additional frame exports during this pass.
-- The Sprint 2 structural check, all 14 existing delivery-tool unit tests and the staged whitespace check passed locally. The Sprint 1 contract check stopped at import because PyYAML was unavailable in the local Python runtime.
-- Still to verify with a teammate: Present-mode playback, reviewer access to the design and prototype, and the remaining screen exports. In Figma, select the student workspace, lesson decision and assignment frames, then use **Export → PNG**.
-- Loading, unauthorized/forbidden screens, responsive widths, keyboard focus and accessibility testing need implementation or design follow-up. For production, show a loading state during mutations, preserve user input on recoverable errors and explain forbidden access without revealing protected records.
-- The prototype uses fixed demo scenarios. No backend behavior, live file transfer, stakeholder feedback or end-to-end product tests were exercised. AI, parents, payments and video calls are outside scope.
+- Earlier Figma inspection confirmed 48 frames, three start points and 152 click destinations. In the follow-up, Present mode verified Teacher workspace → Review request → Approve → See student's approved state → Cancel lesson → Confirm cancellation.
+- The authenticated Figma connector hit its Starter quota and the browser editor displayed a sign-in prompt for editing. The states above remain unwired. Export the student workspace, lesson request/decision, and homework share/detail frames from Figma. The teacher workspace PNG predates this follow-up.
+- Mehmet approved the original PR snapshot. Toprak's follow-up review is open. No backend test, accessibility test or user interview was performed in this follow-up.
+
+### Toprak's review scenarios
+
+1. Create and accept an invitation, then check expired-code recovery.
+2. Publish a slot and request it, then check approval, rejection, conflict recovery and pre-start cancellation.
+3. Share homework and open the student detail and download preview. After the new Figma frames are wired, verify 401 re-entry, 403 recovery, filters with an empty result, and role routing after sign-in.
