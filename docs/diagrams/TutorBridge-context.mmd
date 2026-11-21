@@ -1,0 +1,6 @@
+flowchart LR
+  Teacher[Teacher] -->|Uses| TutorBridge[TutorBridge]
+  Student[Student] -->|Uses| TutorBridge
+  TutorBridge -->|Connection and schedule data| SQL[(SQLite)]
+  Teacher -->|Existing workflow| WhatsApp[WhatsApp]
+  Teacher -->|Outside lesson tool| Meet[Google Meet]

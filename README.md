@@ -8,6 +8,7 @@ A web platform for private tutors and their existing students. The first release
 - [System Boundary](docs/diagrams/system-boundary.svg)
 - [Roles and RACI](docs/Team-Members-and-RACI.md)
 - [OpenAPI Draft](docs/Openapi.yaml)
+- [Architecture](docs/sprint-2/Architecture.md)
 - [Git-Flow Workflow](docs/Git-Flow-Workflow.md)
 - [Initial Product Backlog](docs/Initial-Product-Backlog.md)
 - [Individual Contributions](CONTRIBUTIONS.md)
@@ -23,7 +24,7 @@ Frontend'i ve SQLite kullanıcı veritabanını çalıştırmak için proje kök
 python src/server.py
 ```
 
-Ardından `http://127.0.0.1:8000/register.html` veya `http://127.0.0.1:8000/login.html` adresini açın. Hesaplar `data/tutorbridge.db` dosyasındaki `users` tablosuna, oturumlar geçici olarak `auth_tokens` tablosuna kaydedilir.
+Ardından `http://127.0.0.1:8000/register.html` veya `http://127.0.0.1:8000/login.html` adresini açın. Hesaplar `data/tutorbridge.db` dosyasındaki `users` tablosuna, oturumlar geçici olarak `auth_tokens` tablosuna kaydedilir. Oturum değeri veritabanında tutulan rastgele bearer token'dır; JWT seçimi yapılmamıştır. Kayıt ve giriş minimum 12 karakterlik şifreyi doğrular; giriş doğrulaması anlık HTTP API davranışıdır.
 
 Validation tools stay in the repository. A local authentication backend, registration/login screens, and an example OBS-style student dashboard are implemented. Dashboard and announcement content is sample data and is not connected to the database. AI and parent features are deferred.
 

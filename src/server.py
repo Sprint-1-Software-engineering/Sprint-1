@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import sqlite3
 import uuid
@@ -14,6 +15,7 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = ROOT.parent
 DATABASE_PATH = PROJECT_ROOT / "data" / "tutorbridge.db"
+EMAIL_PATTERN = re.compile(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$")
 
 
 def connect_database():
@@ -152,19 +154,38 @@ class TutorBridgeHandler(SimpleHTTPRequestHandler):
             self.send_json(400, {"code": "invalid_input", "message": "Geçersiz istek."})
             return
 
-        name = str(data.get("name", "")).strip()
-        email = str(data.get("email", "")).strip().lower()
-        password = str(data.get("password", ""))
+        unknown_fields = set(data) - {"name", "email", "password", "role"}
+        if unknown_fields:
+            self.send_json(400, {"code": "invalid_input", "message": "Desteklenmeyen istek alanı."})
+            return
+
+        name = data.get("name")
+        email = data.get("email")
+        password = data.get("password")
         role = data.get("role")
 
+        if not isinstance(name, str):
+            self.send_json(400, {"code": "invalid_input", "message": "Ad ve soyadı metin olarak girin."})
+            return
+        name = name.strip()
         if not 1 <= len(name) <= 100:
             self.send_json(400, {"code": "invalid_input", "message": "Ad ve soyadı girin."})
             return
-        if not 3 <= len(email) <= 254 or "@" not in email:
+        if not isinstance(email, str):
             self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir e-posta girin."})
+            return
+        email = email.strip().lower()
+        if not 3 <= len(email) <= 254 or not EMAIL_PATTERN.fullmatch(email):
+            self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir e-posta girin."})
+            return
+        if not isinstance(password, str):
+            self.send_json(400, {"code": "invalid_input", "message": "Şifre metin olarak girilmelidir."})
             return
         if not 12 <= len(password) <= 128:
             self.send_json(400, {"code": "invalid_input", "message": "Şifre 12 ile 128 karakter arasında olmalıdır."})
+            return
+        if not isinstance(role, str):
+            self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir hesap türü seçin."})
             return
         if role not in ("teacher", "student"):
             self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir hesap türü seçin."})
@@ -197,8 +218,17 @@ class TutorBridgeHandler(SimpleHTTPRequestHandler):
             self.send_json(400, {"code": "invalid_input", "message": "Geçersiz istek."})
             return
 
-        email = str(data.get("email", "")).strip().lower()
-        password = str(data.get("password", ""))
+        unknown_fields = set(data) - {"email", "password"}
+        if unknown_fields:
+            self.send_json(400, {"code": "invalid_input", "message": "Desteklenmeyen istek alanı."})
+            return
+
+        email = data.get("email")
+        password = data.get("password")
+        if not isinstance(email, str) or not isinstance(password, str):
+            self.send_json(400, {"code": "invalid_input", "message": "Geçersiz giriş bilgileri."})
+            return
+        email = email.strip().lower()
 
         with connect_database() as database:
             user = database.execute(
