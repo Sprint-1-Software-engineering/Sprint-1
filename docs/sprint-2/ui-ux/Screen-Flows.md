@@ -52,3 +52,7 @@ Each action moves to the named destination frame. Screens after the launcher als
 | S Homework · Assignments | Open Linear equations → S Assignment<br>Workspace → S Home |
 | S Assignment · Linear equations | Preview download outcome → S Download<br>Back to assignments → S Homework |
 | S Download · Download preview | Back to assignment → S Assignment |
+
+## Follow-up review
+
+The original transition table remains the inventory of wired Figma screens. The [handoff](../UI-UX.md#pending-figma-states-and-entry-flows) lists the pending authentication, calendar, loading and access-recovery transitions. Use the [invitation](invitation-flow.svg), [lesson](lesson-flow.svg), and [homework](homework-flow.svg) diagrams to review the SRS decision paths.

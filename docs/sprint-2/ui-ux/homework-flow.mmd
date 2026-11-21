@@ -1,0 +1,16 @@
+flowchart TD
+  M0["Teacher selects a student and attaches a file"]
+  M1{"Connected student and valid file?"}
+  M2["Assignment shared"]
+  M3["Student opens assignment detail"]
+  M4{"Student is authorized for the file?"}
+  M5["Serve file through protected download"]
+  B0["Correct recipient or file and retry"]
+  B1["Return to assignments; keep details private"]
+  M0 --> M1
+  M1 -->|"Yes"| M2
+  M2 --> M3
+  M3 --> M4
+  M4 -->|"Yes"| M5
+  M1 -->|"No"| B0
+  M4 -->|"403"| B1

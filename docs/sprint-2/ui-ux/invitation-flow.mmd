@@ -1,0 +1,16 @@
+flowchart TD
+  M0["Teacher enters student email"]
+  M1{"Can an invitation be created?"}
+  M2["Teacher shares single-use code externally"]
+  M3["Student signs in and enters code"]
+  M4{"Valid code for this account?"}
+  M5["Connection created and code consumed"]
+  B0["Correct email or open existing connection"]
+  B1["Check account email or request a fresh code"]
+  M0 --> M1
+  M1 -->|"Yes"| M2
+  M2 --> M3
+  M3 --> M4
+  M4 -->|"Yes"| M5
+  M1 -->|"Invalid / already connected"| B0
+  M4 -->|"Invalid / expired / wrong account"| B1
