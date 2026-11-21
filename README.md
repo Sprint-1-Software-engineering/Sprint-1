@@ -1,4 +1,4 @@
-# TutorBridge: Sprint 1
+# TutorBridge
 
 A web platform for private tutors and their existing students. The first release covers connections, lesson scheduling and assignment sharing.
 
