@@ -1,0 +1,126 @@
+# TutorBridge - Non-Functional Requirements and Quality Measures
+
+Version: 0.1 draft, 23 November 2026. Owner: Berat Erdem Yalçın (Quality / Testing). Tracking: [Issue #72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72).
+Review state: prepared for peer review. No team or stakeholder approval is claimed. Thresholds marked "Proposed" are QA suggestions that the team still has to accept, change or reject.
+
+## 1. Purpose and how to read this document
+
+This document turns the quality constraints already stated in the [SRS](SRS.md), the [OpenAPI draft](../Openapi.yaml) and the course rubric into measurable targets, and proposes targets where none exist. Each requirement has an ID, rationale, threshold, verification method, environment or load assumption, owner and status. The cases that verify them are listed in the [Review and Test Plan](Review-and-Test-Plan.md).
+
+Two columns keep targets and results apart:
+
+- **Source** says where the target comes from: *SRS* or *OpenAPI* (existing requirement), *Course* (BM321 rubric), *Design* (existing architecture or deployment note) or *Proposed* (new QA suggestion, not yet accepted).
+- **Status** uses only these values:
+
+| Status | Meaning |
+|---|---|
+| Verified (local) | The check was executed on 23 November 2026 against `develop` at `ec696e3` and passed. Local API check only; no browser or end-to-end test. |
+| Measured (baseline) | A number was recorded on one machine. It describes that run, not an accepted target. |
+| Planned | The method is defined, but the feature or the session does not exist yet, so nothing was run. |
+| Not met | The check was executed and failed, or a documented behavior is absent. |
+| Not measured | Needs a tool, user session or environment that has not been used. No number is claimed. |
+
+Owners are proposed assignments. "Verify" means designing and running the check; "implement" means the code owner named in the [backlog](../Initial-Product-Backlog.md).
+
+## 2. Environment and load assumptions
+
+| Item | Assumption |
+|---|---|
+| Product state | Only registration, login and `GET /users/me` exist in `src/server.py` (Python standard library HTTP server, SQLite). Invitations, availability, bookings and assignments are design scope ([Architecture](Architecture.md)). |
+| Reference environment | One process on `127.0.0.1`, temporary SQLite database, HTTP without TLS. CI uses `ubuntu-latest` with Python 3.12. The baseline in section 4 was taken on Windows 11, AMD64, 16 logical CPUs, Python 3.12.10. |
+| Data volume | Small course deployment (SRS section 2): list responses are capped at 200 items. For load tests, seed up to 10 teachers, 100 students and 200 records per list. |
+| Load profile (Proposed) | Up to 10 concurrent users on one server process. No capacity beyond this is claimed; SQLite is not a decision for a concurrent hosted deployment ([Architecture](Architecture.md)). |
+| Not covered | Hosted environment, network latency, TLS, real browsers and devices, real user data. Hosting is undecided (SRS OD-04). |
+
+## 3. Requirements
+
+### 3.1 Security and access
+
+| ID | Requirement and rationale | Threshold | Method | Environment / load | Owner | Source | Status |
+|---|---|---|---|---|---|---|---|
+| SEC-01 | **Session lifetime.** A login session ends one hour after it starts, so a leaked token is only briefly useful (SRS BR-01, AC-02.1, AC-02.3). | `expiresIn` is 3600; the stored expiry is 3590-3600 s after login; a request after expiry returns 401; a request before expiry returns 200. | Automated: read the stored expiry from the temporary database after login (T-06); shorten one token to 3 s and call before and after (T-07). An optional single manual 61-minute wait confirms the real duration. | Local, temporary DB, one user. | Berat (verify), Mehmet (implement) | SRS | Verified (local): expiry 3600 s measured in the database; boundary checked with a shortened expiry. The real one-hour wait was not run. |
+| SEC-02 | **Authentication on protected operations.** Every protected operation rejects missing, malformed, unknown and expired credentials with 401 and no data (SRS AC-02.3). | 100% of the credential cases below return 401 with the `{code, message}` body. | Automated cases T-02 to T-05 against each protected operation; repeat the matrix for every operation when it is implemented. | Local, one server. | Berat (verify), Mehmet (implement) | SRS | Verified (local) for `GET /users/me`, the only protected operation. Planned for the others. |
+| SEC-03 | **Role and ownership enforcement.** A user can only act on their own records and only with the correct role (SRS BR-01). | Across a matrix of 2 teachers x 2 students (one connected pair each) and every protected resource, 0 cross-account or cross-role requests succeed; expected 403 (404 where the contract says so). | Automated API tests that build the matrix and compare every combination with the expected status. | Local, temporary DB, 4 accounts. | Berat (verify), Mehmet (implement) | SRS | Planned. The domain endpoints are not implemented. |
+| SEC-04 | **Personal assignment access.** Only the creating teacher and the assigned student can read assignment metadata and download the file (SRS AC-14.2, vision risk "access to another student's records"). | For one assignment: creating teacher and assigned student get 200 on metadata and file; an unconnected student, a connected but non-assigned student and a different teacher get 403; no token gets 401; an unknown id gets 404. Unauthorized 200 responses: 0. | Automated API tests with the SEC-03 accounts, covering both `GET /assignments/{id}` and `GET /assignments/{id}/file`. | Local, temporary DB and upload directory. | Berat (verify), Kemal (implement) | SRS | Planned. |
+| SEC-05 | **Credential protection.** Passwords are stored as salted hashes; no response exposes a password, hash or session secret except the login token to its owner (SRS BR-01, AC-01.4). | Stored value has the `pbkdf2_sha256$` salted format and does not contain the password; response key sets equal the documented schemas; server logs contain no credentials. | Automated: R-26 (hash storage), R-01, L-01 and T-01 (response key sets). Manual: read the server output of one test run. | Local. | Berat (verify), Mehmet (implement) | SRS | Verified (local) for storage and response bodies. Log review: Not measured. |
+| SEC-06 | **Input validation.** The server enforces the declared bounds so malformed data never reaches storage (SRS BR-02). | Name 1-100 characters, e-mail valid and at most 254, password 12-128, role teacher or student. Valid boundary values return 201; invalid values return 400; no account is created for a rejected request. | Automated boundary and wrong-type cases R-05 to R-25. | Local, temporary DB. | Berat (verify), Mehmet (implement) | SRS | Verified (local): all boundary and wrong-type cases passed, including `invalid@` and JSON `null` name. |
+| SEC-07 | **Upload restrictions.** Only PDF, JPEG and PNG files up to 10 MiB are accepted, checked by real content (SRS BR-09, AC-13.2). | 10485760 bytes of valid content returns 201; 10485761 bytes returns 413; a renamed file with non-PDF/JPEG/PNG content returns 415 even with a `.pdf` name; a hostile filename (path separators, `..`) is sanitized; the stored file is not reachable by a static URL. | Automated API tests with generated files at the size boundary, wrong content with a correct extension, and a traversal filename. | Local, temporary upload directory. | Berat (verify), Kemal (implement) | SRS | Planned. `POST /assignments` is not implemented. |
+| SEC-08 | **Transport security.** Traffic outside local development uses HTTPS (SRS section 7). | Every non-localhost endpoint serves HTTPS only; plain HTTP is refused or redirected; the bearer token is never sent over HTTP. | Deployment check with a command-line HTTP client once a host exists. | Hosted environment (undecided). | Osman (deploy), Berat (verify) | SRS | Planned. Not applicable to the local run. |
+| SEC-09 | **No public server-side files.** Source code, the database and the data directory cannot be downloaded through the web server. | `GET` of `server.py`, the database and traversal paths returns 404. | Automated probes O-06 in the [Review and Test Plan](Review-and-Test-Plan.md) (source file, database and traversal paths). | Local. | Mehmet (decide and implement), Berat (verify) | Proposed | Not met: `GET /server.py` returns 200. The database and traversal probes returned 404. Source code is public in the repository, so the exposure is low, but static serving is not restricted to front-end assets. |
+| SEC-10 | **Brute-force resistance.** Repeated failed logins for one account should slow down or stop (not in the SRS; would add behavior). | After 10 failed logins for one account within 15 minutes, further attempts are delayed or answered with 429. The numbers are a suggestion for the team to change. | Automated: send 12 wrong passwords and inspect the status codes. | Local. | Mehmet (decide), Berat (verify) | Proposed | Not met: 12 consecutive wrong passwords all returned 401. Needs a scope decision before it becomes a requirement. |
+
+### 3.2 Performance
+
+All thresholds in this section are **Proposed** for the small course deployment in section 2. The team must accept or change them. The measured values are a baseline from one machine, not an acceptance result.
+
+| ID | Requirement and rationale | Threshold | Method | Environment / load | Owner | Source | Status |
+|---|---|---|---|---|---|---|---|
+| PERF-01 | **Authenticated read latency.** Profile, lists and calendar views should feel immediate. | p95 at most 200 ms and 0 errors at 10 concurrent users. | `scripts/measure_auth_latency.py` (extend per endpoint): at least 500 requests, 10 threads, one token per thread; report p50, p95 and maximum. | Reference environment, seeded as in section 2. | Berat (verify), Mehmet (implement) | Proposed | Measured (baseline) for `GET /users/me` only: p95 13-14 ms at 10 concurrent users (500 requests, 0 errors, two runs). The maximum was about 520 ms in both runs, probably connection start-up; it was not investigated. List endpoints: Planned. |
+| PERF-02 | **Login and registration latency.** Password hashing is deliberately slow (PBKDF2, 200,000 iterations), so these operations need their own target. | p95 at most 1 s at 5 concurrent logins. | Same script: 30 sequential registrations, 30 sequential logins, 30 logins with 5 threads. | Reference environment. | Berat (verify), Mehmet (implement) | Proposed | Measured (baseline), two runs: registration p95 82-92 ms; login p95 90-136 ms sequential and 161-195 ms at 5 concurrent users; 0 errors. |
+| PERF-03 | **Transactional writes.** Booking requests and approvals run a conflict check in one transaction. | p95 at most 500 ms at 10 concurrent users. | Concurrent API test on the booking endpoints, same method as PERF-01. | Reference environment. | Berat (verify), Mehmet (implement) | Proposed | Planned. The endpoints are not implemented. |
+| PERF-04 | **File transfer.** A teacher can attach a maximum-size file and a student can fetch it. | A 10 MiB upload and download each complete within 5 s on loopback. A hosted target is set after hosting is chosen. | Timed API test with a 10485760-byte PDF. | Reference environment. | Berat (verify), Kemal (implement) | Proposed | Planned. |
+
+### 3.3 Usability and accessibility
+
+| ID | Requirement and rationale | Threshold | Method | Environment / load | Owner | Source | Status |
+|---|---|---|---|---|---|---|---|
+| USE-01 | **Two-minute lesson request.** A signed-in, connected student can request a lesson quickly (SRS section 7, vision success criteria). | At least 80% of participants (Proposed) complete the task in 120 s or less without help; median time and errors are recorded. | Moderated task on the Figma prototype ([UI-UX](UI-UX.md)): start at the student workspace, end at the "request sent" screen. At least 5 participants (Proposed); stopwatch timing. | Desktop browser, prototype, one participant at a time. | Berat (verify), Kemal (prototype), Toprak (participants) | SRS | Planned. No session has been held and no result is claimed (SRS OD-05). |
+| USE-02 | **Interaction states.** Every main journey shows error, empty, loading and success states where they apply (SRS BR-12). | Each step of the three required journeys has the applicable state designed; 0 missing states in the review checklist. | Review the Figma file and the exported screens against a checklist built from the plan's functional requirements. | Figma and the repository exports. | Berat (verify), Kemal (design) | SRS | Not measured. The Figma file was not opened in this QA session. |
+| USE-03 | **Labels, keyboard and announcements.** Forms are usable with keyboard and assistive technology. | Every form input has an associated label; every control is reachable with Tab in a logical order with a visible focus indicator; validation errors are announced to assistive technology. | Static review of the HTML (done), manual keyboard walkthrough and an automated accessibility scan in a browser (not done). | `src/login.html`, `src/register.html`, desktop browser. | Berat (verify), Kemal (implement) | Proposed | Partly verified by static review: all inputs in `login.html` and `register.html` have a label or are wrapped in one, and the script sets `aria-invalid` on invalid inputs. The error message paragraphs (`class="error"`) have no `aria-live` or `aria-describedby` link in the HTML or script, so the message text is not announced automatically (Not met by static reading). Keyboard walkthrough and scan: Not measured. |
+| USE-04 | **Consistent validation messages.** The interface states the same password rule as the API (SRS BR-02). | Registration form, login form and API all state or enforce 12-128 characters; 0 contradictory messages. | Static review of `src/register.html` and `src/script.js`, compared with API cases R-05 to R-08. | Repository files. | Berat (verify), Mehmet (implement) | SRS | Not met: the registration form says at least 12 (matches the API), but the login form tells the user a password needs at least 6 characters (`src/script.js` lines 59-60). Static review only. |
+| USE-05 | **Role-specific entry.** A teacher and a student each land on their own journey after login (SRS AC-02.4, AC-15.3). | Teacher account opens the teacher entry screen; student account opens the student entry screen. | Browser test with one account of each role. | Desktop browser, local server. | Berat (verify), Mehmet (implement) | SRS | Not met by static reading: the login handler redirects every user to `main_page.html` (`src/script.js` line 81) and no role check was found. Not confirmed in a browser. Tracked by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61). |
+
+### 3.4 Reliability and data integrity
+
+| ID | Requirement and rationale | Threshold | Method | Environment / load | Owner | Source | Status |
+|---|---|---|---|---|---|---|---|
+| REL-01 | **Conflicting approvals stay consistent.** Two overlapping lessons for one teacher can never both be approved (SRS BR-05, AC-10.3). | With 10 simultaneous approvals of overlapping pending requests for one teacher, exactly one returns 200, the others return 409, and the database holds exactly one approved lesson for that interval. 100 repeated rounds, 0 violations. | Concurrent API test with threads released together on a barrier, run against a temporary DB. Adjacent (non-overlapping) lessons are included as a control and must both succeed. | One server process, SQLite file DB. | Berat (verify), Mehmet (implement) | SRS | Planned. The booking endpoints are not implemented. |
+| REL-02 | **No partial records.** A failed multi-step operation leaves no partial data (SRS BR-11). | Registration: 8 simultaneous requests with one e-mail create exactly one account. Invitation: a code is consumed if and only if the relationship exists; two simultaneous accepts create one relationship. Upload: a failed upload leaves no metadata row and no stored file. | Concurrent and fault-injection API tests, then row and file counts. | One server process, temporary DB. | Berat (verify), Mehmet (implement) | SRS | Verified (local) for registration (8 simultaneous requests returned one 201 and seven 409; one account row). Planned for invitations and uploads. |
+| REL-03 | **Malformed requests never crash a handler.** Every request receives an HTTP response in the documented error format (SRS BR-11). | 0 unhandled server exceptions and 0 dropped connections across the malformed-input suite. | Automated malformed-input cases: bad JSON, wrong types, bad headers (P-01 in the plan). | Local. | Mehmet (implement), Berat (verify) | SRS | Not met: a non-numeric `Content-Length` closes the connection without a response (Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). A `GET` to an unknown API path (tested: `/api/v1/auth/login`) also returns an HTML 404 instead of the JSON error body. |
+| REL-04 | **Recovery objectives.** Data can be restored after a failure ([Deployment and Recovery](Deployment-and-Recovery.md) proposes at most 24 h of data loss and at most 1 h to restore; unapproved). | Backup restored and login verified within 60 minutes; data loss at most 24 hours of changes. | Timed restore rehearsal on a synthetic database and file set, recording elapsed time and a post-restore login. | Reference environment. | Osman (procedure), Berat (verify) | Design | Planned. [Verification-Report](Verification-Report.md) describes a synthetic backup and restore rehearsal by the DevOps owner; QA has not repeated or timed it against these targets. |
+
+No production availability target (for example "99.9% uptime") is set: hosting, monitoring and operations are undecided (SRS OD-04), and a number without them could not be measured.
+
+### 3.5 Maintainability and testability
+
+| ID | Requirement and rationale | Threshold | Method | Environment / load | Owner | Source | Status |
+|---|---|---|---|---|---|---|---|
+| MNT-01 | **Unit-test coverage.** The course requires at least 50% unit-test coverage in the CI pipeline by Sprint 3. | Line coverage of the application code of at least 50%, enforced by the CI job. | Run the tests under a coverage tool in CI and fail below 50%. | CI, Python 3.12. | Berat (define), Osman (CI) | Course | Not measured. No coverage tool has been run; Sprint 3 deliverable. |
+| MNT-02 | **Requirement traceability.** Every functional requirement can be traced to at least one case in the test plan. | FR-01 to FR-15 each map to at least 1 case. | Check the coverage matrix in the [Review and Test Plan](Review-and-Test-Plan.md). | Documents. | Berat | Proposed | Verified (local): 15 of 15 functional requirements are mapped; 3 of them (FR-01, FR-02, FR-15) have executed cases and the other 12 are Planned. |
+| MNT-03 | **Repeatable auth checks in CI.** The auth quality cases run from one command without secrets or network and give the same result every time. | `python -m unittest discover -s tests` passes, takes under 60 s, and gives the same result on 3 consecutive runs. | Run the suite repeatedly; CI already runs `unittest discover` in the Sprint 2 validation workflow. | Local and `ubuntu-latest`. | Berat (tests), Osman (CI) | Proposed | Verified (local): `tests/test_auth_quality.py` has 23 tests (22 pass, 1 expected failure for #71), about 6.4 s, identical result in 4 consecutive local runs. A CI run on this branch is the next evidence and is not yet available. |
+| MNT-04 | **Specification consistency.** Limits in the SRS, OpenAPI and code agree. | 0 mismatches for: name 100, e-mail 254, password 12-128, title 120, instructions 2000, list cap 200, `expiresIn` 3600, 10485760 bytes. | Manual comparison on 23 November; an automated check is Proposed. | Documents and code. | Berat | Proposed | Verified (local): SRS, OpenAPI and the registration code agree on the limits that exist in code. The login form message in USE-04 is the only mismatch found. |
+| MNT-05 | **Defect tracking.** Every defect found by QA has an Issue with reproduction steps, expected and observed result and severity; fixed defects are re-tested. | 100% of defects have an Issue. | Review of the Issue list against this document. | GitHub Issues. | Berat | Proposed | In progress: [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71) is open. Findings SEC-09, SEC-10, USE-03, USE-04 and USE-05 and the 404 format in REL-03 have no Issue yet; the team should decide which become Issues. |
+
+## 4. Baseline measurements (23 November 2026)
+
+Source: `scripts/measure_auth_latency.py`, run twice on one machine (Windows 11, AMD64, 16 logical CPUs, Python 3.12.10, loopback, temporary SQLite database, synthetic accounts). These are baseline observations, not acceptance results, and CI runners will differ.
+
+| Operation | Requests | Concurrency | Errors | p50 (ms) | p95 (ms) | Maximum (ms) |
+|---|---|---|---|---|---|---|
+| `POST /auth/register` | 30 | 1 | 0 | 69.5-70.5 | 81.7-91.6 | 90.3-92.5 |
+| `POST /auth/login` | 30 | 1 | 0 | 69.9-103.9 | 90.2-136.3 | 96.7-142.2 |
+| `POST /auth/login` | 30 | 5 | 0 | 82.8-160.4 | 161.2-194.9 | 173.0-203.5 |
+| `GET /users/me` | 200 | 1 | 0 | 1.4-1.8 | 4.8-20.8 | 25.9-26.9 |
+| `GET /users/me` | 500 | 10 | 0 | 4.4-5.7 | 13.0-14.1 | 520.8-526.4 |
+
+Each cell shows the lowest and highest value of the two runs.
+
+## 5. Observations that need a team decision
+
+These behaviors were seen during the 23 November checks. None is a defect against the current SRS, but each affects a requirement above.
+
+| Observation | Related | Decision needed from |
+|---|---|---|
+| A second login for the same account invalidates the earlier token (the first token returned 401, the second 200). | SEC-01, SRS OD-02 (login concurrency and revocation) | Mehmet, Toprak |
+| Logout only deletes the token in the browser; the server has no revocation endpoint. The browser keeps the token in `localStorage`. | SEC-01, [Architecture](Architecture.md) | Mehmet |
+| API responses send `Access-Control-Allow-Origin: *`. Bearer tokens in headers (no cookies) limit the impact. | SEC-02 | Mehmet |
+| There is no request-body size limit; a 3 MiB body was read in full before field validation rejected it. | REL-03, SEC-07 | Mehmet |
+
+## 6. Open points and limits of this document
+
+- Performance numbers, the usability sample (5 participants, 80%), brute-force limits and recovery objectives are proposals. Toprak (targets) and Mehmet (technical review) should confirm or change them before the team treats them as requirements.
+- Nothing here is a browser, Figma or end-to-end result. The browser checks (USE-01, USE-02, USE-05 and the keyboard part of USE-03) are still to be done.
+- The 50% coverage target and the working MVP belong to Sprint 3.
+- Statuses refer to `develop` at `ec696e3`. Re-check them after any change to `src/server.py`.
+
+References: [SRS](SRS.md), [Review and Test Plan](Review-and-Test-Plan.md), [Architecture](Architecture.md), [Deployment and Recovery](Deployment-and-Recovery.md), [Verification Report](Verification-Report.md), [OpenAPI draft](../Openapi.yaml), [backlog](../Initial-Product-Backlog.md).

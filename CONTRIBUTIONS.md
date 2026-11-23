@@ -38,6 +38,12 @@ Role: Quality. Responsibilities: Backend & testing; QA and acceptance criteria.
 Recorded work: Reviewed the API response codes against backlog stories US-10, US-13 and US-14. Added a consistency note covering booking conflicts, unauthorized assignment access, oversized files and unsupported file types. This was a document review; application behavior was not tested.
 Evidence: [Issue #44](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/44), [Pull Request #54](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/54), [API review commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/2286df1).
 
+### Sprint 2 - Quality, NFR and verification
+
+Authored the [NFR and quality measures](docs/sprint-2/NFR-and-Quality-Measures.md) and the [review and test plan](docs/sprint-2/Review-and-Test-Plan.md), added a repeatable auth API test suite ([tests/test_auth_quality.py](tests/test_auth_quality.py)) and a latency baseline script ([scripts/measure_auth_latency.py](scripts/measure_auth_latency.py)). Performance, usability, brute-force and recovery thresholds are QA proposals that the team has not accepted.
+
+Actual local checks on 23 November 2026 against `develop` at `ec696e3`: 23 auth tests (22 pass, 1 expected failure for a known defect); an exploratory run of 77 checks (66 pass, 1 fail, 10 observations); and a re-test showing that 14 of the 15 checks that failed on the PR #58 snapshot now pass. These are local API checks. They are not browser, Figma, end-to-end or coverage results, and the connection, lesson and assignment cases are planned only. Defect found: [Issue #71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71). Tracking: [Issue #72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72). Evidence: [PR #73](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/73) and its [authored commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/4d06c3f). Teammate review of PR #73 is pending; no approval is claimed.
+
 ## Osman Berke Özdemir
 Student ID: 220205017 · GitHub: [@makucheez](https://github.com/makucheez)
 Role: DevOps. Responsibilities: Backend; repository workflow and deployment plan.

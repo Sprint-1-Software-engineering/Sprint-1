@@ -1,0 +1,290 @@
+# TutorBridge - Review and Test Plan
+
+Version: 0.1 draft, 23 November 2026. Owner: Berat Erdem Yalçın (Quality / Testing). Tracking: [Issue #72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72). Quality targets: [NFR and Quality Measures](NFR-and-Quality-Measures.md).
+Review state: prepared for peer review. No team approval is claimed.
+
+## 1. Purpose, scope and status values
+
+The plan lists normal, negative and boundary cases for registration, login, roles, connections, lessons and assignments. Each case names the expected HTTP response from the [SRS](SRS.md) and the [OpenAPI draft](../Openapi.yaml) and is mapped to a functional requirement (FR), acceptance criterion (AC) and story (US). Expected values come from those documents, not from the code.
+
+Only registration, login and `GET /users/me` exist in the code today. Every other area is **Planned**: nothing was run and no result is claimed.
+
+| Status | Meaning |
+|---|---|
+| Pass / Fail | Executed on 23 November 2026 against `develop` at `ec696e3`, local API only. |
+| Expected failure | Executed; fails because of a known defect that has an Issue. CI treats it as expected. |
+| Observation | Executed; the specification gives no expected value, so the observed behavior is recorded. |
+| Planned | Not executed. The feature, the browser session or the Figma review does not exist yet. |
+| Static | Judged by reading the source files; no browser was used. |
+
+## 2. Environment and how to run
+
+- Local Python 3.12 HTTP server from `src/server.py`, temporary SQLite database, random localhost port, synthetic accounts only. CI uses `ubuntu-latest`.
+- Repeatable suite: `python -m unittest tests.test_auth_quality -v` (cases below marked "QA suite"). Whole suite: `python -m unittest discover -s tests`; the delivery-tool tests need `git` on `PATH`.
+- Latency baseline: `python scripts/measure_auth_latency.py`.
+- No real token, password or personal data is written to any report or log. Test passwords are synthetic.
+- Not covered: browser behavior, Figma, a hosted environment, load beyond 10 concurrent users, code coverage.
+
+## 3. Results executed so far (23 November 2026)
+
+| Run | Scope | Result |
+|---|---|---|
+| QA suite, `tests/test_auth_quality.py` (committed) | Registration, login, token and profile, hashing, simultaneous registration | 23 tests: 22 pass, 1 expected failure (P-01, Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). About 6.4 s; identical result in 4 consecutive runs. |
+| Existing `tests/test_auth_api.py` (written by the team) | 5 registration and login cases | Executed by QA as part of the whole suite: pass. Not counted as new QA cases. |
+| Whole suite, `unittest discover -s tests` | 42 tests including DevOps delivery-tool tests | OK with 1 expected failure. Needs `git` on `PATH`; without it 14 delivery-tool tests error with `FileNotFoundError`, which is an environment gap, not an application result. |
+| Exploratory run (script not committed) | The same cases plus probes: 77 checks | 66 pass, 1 fail (P-01), 10 observations. Identical result in two runs. Source of the Observations in section 4.8. |
+| Mutation check | Three deliberately broken copies of `server.py` (password minimum 8, two-hour sessions, login accepts any password) | All three were detected by the QA suite (R-05, T-06, L-03). The repository files were not changed. |
+
+### Re-test of the defects reproduced on 19 November
+
+The [SRS](SRS.md) section 8 and the [Verification Report](Verification-Report.md) describe two input defects found in the PR #58 snapshot: `invalid@` as e-mail and JSON `null` as name were accepted with 201.
+
+QA ran the same checks on the PR #58 snapshot (`7f3fa77`, from the team's reference ZIP) and on current `develop` (`ec696e3`):
+
+| Check | PR #58 snapshot | `develop` `ec696e3` |
+|---|---|---|
+| R-10 `invalid@` and R-10b to R-10f other malformed e-mails | 201 (not rejected) | 400 |
+| R-11 name `null` and R-12 name of another JSON type | 201 | 400 |
+| R-20 unknown request property on registration | 201 | 400 |
+| L-05 missing password, L-06 e-mail `null`, L-07 unknown property on login | 401, 401, 200 | 400, 400, 400 |
+| P-01 non-numeric `Content-Length` | no response | no response (Issue #71) |
+
+Of 15 checks that failed on the snapshot, 14 pass on `develop`. Twelve of the failing checks are additional to the two defects named in the SRS (other malformed e-mails, other name types, unknown properties, login validation). The fixes arrived in the two later commits to `src/server.py` on `develop`; this document does not attribute them further. P-01 exists in both versions, so it is not a regression.
+
+### Defects and findings
+
+| ID | Finding | Severity | Record |
+|---|---|---|---|
+| BUG-1 | A non-numeric `Content-Length` closes the connection without a response | Low | Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71), open |
+| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding, no Issue yet (see [NFR](NFR-and-Quality-Measures.md) USE-04) |
+| F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); not confirmed in a browser |
+| F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding, no Issue yet |
+| F-4 | `GET /server.py` is served by the static handler; unknown API `GET` paths return an HTML 404 | Low | Observation, no Issue yet |
+| F-5 | No limit on repeated failed logins | Low | Observation; scope decision needed (NFR SEC-10) |
+
+Findings without an Issue are listed so the team can decide which ones become Issues; QA has not opened them.
+
+## 4. Test cases
+
+Columns: **Type** is N (normal), X (negative) or B (boundary). **Requirement** gives the FR and AC. **Story** gives the user story and its Issue. "QA suite" means the case is part of `tests/test_auth_quality.py`; "Exploratory" means it was only run in the exploratory run.
+
+### 4.1 Registration (FR-01, US-01 / #15)
+
+| ID | Type | Case | Expected | Requirement | Status |
+|---|---|---|---|---|---|
+| R-01 | N | Valid teacher registration | 201; body has only id, name, e-mail, role | FR-01 AC-01.1 | Pass (QA suite) |
+| R-02 | N | Valid student registration | 201 | FR-01 AC-01.1 | Pass (QA suite) |
+| R-03 | X | Same e-mail again | 409 | FR-01 AC-01.2 | Pass (QA suite) |
+| R-04 | X | Same e-mail with other case and surrounding spaces | 409; one account row | FR-01 AC-01.2 | Pass (QA suite) |
+| R-05 | B | Password of 11 characters | 400 | FR-01 AC-01.3, BR-02 | Pass (QA suite) |
+| R-06 | B | Password of 12 characters | 201 | BR-02 | Pass (QA suite) |
+| R-07 | B | Password of 128 characters | 201 | BR-02 | Pass (QA suite) |
+| R-08 | B | Password of 129 characters | 400 | BR-02 | Pass (QA suite) |
+| R-09 | X | Role `admin` | 400 | FR-01 AC-01.3 | Pass (QA suite) |
+| R-10 | X | E-mail `invalid@` and other malformed e-mails (R-10b to R-10f) | 400 | FR-01 AC-01.3 | Pass (QA suite, existing suite, Exploratory) |
+| R-11 | X | Name `null` | 400 | FR-01 AC-01.3 | Pass (existing suite, Exploratory) |
+| R-12 | X | Name as number, list, object or boolean | 400 | FR-01 AC-01.3, BR-02 | Pass (QA suite for number; Exploratory for the rest) |
+| R-13 | X | Name of only spaces | 400 | BR-02 | Pass (QA suite) |
+| R-14 | B | Name of 100 characters | 201 | BR-02 | Pass (QA suite) |
+| R-15 | B | Name of 101 characters | 400 | BR-02 | Pass (QA suite) |
+| R-16 | N | Name with Turkish characters ("Yalçın") | 201; name returned unchanged | BR-02 | Pass (QA suite) |
+| R-17 | B | E-mail of 254 characters | 201 | BR-02 | Pass (QA suite) |
+| R-18 | B | E-mail of 255 characters | 400 | BR-02 | Pass (QA suite) |
+| R-19 | X | Each of name, e-mail, password, role missing | 400 | FR-01 AC-01.3 | Pass (QA suite) |
+| R-20 | X | Unknown request property | 400 | FR-01 AC-01.3 | Pass (existing suite, Exploratory) |
+| R-21 | X | Empty body | 400 | FR-01 AC-01.3 | Pass (QA suite) |
+| R-22 | X | Malformed JSON | 400 | FR-01 AC-01.3 | Pass (QA suite) |
+| R-23 | X | JSON array instead of object | 400 | FR-01 AC-01.3 | Pass (QA suite) |
+| R-24 | X | Password `null` | 400 | FR-01 AC-01.3 | Pass (QA suite) |
+| R-25 | X | Role as number | 400 | FR-01 AC-01.3 | Pass (QA suite) |
+| R-26 | N | Password stored as salted hash, absent from responses | Hash format `pbkdf2_sha256$`; no password in body | FR-01 AC-01.4 | Pass (QA suite) |
+| R-27 | X | 8 simultaneous registrations with one e-mail | One 201, seven 409; one account row | FR-01 AC-01.2 | Pass (QA suite) |
+
+### 4.2 Login (FR-02, US-02 / #16)
+
+| ID | Type | Case | Expected | Requirement | Status |
+|---|---|---|---|---|---|
+| L-01 | N | Valid credentials | 200; `accessToken`, `tokenType` Bearer, `expiresIn` 3600; no other fields | FR-02 AC-02.1 | Pass (QA suite) |
+| L-02 | N | E-mail in other letter case | 200 | BR-02 | Pass (QA suite) |
+| L-03 | X | Wrong password | 401, generic message | FR-02 AC-02.2 | Pass (QA suite) |
+| L-04 | X | Unknown e-mail | 401, body identical to L-03 | FR-02 AC-02.2 | Pass (QA suite) |
+| L-05 | X | Password missing | 400 | FR-02 AC-02.2 | Pass (QA suite) |
+| L-06 | X | E-mail `null` | 400 | FR-02 AC-02.2 | Pass (QA suite) |
+| L-07 | X | Unknown request property | 400 | FR-02 AC-02.2 | Pass (QA suite) |
+| L-08 | X | Empty body | 400 | FR-02 AC-02.2 | Pass (QA suite) |
+
+### 4.3 Profile and session (FR-02 AC-02.3, FR-15, US-02 / #16, US-15 / #60)
+
+| ID | Type | Case | Expected | Requirement | Status |
+|---|---|---|---|---|---|
+| T-01 | N | Valid token on `GET /users/me` | 200; only id, name, e-mail, role; own account | FR-15 AC-15.1 | Pass (QA suite) |
+| T-02 | X | No `Authorization` header | 401, `{code, message}` | FR-15 AC-15.2 | Pass (QA suite) |
+| T-03 | X | Malformed header: `Bearer`, `Bearer ` (empty), `Token abc`, `abc`, `Basic ...` | 401 | FR-02 AC-02.3 | Pass (QA suite) |
+| T-04 | X | Well-formed but unknown token | 401 | FR-02 AC-02.3 | Pass (QA suite) |
+| T-05 | X | Expired token (expiry set one second in the past in the temporary database) | 401 | FR-02 AC-02.3 | Pass (QA suite) |
+| T-06 | B | Stored expiry after login | 3590 to 3600 s remaining | FR-02 AC-02.1 | Pass (QA suite) |
+| T-07 | B | Token with 3 s left: call before and after expiry | 200, then 401 | FR-02 AC-02.3 | Pass (QA suite) |
+| T-08 | N | Teacher token and student token | Each returns its own role and account | FR-15 AC-15.3 | Pass (QA suite) |
+| T-09 | B | Real one-hour wait, then call | 401 after 3600 s | FR-02 AC-02.1 | Planned (one manual run; not done) |
+| T-10 | X | Token after an operator revokes the session or the user logs out | Behavior undefined (SRS OD-02) | FR-02 | Planned after OD-02 is decided |
+
+### 4.4 Roles and access (cross-cutting, BR-01)
+
+| ID | Type | Case | Expected | Requirement | Status |
+|---|---|---|---|---|---|
+| ROL-01 | X | Student calls `POST /invitations` | 403 | FR-03 AC-03.2 | Planned |
+| ROL-02 | X | Teacher calls `POST /invitations/accept` | 403 | FR-04 AC-04.2 | Planned |
+| ROL-03 | X | Student calls `GET /teachers/me/students`; teacher calls `GET /students/me/teachers` | 403 each | FR-05 AC-05.2 | Planned |
+| ROL-04 | X | Student calls `POST /availability` | 403 | FR-06 AC-06.3 | Planned |
+| ROL-05 | X | Teacher calls `POST /bookings` | 403 | FR-09 AC-09.2 | Planned |
+| ROL-06 | X | Student sends status `approved` | 403 | FR-10 AC-10.2 | Planned |
+| ROL-07 | X | Student calls `POST /assignments` | 403 | FR-13 AC-13.3 | Planned |
+| ROL-08 | X | Every protected operation with no token, a malformed token and an expired token | 401 | FR-02 AC-02.3 | Planned (done for `/users/me`) |
+| ROL-09 | X | Body field that names another owner (for example `teacherId` on `POST /availability`) | 400; identity always comes from the token | BR-01, FR-06 AC-06.1 | Planned |
+| ROL-10 | X | Cross-account matrix: 2 teachers x 2 students (one connected pair each) against every resource | 0 cross-account successes | BR-01 | Planned |
+
+### 4.5 Connections (FR-03, FR-04, FR-05)
+
+| ID | Type | Case | Expected | Requirement | Story | Status |
+|---|---|---|---|---|---|---|
+| INV-01 | N | Teacher invites a student e-mail | 201; code and `expiresAt` | FR-03 AC-03.1 | US-03 / #17 | Planned |
+| INV-02 | X | E-mail missing or malformed | 400 | FR-03 AC-03.2 | US-03 / #17 | Planned |
+| INV-03 | X | Student is already connected | 409; no second relationship | FR-03 AC-03.3 | US-03 / #17 | Planned |
+| INV-04 | B | `expiresAt` minus creation time | 7 days (within 5 s) | FR-03 AC-03.1 | US-03 / #17 | Planned |
+| INV-05 | X | Second active invitation to the same e-mail | Not specified; record the observed result and report it as a specification gap | FR-03 | US-03 / #17 | Planned |
+| ACC-01 | N | Student with the matching e-mail accepts a valid code | 201; one relationship; role unchanged | FR-04 AC-04.1, AC-04.4 | US-04 / #18 | Planned |
+| ACC-02 | X | Code used a second time | 409 | FR-04 AC-04.3 | US-04 / #18 | Planned |
+| ACC-03 | B | Code at the moment `expiresAt` is reached | 409 | FR-04 AC-04.4 | US-04 / #18 | Planned |
+| ACC-04 | X | Unknown code | 404 | FR-04 AC-04.2 | US-04 / #18 | Planned |
+| ACC-05 | X | Missing code, or a code shorter than 16 characters | 400 | FR-04 AC-04.2 | US-04 / #18 | Planned |
+| ACC-06 | X | Code for another student's e-mail | 403 | FR-04 AC-04.2 | US-04 / #18 | Planned |
+| ACC-07 | X | Two simultaneous accepts of one code | One 201, one 409; one relationship | FR-04 AC-04.3 | US-04 / #18 | Planned |
+| LST-01 | N | Teacher lists students; student lists teachers | 200; own connections only, ordered by name, no secret fields | FR-05 AC-05.1, AC-05.3 | US-05 / #19 | Planned |
+| LST-02 | B | No connections | 200 with an empty list | FR-05 AC-05.1 | US-05 / #19 | Planned |
+| LST-03 | B | 201 connections seeded | 200 with exactly 200 items | FR-05 AC-05.3, BR-10 | US-05 / #19 | Planned |
+
+### 4.6 Availability and lessons (FR-06 to FR-12)
+
+| ID | Type | Case | Expected | Requirement | Story | Status |
+|---|---|---|---|---|---|---|
+| AVL-01 | N | Teacher publishes a future slot with a timezone offset | 201; owner from the token | FR-06 AC-06.1 | US-06 / #20 | Planned |
+| AVL-02 | X | Malformed, offset-free, past or reversed interval (each separately) | 400 | FR-06 AC-06.2 | US-06 / #20 | Planned |
+| AVL-03 | X | Overlap with the teacher's own slot | 409 | FR-06 AC-06.2 | US-06 / #20 | Planned |
+| AVL-04 | B | Slot that starts exactly when another ends | 201 | FR-06 AC-06.3, BR-05 | US-06 / #20 | Planned |
+| AVL-05 | N | Connected student views the teacher's slots | 200; future slots, no approved overlap, ordered by start | FR-07 AC-07.1 | US-07 / #21 | Planned |
+| AVL-06 | N | A pending request exists for a slot | Slot is still listed | FR-07 AC-07.2 | US-07 / #21 | Planned |
+| AVL-07 | B | No matching slots | 200 with an empty list | FR-07 AC-07.2 | US-07 / #21 | Planned |
+| AVL-08 | X | `teacherId` missing or invalid; unknown teacher; unconnected student | 400; 404; 403 | FR-07 AC-07.3 | US-07 / #21 | Planned |
+| AVL-09 | B | `from` equal to or after `to`; slot ending exactly at `from`; slot starting exactly at `to` | 400; excluded; excluded | FR-07 AC-07.4, BR-06 | US-07 / #21 | Planned |
+| AVL-10 | N | Owner deletes a slot with no active booking | 204, no body | FR-08 AC-08.1 | US-08 / #22 | Planned |
+| AVL-11 | X | Delete a slot with a pending or approved booking | 409; slot unchanged | FR-08 AC-08.2 | US-08 / #22 | Planned |
+| AVL-12 | X | Wrong owner; unknown slot; malformed id; student | 403; 404; 400; 403 | FR-08 AC-08.3 | US-08 / #22 | Planned |
+| BKG-01 | N | Connected student requests a future slot | 201; `pending`; slot times and teacher copied; client-supplied values rejected or ignored | FR-09 AC-09.1 | US-09 / #23 | Planned |
+| BKG-02 | X | Unconnected student; malformed input; unknown slot | 403; 400; 404 | FR-09 AC-09.2 | US-09 / #23 | Planned |
+| BKG-03 | X | Same student requests the same slot twice | 409; one booking | FR-09 AC-09.3 | US-09 / #23 | Planned |
+| BKG-04 | N | Two different students request the same slot | Both 201 (pending does not reserve) | FR-09 AC-09.3, BR-07 | US-09 / #23 | Planned |
+| BKG-05 | X | Request for a slot whose start has passed | Not specified (400 or 409); record the observed result | FR-09 | US-09 / #23 | Planned |
+| BKG-06 | N | Owning teacher approves; owning teacher rejects | 200 with the updated booking | FR-10 AC-10.1 | US-10 / #24 | Planned |
+| BKG-07 | X | Wrong teacher; unknown booking; invalid status value; transition from a terminal state | 403; 404; 400; 409 | FR-10 AC-10.2 | US-10 / #24 | Planned |
+| BKG-08 | X | Approve a booking that overlaps an approved lesson | 409 | FR-10 AC-10.4, BR-05 | US-10 / #24 | Planned |
+| BKG-09 | B | Approve a booking that starts exactly when an approved lesson ends | 200 | FR-10 AC-10.4 | US-10 / #24 | Planned |
+| BKG-10 | X | 10 simultaneous approvals of overlapping requests, 100 rounds | Exactly one 200 per round, others 409; one approved lesson | FR-10 AC-10.3 | US-10 / #24 | Planned |
+| BKG-11 | X | Approve a pending request whose start has passed | Not specified; record the observed result | FR-10 | US-10 / #24 | Planned |
+| BKG-12 | N | User lists lessons | 200; only own bookings, ordered by start, at most 200 | FR-11 AC-11.1, AC-11.3 | US-11 / #25 | Planned |
+| BKG-13 | X | Invalid `status`, `from` after `to`, offset-free dates | 400 | FR-11 AC-11.2 | US-11 / #25 | Planned |
+| BKG-14 | B | No bookings | 200 with an empty list | FR-11 AC-11.1 | US-11 / #25 | Planned |
+| BKG-15 | N | Student and teacher each cancel a pending or approved lesson before it starts | 200; `cancelled` | FR-12 AC-12.1 | US-12 / #26 | Planned |
+| BKG-16 | B | Cancel one second before `startTime`; cancel exactly at `startTime` | 200; 409 | FR-12 AC-12.1, AC-12.2 | US-12 / #26 | Planned |
+| BKG-17 | X | Cancel a terminal booking; unrelated user; unknown id; malformed input | 409; 403; 404; 400 | FR-12 AC-12.2 | US-12 / #26 | Planned |
+| BKG-18 | N | After cancellation, delete the slot and approve another overlapping request | Both succeed | FR-12 AC-12.3 | US-12 / #26 | Planned |
+
+### 4.7 Assignments (FR-13, FR-14)
+
+| ID | Type | Case | Expected | Requirement | Story | Status |
+|---|---|---|---|---|---|---|
+| ASG-01 | N | Teacher uploads a PDF, a JPEG and a PNG to a connected student | 201 each | FR-13 AC-13.1, AC-13.2 | US-13 / #27 | Planned |
+| ASG-02 | B | Title of 1, 120 and 121 characters; instructions of 2000 and 2001 | 201, 201, 400; 201, 400 | FR-13 AC-13.1 | US-13 / #27 | Planned |
+| ASG-03 | B | File of 10485760 bytes; file of 10485761 bytes | 201; 413 | FR-13 AC-13.2 | US-13 / #27 | Planned |
+| ASG-04 | B | Empty (0-byte) file | Not specified (the OpenAPI schema requires at least 1 byte); record the observed result | FR-13 | US-13 / #27 | Planned |
+| ASG-05 | X | Text file; executable renamed to `.pdf`; PNG content named `.exe` | 415 for unsupported actual content | FR-13 AC-13.2 | US-13 / #27 | Planned |
+| ASG-06 | X | Student calls the endpoint; unconnected student; required field missing; unknown student | 403; 403; 400; 404 | FR-13 AC-13.3 | US-13 / #27 | Planned |
+| ASG-07 | X | Filename with path separators or `..`; fetch the stored file by a static URL | Name sanitized; static URL returns 404; response has no public path | FR-13 AC-13.4 | US-13 / #27 | Planned |
+| ASG-08 | X | Upload rejected with 413 or 415 | No metadata row and no stored file remain | BR-11 | US-13 / #27 | Planned |
+| ASG-09 | N | Teacher lists; student lists | Own assignments only, newest first, at most 200; empty list returns 200 | FR-14 AC-14.1 | US-14 / #28 | Planned |
+| ASG-10 | N | Creating teacher and assigned student read details and download | 200; actual media type; safe `Content-Disposition`; no storage path | FR-14 AC-14.2, AC-14.3 | US-14 / #28 | Planned |
+| ASG-11 | X | Unrelated student; other teacher; connected but non-assigned student | 403 on metadata and file | FR-14 AC-14.2 | US-14 / #28 | Planned |
+| ASG-12 | X | Unknown id; malformed id; no token | 404; 400; 401 | FR-14 AC-14.2 | US-14 / #28 | Planned |
+
+### 4.8 Observations from the executed run (no expected value in the SRS)
+
+| ID | Observation | Related NFR |
+|---|---|---|
+| O-01 | A second login for the same user invalidates the earlier token: first token 401, second 200 | SEC-01, OD-02 |
+| O-02 | `POST /api/v1/users/me` returns a JSON 404 | REL-03 |
+| O-03 | `GET /api/v1/auth/login` returns an HTML 404 | REL-03 |
+| O-04 | `Access-Control-Allow-Origin: *` is sent on API responses | SEC-02 |
+| O-05 | 12 consecutive wrong passwords for one account all returned 401 | SEC-10 |
+| O-06 | `GET /server.py` returned 200; `GET /tutorbridge.db`, `/../data/tutorbridge.db` and the encoded form returned 404 | SEC-09 |
+| P-02 | A 3 MiB request body was read in full and then rejected by field validation (400) | REL-03 |
+| P-01 | Non-numeric `Content-Length`: no response, unhandled `ValueError`. Expected 400. | REL-03, Issue #71 |
+
+### 4.9 Interface and prototype checks (browser or Figma needed)
+
+| ID | Type | Case | Expected | Requirement | Status |
+|---|---|---|---|---|---|
+| UI-01 | N | Log in as a teacher and as a student | Each lands on their own entry screen | FR-02 AC-02.4, FR-15 AC-15.3 | Planned in a browser. Static: Not met (F-2) |
+| UI-02 | X | Read the login and registration password messages | Both state 12 characters | BR-02 | Static: Not met (F-1); browser check Planned |
+| UI-03 | N | Complete login and registration using only the keyboard | Logical Tab order, visible focus, Enter submits | NFR USE-03 | Planned |
+| UI-04 | X | Trigger validation errors with a screen reader or the accessibility tree | Message text is announced | NFR USE-03 | Planned. Static: Not met (F-3) |
+| UI-05 | N | Check that all form fields have labels | Every input has a label | NFR USE-03 | Static: Pass for `login.html` and `register.html`; browser scan Planned |
+| UI-06 | X | Open the dashboard with an expired token | Redirect to the login page | FR-02 AC-02.3 | Planned in a browser. Static: the script redirects on 401 |
+| UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Planned. The Figma file was not opened in this QA session |
+| UI-08 | N | Student requests a lesson in the prototype | At least 80% of 5 or more participants finish within 120 s without help | SRS section 7, NFR USE-01 | Planned. No session held |
+
+## 5. Requirement coverage
+
+Every functional requirement has at least one case. "Executed" counts cases with status Pass, Fail, Expected failure or Observation.
+
+| FR | Cases | Executed |
+|---|---|---|
+| FR-01 | R-01 to R-27 | Yes |
+| FR-02 | L-01 to L-08, T-03 to T-10, ROL-08, UI-01, UI-06 | Yes |
+| FR-03 | INV-01 to INV-05, ROL-01 | No |
+| FR-04 | ACC-01 to ACC-07, ROL-02 | No |
+| FR-05 | LST-01 to LST-03, ROL-03 | No |
+| FR-06 | AVL-01 to AVL-04, ROL-04, ROL-09 | No |
+| FR-07 | AVL-05 to AVL-09 | No |
+| FR-08 | AVL-10 to AVL-12 | No |
+| FR-09 | BKG-01 to BKG-05, ROL-05 | No |
+| FR-10 | BKG-06 to BKG-11, ROL-06 | No |
+| FR-11 | BKG-12 to BKG-14 | No |
+| FR-12 | BKG-15 to BKG-18 | No |
+| FR-13 | ASG-01 to ASG-08, ROL-07 | No |
+| FR-14 | ASG-09 to ASG-12 | No |
+| FR-15 | T-01, T-02, T-04, T-05, T-08, UI-01 | Yes |
+
+Executed requirements: 3 of 15 (FR-01, FR-02, FR-15). The other 12 are Planned because their endpoints do not exist yet.
+
+## 6. Specification gaps found while writing the plan
+
+These cases have no expected value in the SRS or OpenAPI. The Product Owner (Toprak) decides each answer; the plan records the observed behavior once the feature exists.
+
+- INV-05: behavior of a second active invitation to the same e-mail.
+- BKG-05: status code for a lesson request on a slot whose start has already passed, and what "active request" means in AC-09.3.
+- BKG-11: whether a teacher may approve a pending request whose start has passed.
+- ASG-04: how a 0-byte file is handled.
+
+## 7. Hand-off to CI
+
+- The QA suite `tests/test_auth_quality.py` should run inside the existing "Sprint 2 document and hygiene checks" job, because that job already runs `python -m unittest discover -s tests`. This has not been confirmed on CI yet; the first CI run of the pull request is the evidence. Its step title says "not application tests", but the folder now contains application API checks. Osman Berke (DevOps owner) decides whether to rename the step or add a separate job. This plan does not edit the workflow.
+- P-01 is marked as an expected failure. When Issue #71 is fixed the test reports an unexpected success and fails the run; the fix then needs to remove the marker.
+- Not suitable for CI yet: the browser checks, the real one-hour wait (T-09), the Figma review and the usability session.
+
+## 8. Limits of this plan
+
+- Only the registration, login and profile cases were executed. The remaining cases describe expected behavior and are not results.
+- All executed results are local API checks against the Python handler. No browser, Figma or end-to-end run is included.
+- Coverage was not measured; the 50% unit-test coverage target belongs to Sprint 3.
+- Re-run the QA suite after any change to `src/server.py`.
+
+References: [SRS](SRS.md), [NFR and Quality Measures](NFR-and-Quality-Measures.md), [OpenAPI draft](../Openapi.yaml), [backlog](../Initial-Product-Backlog.md), [Verification Report](Verification-Report.md), [UI-UX](UI-UX.md).
