@@ -16,4 +16,8 @@ sequenceDiagram
   API->>API: Verify password and create random opaque token
   API->>DB: Store token with expiry
   DB-->>API: Token record
-  API-->>Browser: 200 bearer token and profile
+  API-->>Browser: 200 opaque bearer token
+  Browser->>API: GET /api/v1/users/me (Authorization: Bearer token)
+  API->>DB: Look up token, expiry and associated user
+  DB-->>API: Public user profile
+  API-->>Browser: 200 public user profile

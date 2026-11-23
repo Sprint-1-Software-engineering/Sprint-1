@@ -189,7 +189,11 @@ sequenceDiagram
   API->>API: Verify password and create random opaque token
   API->>DB: Store token with expiry
   DB-->>API: Token record
-  API-->>Browser: 200 bearer token and profile
+  API-->>Browser: 200 opaque bearer token
+  Browser->>API: GET /api/v1/users/me (Authorization: Bearer token)
+  API->>DB: Look up token, expiry and associated user
+  DB-->>API: Public user profile
+  API-->>Browser: 200 public user profile
 ```
 
 ## 7. Sequence: request and approve a lesson
@@ -241,7 +245,7 @@ sequenceDiagram
 - `bookings`: student, teacher and availability references, copied UTC start/end and lifecycle status. On approval, detect overlap using `startTime < otherEnd && endTime > otherStart` within a transaction.
 - `assignments` and `assignment_files`: teacher/student scope, instructions and private storage metadata. Never expose a filesystem path or public static URL.
 
-The OpenAPI draft is the interface contract for these future operations. It still specifies `localhost:3000` and JWT, while the local prototype reference uses `127.0.0.1:8000` and opaque database-backed tokens; resolve this mismatch with the SRS owners before changing either contract. Persist instants in UTC, retain offset-aware input validation, use foreign keys and parameterized queries, and return a resource only after checking the caller's role and ownership. Only registration, login and current-user lookup are represented as implemented in the prototype reference; the remaining API operations are planned.
+The OpenAPI draft is the interface contract for these future operations. Its `localhost:3000` and JWT references are legacy draft values: the implemented local prototype listens on `127.0.0.1:8000` and uses opaque database-backed bearer tokens. The contract should be reconciled with the implemented reference before these interfaces are treated as approved. Persist instants in UTC, retain offset-aware input validation, use foreign keys and parameterized queries, and return a resource only after checking the caller's role and ownership. Only registration, login and current-user lookup are represented as implemented in the prototype reference; the remaining API operations are planned.
 
 ## 9. Open decisions and links
 

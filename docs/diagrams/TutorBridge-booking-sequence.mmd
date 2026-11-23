@@ -11,7 +11,7 @@ sequenceDiagram
   actor Teacher
   Teacher->>API: PATCH /bookings/{id}/status (approved), bearer token
   API->>API: Authenticate teacher
-  API->>DB: BEGIN transaction; verify booking ownership and pending state
+  API->>DB: Begin transaction and verify booking ownership and pending state
   API->>DB: Check for overlapping approved bookings
   alt Conflict exists
     API->>DB: ROLLBACK
