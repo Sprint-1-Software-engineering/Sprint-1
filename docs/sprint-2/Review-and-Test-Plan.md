@@ -11,8 +11,8 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 
 | Status | Meaning |
 |---|---|
-| Pass / Fail | Executed on 23 November 2026 against `develop` at `ec696e3`, local API only. |
-| Expected failure | Executed; fails because of a known defect that has an Issue. CI treats it as expected. |
+| Pass / Fail | Executed on 23 November 2026 against `develop` at `ec696e3`; re-tested at `7fccc47` where the text says so. Local API only. |
+| Expected failure | Executed; fails because of a known defect that has an Issue. CI treats it as expected. No case has this status at `7fccc47`; P-01 had it until #71 was fixed. |
 | Observation | Executed; the specification gives no expected value, so the observed behavior is recorded. |
 | Planned | Not executed. The feature, the browser session or the Figma review does not exist yet. |
 | Static | Judged by reading the source files; no browser was used. |
@@ -29,11 +29,11 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 
 | Run | Scope | Result |
 |---|---|---|
-| QA suite, `tests/test_auth_quality.py` (committed) | Registration, login, token and profile, hashing, simultaneous registration | 23 tests: 22 pass, 1 expected failure (P-01, Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). About 6.4 s; identical result in 4 consecutive runs. |
+| QA suite, `tests/test_auth_quality.py` (committed) | Registration, login, token and profile, hashing, simultaneous registration | At `ec696e3`: 23 tests, 22 pass, 1 expected failure (P-01, Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). At `7fccc47`, after the fix in PR #79: 23 tests, all pass; P-01 is now a normal test that the code owner extended in PR #79 to cover `abc` and `-1` on both auth endpoints. About 6.4 s; identical result in 4 consecutive runs at `ec696e3` and 2 at `7fccc47`. The CI log of the Sprint 2 validation run for `develop` at `7fccc47` shows these tests passing on `ubuntu-26.04`. |
 | Existing `tests/test_auth_api.py` (written by the team) | 5 registration and login cases | Executed by QA as part of the whole suite: pass. Not counted as new QA cases. |
-| Whole suite, `unittest discover -s tests` | 42 tests including DevOps delivery-tool tests | OK with 1 expected failure. Needs `git` on `PATH`; without it 14 delivery-tool tests error with `FileNotFoundError`, which is an environment gap, not an application result. |
-| Exploratory run (script not committed) | The same cases plus probes: 77 checks | 66 pass, 1 fail (P-01), 10 observations. Identical result in two runs. Source of the Observations in section 4.8. |
-| Mutation check | Three deliberately broken copies of `server.py` (password minimum 8, two-hour sessions, login accepts any password) | All three were detected by the QA suite (R-05, T-06, L-03). The repository files were not changed. |
+| Whole suite, `unittest discover -s tests` | 42 tests including DevOps delivery-tool tests | At `ec696e3`: OK with 1 expected failure. At `7fccc47`: 42 tests OK, no expected failures (also in CI). Needs `git` on `PATH`; without it 14 delivery-tool tests error with `FileNotFoundError`, which is an environment gap, not an application result. |
+| Exploratory run (script not committed) | The same cases plus probes: 77 checks | At `ec696e3`: 66 pass, 1 fail (P-01), 10 observations, identical in two runs. At `7fccc47`: 67 pass, 0 fail, 10 observations, 0 unhandled server exceptions, identical in two runs. Source of the Observations in section 4.8. |
+| Mutation check | Three deliberately broken copies of `server.py` (password minimum 8, two-hour sessions, login accepts any password) | All three were detected by the QA suite (R-05, T-06, L-03). A fourth copy with the #71 fix reverted made the new P-01 test fail (2 sub-cases). The repository files were not changed. |
 
 ### Re-test of the defects reproduced on 19 November
 
@@ -47,16 +47,16 @@ QA ran the same checks on the PR #58 snapshot (`7f3fa77`, from the team's refere
 | R-11 name `null` and R-12 name of another JSON type | 201 | 400 |
 | R-20 unknown request property on registration | 201 | 400 |
 | L-05 missing password, L-06 e-mail `null`, L-07 unknown property on login | 401, 401, 200 | 400, 400, 400 |
-| P-01 non-numeric `Content-Length` | no response | no response (Issue #71) |
+| P-01 non-numeric `Content-Length` | no response | no response at `ec696e3` (Issue #71); 400 with the JSON error body at `7fccc47` |
 
-Of 15 checks that failed on the snapshot, 14 pass on `develop`. Twelve of the failing checks are additional to the two defects named in the SRS (other malformed e-mails, other name types, unknown properties, login validation). The fixes arrived in the two later commits to `src/server.py` on `develop`; this document does not attribute them further. P-01 exists in both versions, so it is not a regression.
+Of 15 checks that failed on the snapshot, 14 passed on `develop` at `ec696e3` and all 15 pass at `7fccc47`. Twelve of the failing checks are additional to the two defects named in the SRS (other malformed e-mails, other name types, unknown properties, login validation). The fixes arrived in the two later commits to `src/server.py` on `develop`; this document does not attribute them further. P-01 existed in both versions, so it was not a regression; it was fixed in PR #79 and QA re-tested it at `7fccc47` (Issue #71 closed).
 
 ### Defects and findings
 
 | ID | Finding | Severity | Record |
 |---|---|---|---|
-| BUG-1 | A non-numeric `Content-Length` closes the connection without a response | Low | Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71), open |
-| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding. Issue [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) (see [NFR](NFR-and-Quality-Measures.md) USE-04) |
+| BUG-1 | A non-numeric `Content-Length` closes the connection without a response | Low | Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71): fixed in PR #79, re-tested by QA at `7fccc47` (400 with the JSON error body on register and login), closed |
+| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding. Issue [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) (see [NFR](NFR-and-Quality-Measures.md) USE-04). PR #79 removed the 6-character check; static re-check at `7fccc47`, browser check pending, Issue open |
 | F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); QA note added to #61; not confirmed in a browser |
 | F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75), awaiting a team decision |
 | F-4 | `GET /server.py` is served by the static handler | Low | Observation. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75). A `GET` to an unknown API path returning an HTML 404 has no Issue |
@@ -227,7 +227,7 @@ Columns: **Type** is N (normal), X (negative) or B (boundary). **Requirement** g
 | O-05 | 12 consecutive wrong passwords for one account all returned 401 | SEC-10 |
 | O-06 | `GET /server.py` returned 200; `GET /tutorbridge.db`, `/../data/tutorbridge.db` and the encoded form returned 404 | SEC-09 |
 | P-02 | A 3 MiB request body was read in full and then rejected by field validation (400) | REL-03 |
-| P-01 | Non-numeric `Content-Length`: no response, unhandled `ValueError`. Expected 400. | REL-03, Issue #71 |
+| P-01 | Non-numeric `Content-Length`: no response, unhandled `ValueError`. Expected 400. Fixed in PR #79; at `7fccc47` it returns 400 on register and login. | REL-03, Issue #71 |
 
 ### 4.9 Interface and prototype checks (browser or Figma needed)
 
@@ -277,8 +277,8 @@ These cases have no expected value in the SRS or OpenAPI. The Product Owner (Top
 
 ## 7. Hand-off to CI
 
-- The QA suite `tests/test_auth_quality.py` should run inside the existing "Sprint 2 document and hygiene checks" job, because that job already runs `python -m unittest discover -s tests`. This has not been confirmed on CI yet; the first CI run of the pull request is the evidence. Its step title says "not application tests", but the folder now contains application API checks. Osman Berke (DevOps owner) decides whether to rename the step or add a separate job. This plan does not edit the workflow.
-- P-01 is marked as an expected failure. When Issue #71 is fixed the test reports an unexpected success and fails the run; the fix then needs to remove the marker.
+- The QA suite `tests/test_auth_quality.py` should run inside the existing "Sprint 2 document and hygiene checks" job, because that job already runs `python -m unittest discover -s tests`. CI confirms it: the log of the Sprint 2 validation run for `develop` at `7fccc47` (`ubuntu-26.04`) lists the QA tests, including P-01, and ends with "Ran 42 tests ... OK". The DevOps owner has since renamed the step to "Python unittest suite (auth API, QA, and delivery tooling)". This plan does not edit the workflow.
+- P-01 was an expected failure until #71 was fixed; PR #79 turned it into a normal test, so no expected-failure marker remains.
 - Not suitable for CI yet: the browser checks, the real one-hour wait (T-09), the Figma review and the usability session.
 
 ## 8. Limits of this plan
