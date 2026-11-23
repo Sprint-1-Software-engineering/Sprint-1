@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/check_sprint2.py
-      - name: Delivery tooling safety and integrity tests (not application tests)
+      - name: Python unittest suite (auth API, QA, and delivery tooling)
         run: python -m unittest discover -s tests -v
   runtime-availability:
     name: Detect integrated auth runtime
