@@ -18,6 +18,12 @@ Prepared the architecture baseline and database-plan separation in [Architecture
 
 Evidence: [Sprint 2 architecture and auth commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/9bb15e7) and the open feature branch PR workflow remain pending teammate review.
 
+### Sprint 2 - Auth request validation
+
+Handled malformed and negative `Content-Length` values on both registration and login without an unbounded body read. Added raw-socket regressions for both endpoints and removed the obsolete expected-failure marker. Removed the login form's contradictory 6-character password minimum; registration's existing 12-128 rule is unchanged.
+
+Validation on Python 3.14.5: `python -m unittest discover -s tests -v` passed (42 tests, no expected failures). These are local HTTP-handler tests with a temporary SQLite database; no browser or deployed-server test was run. Tracking: [Issue #71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71), [Issue #74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74).
+
 ## Toprak Daldal
 Student ID: 260201315 · GitHub: [@toprakdaldal](https://github.com/toprakdaldal)
 Role: Product. Responsibilities: Backend & frontend; scope and backlog.

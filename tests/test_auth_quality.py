@@ -298,32 +298,55 @@ class AuthQualityTests(unittest.TestCase):
         count = self.database().execute("SELECT COUNT(*) FROM users WHERE email = ?", (email,)).fetchone()[0]
         self.assertEqual(count, 1)
 
-    # ------------------------------------------------------------ known defect
-    @unittest.expectedFailure
-    def test_p01_non_numeric_content_length_returns_400(self):
-        """Known defect, Issue #71: the server closes the connection without a response.
+    def test_p01_invalid_content_length_returns_400_on_auth_endpoints(self):
+        """Issue #71: invalid lengths return the documented JSON error.
 
-        Remove the expectedFailure marker when #71 is fixed; an unexpected success
-        will then remind the team to do so.
+        No body is sent and the connection remains open while awaiting the
+        response, so a negative length must not trigger an unbounded body read.
         """
-        raw = ("POST /api/v1/auth/register HTTP/1.1\r\nHost: x\r\nContent-Type: application/json\r\n"
-               "Content-Length: abc\r\nConnection: close\r\n\r\n{}")
-        connection = socket.create_connection(("127.0.0.1", self.port), timeout=5)
-        try:
-            connection.sendall(raw.encode("ascii"))
-            received = b""
-            try:
-                while True:
-                    part = connection.recv(4096)
-                    if not part:
-                        break
-                    received += part
-            except socket.timeout:
-                pass
-        finally:
-            connection.close()
-        status_line = received.split(b"\r\n", 1)[0].decode("ascii", "replace")
-        self.assertIn(" 400 ", status_line)
+        endpoints = ("/api/v1/auth/register", "/api/v1/auth/login")
+        for endpoint in endpoints:
+            for content_length in ("abc", "-1"):
+                with self.subTest(endpoint=endpoint, content_length=content_length):
+                    raw = (
+                        f"POST {endpoint} HTTP/1.1\r\n"
+                        "Host: x\r\n"
+                        "Content-Type: application/json\r\n"
+                        f"Content-Length: {content_length}\r\n"
+                        "Connection: close\r\n\r\n"
+                    )
+                    connection = socket.create_connection(("127.0.0.1", self.port), timeout=5)
+                    connection.settimeout(5)
+                    try:
+                        connection.sendall(raw.encode("ascii"))
+                        received = bytearray()
+                        while b"\r\n\r\n" not in received:
+                            chunk = connection.recv(4096)
+                            if not chunk:
+                                self.fail("Server closed the connection without an HTTP response")
+                            received.extend(chunk)
+
+                        headers, body = bytes(received).split(b"\r\n\r\n", 1)
+                        response_headers = {}
+                        for line in headers.split(b"\r\n")[1:]:
+                            name, value = line.decode("ascii").split(":", 1)
+                            response_headers[name.lower()] = value.strip()
+                        response_content_length = int(response_headers["content-length"])
+
+                        while len(body) < response_content_length:
+                            chunk = connection.recv(4096)
+                            if not chunk:
+                                self.fail("Server closed the connection before completing its JSON body")
+                            body += chunk
+
+                        status_code = headers.split(b"\r\n", 1)[0].split()[1]
+                        self.assertEqual(status_code, b"400")
+                        self.assertEqual(
+                            json.loads(body[:response_content_length].decode("utf-8")),
+                            {"code": "invalid_input", "message": "Geçersiz istek."},
+                        )
+                    finally:
+                        connection.close()
 
 
 if __name__ == "__main__":

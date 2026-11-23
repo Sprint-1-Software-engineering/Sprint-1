@@ -56,9 +56,6 @@ if (loginForm) {
     if (!password) {
       setError(passwordInput, passwordError, "Şifrenizi girin.");
       isValid = false;
-    } else if (password.length < 6) {
-      setError(passwordInput, passwordError, "Şifre en az 6 karakter olmalıdır.");
-      isValid = false;
     } else {
       setError(passwordInput, passwordError, "");
     }
