@@ -56,7 +56,16 @@ class AuthApiTests(unittest.TestCase):
         self.assertEqual(body["code"], "invalid_input")
 
     def test_register_rejects_malformed_email(self):
-        for email in ("invalid@", "bad@@example.com", ".bad@example.com", "bad..name@example.com"):
+        for email in (
+            "invalid@",
+            "bad@@example.com",
+            ".bad@example.com",
+            "bad..name@example.com",
+            "bad@-example.com",
+            "bad@example-.com",
+            "bad@example",
+            "bad name@example.com",
+        ):
             with self.subTest(email=email):
                 status, body = self.request("POST", "/api/v1/auth/register", {
                     "name": "Valid Name",
@@ -69,10 +78,14 @@ class AuthApiTests(unittest.TestCase):
 
     def test_register_rejects_wrong_json_types(self):
         cases = [
+            {"name": None, "email": "type@example.test", "password": "Example-only-123", "role": "student"},
             {"name": ["Name"], "email": "type@example.test", "password": "Example-only-123", "role": "student"},
             {"name": "Valid Name", "email": 123, "password": "Example-only-123", "role": "student"},
+            {"name": "Valid Name", "email": None, "password": "Example-only-123", "role": "student"},
             {"name": "Valid Name", "email": "type@example.test", "password": ["password"], "role": "student"},
+            {"name": "Valid Name", "email": "type@example.test", "password": None, "role": "student"},
             {"name": "Valid Name", "email": "type@example.test", "password": "Example-only-123", "role": 1},
+            {"name": "Valid Name", "email": "type@example.test", "password": "Example-only-123", "role": None},
         ]
         for payload in cases:
             with self.subTest(payload=payload):

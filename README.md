@@ -8,6 +8,7 @@ A web platform for private tutors and their existing students. The first release
 - [System Boundary](docs/diagrams/system-boundary.svg)
 - [Roles and RACI](docs/Team-Members-and-RACI.md)
 - [OpenAPI Draft](docs/Openapi.yaml)
+- [Sprint 2 Architecture and diagrams](docs/sprint-2/Architecture.md)
 - [Git-Flow Workflow](docs/Git-Flow-Workflow.md)
 - [Initial Product Backlog](docs/Initial-Product-Backlog.md)
 - [Individual Contributions](CONTRIBUTIONS.md)
@@ -31,11 +32,18 @@ The current local auth smoke checks cover registration and login. They do not ve
 
 ## Sprint 2 requirements draft
 
+- [Detailed SRS](docs/sprint-2/SRS.md)
 - [Refined product backlog](docs/Initial-Product-Backlog.md)
+- [Stakeholder validation guide](docs/sprint-2/Stakeholder-Validation-Guide.md)
 
 These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 remains a separate, unmerged implementation input. The profile addition and unresolved architecture decisions are identified in the SRS; NFR, Figma and architecture deliverables are not marked complete here.
 
 ## Sprint 2 environment and delivery
+
+- [Local Development and Delivery](docs/sprint-2/Local-Development-and-Delivery.md): exact reference setup, storage, commands and known gaps.
+- [Deployment and Recovery Handoff](docs/sprint-2/Deployment-and-Recovery.md): current local behavior and proposed deployment/data decisions.
+- [Verification Report](docs/sprint-2/Verification-Report.md): actual checks and their limits, including the remaining input and browser validation scope.
+- [Submission Checklist](docs/sprint-2/Submission-Checklist.md): required groups, owners, access, reviews and release gates.
 
 The existing Sprint 1 checks validates documents/contracts. Sprint 2 structural validation and local auth smoke have separate scopes; an absent backend is not reported as tested. The supplied Sprint 2 Teams text does not mandate ZIP; confirm live instructions before submission.
 
