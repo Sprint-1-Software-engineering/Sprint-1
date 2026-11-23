@@ -30,7 +30,7 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 
 | Run | Scope | Result |
 |---|---|---|
-| QA suite, `tests/test_auth_quality.py` (committed) | Registration, login, token and profile, hashing, simultaneous registration | At `ec696e3`: 23 tests, 22 pass, 1 expected failure (P-01, Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). At `7fccc47`, after the fix in PR #79: 23 tests, all pass; P-01 is now a normal test that the code owner extended in PR #79 to cover `abc` and `-1` on both auth endpoints. About 6.4 s; identical result in 4 consecutive runs at `ec696e3` and 2 at `7fccc47`. The CI log of the Sprint 2 validation run for `develop` at `7fccc47` shows these tests passing on `ubuntu-26.04`. |
+| QA suite, `tests/test_auth_quality.py` (committed) | Registration, login, token and profile, hashing, simultaneous registration | At `ec696e3`: 23 tests, 22 pass, 1 expected failure (P-01, Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). At `7fccc47`, after the fix in PR #79: 23 tests, all pass; P-01 is now a normal test that the code owner extended in PR #79 to cover `abc` and `-1` on both auth endpoints. About 6.4 s; identical result in 4 consecutive runs at `ec696e3` and 2 at `7fccc47`. The CI log of Sprint 2 validation [run 45250755596](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/45250755596) for `develop` at commit [`7fccc47`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7fccc473ad1647a880125de14c4a5c01b19e2f04) lists all 23 QA tests passing on `ubuntu-26.04` and ends with "Ran 42 tests". |
 | Existing `tests/test_auth_api.py` (written by the team) | 5 registration and login cases | Executed by QA as part of the whole suite: pass. Not counted as new QA cases. |
 | Whole suite, `unittest discover -s tests` | 42 tests including DevOps delivery-tool tests | At `ec696e3`: OK with 1 expected failure. At `7fccc47`: 42 tests OK, no expected failures (also in CI). Needs `git` on `PATH`; without it 14 delivery-tool tests error with `FileNotFoundError`, which is an environment gap, not an application result. |
 | Exploratory run (script not committed) | The same cases plus probes: 77 checks | At `ec696e3`: 66 pass, 1 fail (P-01), 10 observations, identical in two runs. At `7fccc47`: 67 pass, 0 fail, 10 observations, 0 unhandled server exceptions, identical in two runs. Source of the Observations in section 4.8. |
@@ -53,6 +53,22 @@ QA ran the same checks on the PR #58 snapshot (`7f3fa77`, from the team's refere
 
 Of 15 checks that failed on the snapshot, 14 passed on `develop` at `ec696e3` and all 15 pass at `7fccc47`. Twelve of the failing checks are additional to the two defects named in the SRS (other malformed e-mails, other name types, unknown properties, login validation). The fixes arrived in the two later commits to `src/server.py` on `develop`; this document does not attribute them further. P-01 existed in both versions, so it was not a regression; it was fixed in PR #79 and QA re-tested it at `7fccc47` (Issue #71 closed).
 
+### Re-test of #71 and #74 at `develop` `7fccc47` (expected and observed)
+
+Expected values come from the SRS and the OpenAPI draft, not from the fix. The method column says how each case was run; "API only" means no browser was involved.
+
+| Case | Expected | Observed | Method |
+|---|---|---|---|
+| #71: `Content-Length: abc` on `POST /auth/register` | `400` with a `{code, message}` body | `400`, body `{"code": "invalid_input", "message": "Geçersiz istek."}` | Raw HTTP request to the local handler; API only |
+| #71: same request on `POST /auth/login` | `400` with a `{code, message}` body | `400` with the same body | Raw HTTP request; API only |
+| #71: `Content-Length: -1` on both endpoints | `400` with a `{code, message}` body | `400` with the same body | Repository test `test_p01_invalid_content_length_returns_400_on_auth_endpoints` (2 endpoints, 2 values); API only |
+| #71: unhandled server exceptions in the 77-check run | 0 | 0, identical in two runs | API only |
+| #74: login with an empty password | A "required" message, no password-length rule | "&#350;ifrenizi girin." | Headless Chromium |
+| #74: login with a wrong 3-character password | A generic failure message, no password-length rule | "E-posta veya şifre hatalı." | Headless Chromium |
+| #74: login with the correct password | Login succeeds | Login succeeded and the dashboard greeted the user by name | Headless Chromium |
+
+The #74 cases were not run on a real desktop browser or with assistive technology.
+
 ### Defects and findings
 
 | ID | Finding | Severity | Record |
@@ -63,7 +79,7 @@ Of 15 checks that failed on the snapshot, 14 passed on `develop` at `ec696e3` an
 | F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding, confirmed in a browser (the message has no `role` or `aria-live`; the password input has `aria-invalid="false"` after a server-side error). Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75), awaiting a team decision |
 | F-4 | `GET /server.py` is served by the static handler | Low | Observation. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75). A `GET` to an unknown API path returning an HTML 404 has no Issue |
 | F-5 | No limit on repeated failed logins | Low | Observation; scope decision needed (NFR SEC-10). Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75) |
-| F-6 | Figma exports: two pairs of byte-identical files named "failure" and "results", unclear role field on registration, missing input limits and timezone on two screens | Low | Issue [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76); exports only, the live Figma file was not opened |
+| F-6 | Figma exports, naming and clarity suggestions (not defects): the loading frames `load-results` and `load-failure` look the same, so their PNG exports are byte-identical, which [Screen-Flows](ui-ux/Screen-Flows.md) explains (each "Continue demo" leads to a different outcome); unclear role field on registration; no input limits on the share-homework screen; no timezone on the request-a-lesson screen | Low | Issue [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76). Based on the exports and the flow document only; the live prototype was not opened, so no conclusion is drawn about its interactions |
 
 F-1 and F-6 and BUG-1 are Issues for the code and design owners. F-3, F-4 and F-5 are proposals, not violations of the current SRS, so they were opened as one proposal Issue for a team decision.
 
@@ -282,7 +298,7 @@ These cases have no expected value in the SRS or OpenAPI. The Product Owner (Top
 
 ## 7. Hand-off to CI
 
-- The QA suite `tests/test_auth_quality.py` should run inside the existing "Sprint 2 document and hygiene checks" job, because that job already runs `python -m unittest discover -s tests`. CI confirms it: the log of the Sprint 2 validation run for `develop` at `7fccc47` (`ubuntu-26.04`) lists the QA tests, including P-01, and ends with "Ran 42 tests ... OK". The DevOps owner has since renamed the step to "Python unittest suite (auth API, QA, and delivery tooling)". This plan does not edit the workflow.
+- The QA suite `tests/test_auth_quality.py` should run inside the existing "Sprint 2 document and hygiene checks" job, because that job already runs `python -m unittest discover -s tests`. CI confirms it: the log of Sprint 2 validation [run 45250755596](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/45250755596) for `develop` at commit [`7fccc47`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7fccc473ad1647a880125de14c4a5c01b19e2f04) (`ubuntu-26.04`) lists the QA tests, including P-01, and ends with "Ran 42 tests ... OK". Sprint 1 validation [run 45250755760](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/45250755760) for the same commit also succeeded. The DevOps owner has since renamed the step to "Python unittest suite (auth API, QA, and delivery tooling)". This plan does not edit the workflow.
 - P-01 was an expected failure until #71 was fixed; PR #79 turned it into a normal test, so no expected-failure marker remains.
 - Not suitable for CI yet: the browser checks, the real one-hour wait (T-09), the Figma review and the usability session.
 
