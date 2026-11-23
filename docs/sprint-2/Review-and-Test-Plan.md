@@ -56,13 +56,14 @@ Of 15 checks that failed on the snapshot, 14 pass on `develop`. Twelve of the fa
 | ID | Finding | Severity | Record |
 |---|---|---|---|
 | BUG-1 | A non-numeric `Content-Length` closes the connection without a response | Low | Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71), open |
-| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding, no Issue yet (see [NFR](NFR-and-Quality-Measures.md) USE-04) |
-| F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); not confirmed in a browser |
-| F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding, no Issue yet |
-| F-4 | `GET /server.py` is served by the static handler; unknown API `GET` paths return an HTML 404 | Low | Observation, no Issue yet |
-| F-5 | No limit on repeated failed logins | Low | Observation; scope decision needed (NFR SEC-10) |
+| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding. Issue [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) (see [NFR](NFR-and-Quality-Measures.md) USE-04) |
+| F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); QA note added to #61; not confirmed in a browser |
+| F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75), awaiting a team decision |
+| F-4 | `GET /server.py` is served by the static handler | Low | Observation. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75). A `GET` to an unknown API path returning an HTML 404 has no Issue |
+| F-5 | No limit on repeated failed logins | Low | Observation; scope decision needed (NFR SEC-10). Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75) |
+| F-6 | Figma exports: two pairs of byte-identical files named "failure" and "results", unclear role field on registration, missing input limits and timezone on two screens | Low | Issue [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76); exports only, the live Figma file was not opened |
 
-Findings without an Issue are listed so the team can decide which ones become Issues; QA has not opened them.
+F-1 and F-6 and BUG-1 are Issues for the code and design owners. F-3, F-4 and F-5 are proposals, not violations of the current SRS, so they were opened as one proposal Issue for a team decision.
 
 ## 4. Test cases
 
@@ -238,7 +239,7 @@ Columns: **Type** is N (normal), X (negative) or B (boundary). **Requirement** g
 | UI-04 | X | Trigger validation errors with a screen reader or the accessibility tree | Message text is announced | NFR USE-03 | Planned. Static: Not met (F-3) |
 | UI-05 | N | Check that all form fields have labels | Every input has a label | NFR USE-03 | Static: Pass for `login.html` and `register.html`; browser scan Planned |
 | UI-06 | X | Open the dashboard with an expired token | Redirect to the login page | FR-02 AC-02.3 | Planned in a browser. Static: the script redirects on 401 |
-| UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Planned. The Figma file was not opened in this QA session |
+| UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Partly reviewed from the repository exports (10 of 37 PNGs viewed, all 37 hash-compared); findings in F-6 / Issue #76. Planned for the live Figma file, which was not opened |
 | UI-08 | N | Student requests a lesson in the prototype | At least 80% of 5 or more participants finish within 120 s without help | SRS section 7, NFR USE-01 | Planned. No session held |
 
 ## 5. Requirement coverage
