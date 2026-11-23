@@ -8,6 +8,10 @@ Role: Architecture. Responsibilities: Backend & frontend; architecture and API d
 Recorded work: initial repository files, team/API drafts and license; foundation and workflow reviews.
 Evidence: [initial API commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/64c108d59211a057da41a80237c72e89d48a19e7), [Issue #50](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/50), [review #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43#pullrequestreview-5782968240), [review #49](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/49#pullrequestreview-5783564271), [review #51](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/51#pullrequestreview-5783740927). Early direct work has no issue-first record.
 
+### Sprint 2 - Architecture preparation
+
+Prepared a technology-choice proposal, C4 context/container views, UML domain model, registration/sign-in and booking sequences, and editable Mermaid sources. These are design artifacts for review; team stack approval and implementation are not claimed. Tracking: [Issue #63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). Evidence: [architecture commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7b095a02ebfb5b32e51ccaaa4f124bb302503e52). PR review is pending.
+
 ## Toprak Daldal
 Student ID: 260201315 · GitHub: [@toprakdaldal](https://github.com/toprakdaldal)
 Role: Product. Responsibilities: Backend & frontend; scope and backlog.
