@@ -10,7 +10,7 @@ Evidence: [initial API commit](https://github.com/Sprint-1-Software-engineering/
 
 ### Sprint 2 - Architecture preparation
 
-Prepared a technology-choice proposal, C4 context/container views, UML domain model, registration/sign-in and booking sequences, and editable Mermaid sources. These are design artifacts for review; team stack approval and implementation are not claimed. Tracking: [Issue #63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). Evidence: [architecture commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7b095a02ebfb5b32e51ccaaa4f124bb302503e52). PR review is pending.
+Prepared a technology-choice proposal, C4 context/container views, UML domain model, registration/sign-in and booking sequences, and editable Mermaid sources. These are design artifacts for review; team stack approval and implementation are not claimed. Tracking: [Issue #63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). Evidence: [architecture commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7b095a02ebfb5b32e51ccaaa4f124bb302503e52), [PR #70](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/70). Independent review is pending.
 
 ## Toprak Daldal
 Student ID: 260201315 · GitHub: [@toprakdaldal](https://github.com/toprakdaldal)
