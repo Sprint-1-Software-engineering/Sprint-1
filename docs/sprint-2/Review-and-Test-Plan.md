@@ -16,6 +16,7 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 | Observation | Executed; the specification gives no expected value, so the observed behavior is recorded. |
 | Planned | Not executed. The feature, the browser session or the Figma review does not exist yet. |
 | Static | Judged by reading the source files; no browser was used. |
+| Browser | Executed in headless Chromium 159 (Playwright) on 23 November 2026 against the `develop` front end at `7fccc47`, served by the local handler. The scripts are not committed (they need Playwright). Not a test on a real desktop browser, a device or assistive technology. |
 
 ## 2. Environment and how to run
 
@@ -23,7 +24,7 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 - Repeatable suite: `python -m unittest tests.test_auth_quality -v` (cases below marked "QA suite"). Whole suite: `python -m unittest discover -s tests`; the delivery-tool tests need `git` on `PATH`.
 - Latency baseline: `python scripts/measure_auth_latency.py`.
 - No real token, password or personal data is written to any report or log. Test passwords are synthetic.
-- Not covered: browser behavior, Figma, a hosted environment, load beyond 10 concurrent users, code coverage.
+- Not covered: real desktop browsers, devices and assistive technology (only a headless Chromium run was done), the live Figma file, a hosted environment, load beyond 10 concurrent users, code coverage.
 
 ## 3. Results executed so far (23 November 2026)
 
@@ -34,6 +35,7 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 | Whole suite, `unittest discover -s tests` | 42 tests including DevOps delivery-tool tests | At `ec696e3`: OK with 1 expected failure. At `7fccc47`: 42 tests OK, no expected failures (also in CI). Needs `git` on `PATH`; without it 14 delivery-tool tests error with `FileNotFoundError`, which is an environment gap, not an application result. |
 | Exploratory run (script not committed) | The same cases plus probes: 77 checks | At `ec696e3`: 66 pass, 1 fail (P-01), 10 observations, identical in two runs. At `7fccc47`: 67 pass, 0 fail, 10 observations, 0 unhandled server exceptions, identical in two runs. Source of the Observations in section 4.8. |
 | Mutation check | Three deliberately broken copies of `server.py` (password minimum 8, two-hour sessions, login accepts any password) | All three were detected by the QA suite (R-05, T-06, L-03). A fourth copy with the #71 fix reverted made the new P-01 test fail (2 sub-cases). The repository files were not changed. |
+| Headless browser runs (Playwright, Chromium 159; scripts not committed) | Login and registration pages, dashboards, Tab order and focus | Main script, 30 checks: 14 pass, 2 fail (error messages not announced, UI-04), 14 observations. Two follow-up scripts compared the teacher and student dashboards (2 of 77 text lines differ after the name is replaced; the difference is the avatar initial) and the Tab order (login 8 stops, register 13 plus the radio group; every stop is `:focus-visible` and changes style on focus). The first run of the main script contained script errors (reversed expected and observed values, a wrong Tab-order assumption); they were corrected and the results here come from the corrected script. Source of UI-01 to UI-06 and UI-09 to UI-11 in section 4.9. |
 
 ### Re-test of the defects reproduced on 19 November
 
@@ -56,9 +58,9 @@ Of 15 checks that failed on the snapshot, 14 passed on `develop` at `ec696e3` an
 | ID | Finding | Severity | Record |
 |---|---|---|---|
 | BUG-1 | A non-numeric `Content-Length` closes the connection without a response | Low | Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71): fixed in PR #79, re-tested by QA at `7fccc47` (400 with the JSON error body on register and login), closed |
-| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding. Issue [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) (see [NFR](NFR-and-Quality-Measures.md) USE-04). PR #79 removed the 6-character check; static re-check at `7fccc47`, browser check pending, Issue open |
-| F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); QA note added to #61; not confirmed in a browser |
-| F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75), awaiting a team decision |
+| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding. Issue [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) (see [NFR](NFR-and-Quality-Measures.md) USE-04). PR #79 removed the 6-character check; browser re-test at `7fccc47` passed (empty password, wrong short password, correct password); Issue closed |
+| F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); confirmed in a browser at `7fccc47` (comment on #61): both roles land on `/main_page.html`, the "Öğrenci Bilgi Sistemi" dashboard |
+| F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding, confirmed in a browser (the message has no `role` or `aria-live`; the password input has `aria-invalid="false"` after a server-side error). Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75), awaiting a team decision |
 | F-4 | `GET /server.py` is served by the static handler | Low | Observation. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75). A `GET` to an unknown API path returning an HTML 404 has no Issue |
 | F-5 | No limit on repeated failed logins | Low | Observation; scope decision needed (NFR SEC-10). Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75) |
 | F-6 | Figma exports: two pairs of byte-identical files named "failure" and "results", unclear role field on registration, missing input limits and timezone on two screens | Low | Issue [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76); exports only, the live Figma file was not opened |
@@ -233,14 +235,17 @@ Columns: **Type** is N (normal), X (negative) or B (boundary). **Requirement** g
 
 | ID | Type | Case | Expected | Requirement | Status |
 |---|---|---|---|---|---|
-| UI-01 | N | Log in as a teacher and as a student | Each lands on their own entry screen | FR-02 AC-02.4, FR-15 AC-15.3 | Planned in a browser. Static: Not met (F-2) |
-| UI-02 | X | Read the login and registration password messages | Both state 12 characters | BR-02 | Static: Not met (F-1); browser check Planned |
-| UI-03 | N | Complete login and registration using only the keyboard | Logical Tab order, visible focus, Enter submits | NFR USE-03 | Planned |
-| UI-04 | X | Trigger validation errors with a screen reader or the accessibility tree | Message text is announced | NFR USE-03 | Planned. Static: Not met (F-3) |
-| UI-05 | N | Check that all form fields have labels | Every input has a label | NFR USE-03 | Static: Pass for `login.html` and `register.html`; browser scan Planned |
-| UI-06 | X | Open the dashboard with an expired token | Redirect to the login page | FR-02 AC-02.3 | Planned in a browser. Static: the script redirects on 401 |
+| UI-01 | N | Log in as a teacher and as a student | Each lands on their own entry screen | FR-02 AC-02.4, FR-15 AC-15.3 | Fail in a browser (F-2): a teacher and a student both land on `/main_page.html`, a student-information (OBS) sample dashboard; after the user's name is replaced, 2 of 77 text lines differ |
+| UI-02 | X | Read the login and registration password messages | Both state 12 characters | BR-02 | Pass in a browser: registration says 12 characters; login states no minimum (empty: "&#350;ifrenizi girin.", wrong: "E-posta veya şifre hatalı.") |
+| UI-03 | N | Complete login and registration using only the keyboard | Logical Tab order, visible focus, Enter submits | NFR USE-03 | Pass in a browser: login has 8 Tab stops in logical order, register has 13 plus the radio group; every stop is `:focus-visible` and changes style on focus; keyboard-only login (type, Tab twice past the "forgot password" link, type, Enter) succeeded. Choosing an option with the arrow keys inside the radio group was not tested |
+| UI-04 | X | Trigger validation errors with a screen reader or the accessibility tree | Message text is announced | NFR USE-03 | Fail in a browser (F-3): no live region or `role` on the message; the password input has `aria-invalid="false"` and no `aria-describedby` after a server-side error. Not tested with a screen reader |
+| UI-05 | N | Check that all form fields have labels | Every input has a label | NFR USE-03 | Pass in a browser: the accessibility tree gives every input reached by Tab an accessible name (for example "E-posta adresi", "&#350;ifre", "Beni hatırla", "Ad", "Soyad"). No automated accessibility scan was run |
+| UI-06 | X | Open the dashboard with an expired token | Redirect to the login page | FR-02 AC-02.3 | Pass in a browser: the dashboard redirected to `/login.html` and the token was removed from `localStorage` |
 | UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Partly reviewed from the repository exports (10 of 37 PNGs viewed, all 37 hash-compared); findings in F-6 / Issue #76. The text of the states named in the handoff was found in the local `.fig` backup (strings only; layout and connections not checked). Planned for the live Figma file, which was not opened |
 | UI-08 | N | Student requests a lesson in the prototype | At least 80% of 5 or more participants finish within 120 s without help | SRS section 7, NFR USE-01 | Planned. No session held |
+| UI-09 | X | Submit the registration form empty, with a short password and a mismatching confirmation, and with an e-mail that already exists | One message per problem; the password message states the 12-character rule | FR-01 AC-01.3, BR-02 | Pass in a browser: seven field messages when empty; "&#350;ifre en az 12 karakter olmalıdır."; "&#350;ifreler eşleşmiyor."; "Bu e-posta zaten kayıtlı." |
+| UI-10 | N | Open `/main_page.html` with no token | Not specified for the static dashboard (SRS BR-01 covers API operations) | BR-12 | Observation: the page stays open and shows sample content with a banner that it is not connected to real data; there is no redirect to login |
+| UI-11 | N | Log in as each role and check where the access token is kept | Not specified; recorded for the security discussion | NFR SEC-01 | Observation: the token is stored in `localStorage` for both roles; no console or page errors on the dashboards |
 
 ## 5. Requirement coverage
 
@@ -284,7 +289,7 @@ These cases have no expected value in the SRS or OpenAPI. The Product Owner (Top
 ## 8. Limits of this plan
 
 - Only the registration, login and profile cases were executed. The remaining cases describe expected behavior and are not results.
-- All executed results are local API checks against the Python handler. No browser, Figma or end-to-end run is included.
+- The executed results are local API checks against the Python handler and a headless Chromium run of the login and registration pages. No real desktop browser, assistive technology, live Figma file or end-to-end run is included.
 - Coverage was not measured; the 50% unit-test coverage target belongs to Sprint 3.
 - Re-run the QA suite after any change to `src/server.py`.
 
