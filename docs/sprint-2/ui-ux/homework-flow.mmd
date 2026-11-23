@@ -1,0 +1,24 @@
+flowchart TD
+  upload["Teacher selects a student and attaches a file"]
+  validate{"Connected student and valid file?"}
+  shared["Assignment shared"]
+  detailRequest["Student opens assignment link"]
+  metadata{"Authorized to view assignment details?"}
+  detail["Show details and the Download action"]
+  download["Student selects Download"]
+  file{"Still authorized to download this file?"}
+  served["Serve file through protected download"]
+  fix["Correct the recipient or file and retry"]
+  detailsDenied["Return to Assignments. Hide all assignment details."]
+  fileDenied["Return to Assignments. Do not return the file."]
+  upload --> validate
+  validate -->|"Yes"| shared
+  shared --> detailRequest
+  detailRequest --> metadata
+  metadata -->|"Yes"| detail
+  detail --> download
+  download --> file
+  file -->|"Yes"| served
+  validate -->|"Validation failed"| fix
+  metadata -->|"Access denied"| detailsDenied
+  file -->|"Access denied"| fileDenied

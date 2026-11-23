@@ -4,8 +4,20 @@ Owner: Kemal Efe Bilgisiçok (@kbilgisicok). Tracking: [Sprint 2 Issue #66](http
 
 - [Editable Figma design](https://www.figma.com/design/sUCAuJ5j1WEXdGBJKSc8QJ)
 - [Figma prototype — Choose a journey](https://www.figma.com/proto/sUCAuJ5j1WEXdGBJKSc8QJ?page-id=0%3A1&node-id=1-3&starting-point-node-id=1%3A3&scaling=contain)
-- [Teacher workspace PNG](ui-ux/teacher-workspace.png)
+- Workspaces: [teacher](ui-ux/teacher-workspace.png), [student](ui-ux/student-workspace.png)
+- Lesson request and decision: [student request](ui-ux/student-lesson-request.png), [teacher review](ui-ux/teacher-lesson-request.png), [approved](ui-ux/teacher-lesson-approved.png), [rejected](ui-ux/teacher-lesson-rejected.png)
+- Homework: [teacher sharing](ui-ux/teacher-share-homework.png), [student detail](ui-ux/student-assignment-detail.png)
 - [Screen and transition index](ui-ux/Screen-Flows.md)
+
+## User flow diagrams
+
+| Journey | Readable export | Editable source |
+| --- | --- | --- |
+| Invitation and connection | [SVG](ui-ux/invitation-flow.svg) | [Mermaid](ui-ux/invitation-flow.mmd) |
+| Availability, lesson decisions and cancellation | [SVG](ui-ux/lesson-flow.svg) | [Mermaid](ui-ux/lesson-flow.mmd) |
+| Homework sharing and file access | [SVG](ui-ux/homework-flow.svg) | [Mermaid](ui-ux/homework-flow.mmd) |
+
+The diagrams describe the SRS decision paths. The homework flow checks access before showing metadata and checks it again before serving the file. The transition index records the current Figma links.
 
 ## Walkthroughs
 
@@ -26,19 +38,44 @@ Owner: Kemal Efe Bilgisiçok (@kbilgisicok). Tracking: [Sprint 2 Issue #66](http
 | [FR-08](SRS.md#fr-08), US-08 / #22 | Availability → Slot removed or Slot could not be removed. Preserve slots with active bookings. |
 | [FR-09](SRS.md#fr-09), US-09 / #23 | Request a lesson → Request sent or Request could not be sent. Confirm teacher and time, then use Pending until approval. Refresh stale availability after conflict. |
 | [FR-10](SRS.md#fr-10), US-10 / #24 | Lesson request from Maya → approved, rejected or approval conflict. Server-side approval must recheck overlapping approved teacher lessons atomically. |
-| [FR-11](SRS.md#fr-11), US-11 / #25 | Both lesson calendars show the participant, time and status. The prototype uses a chronological list. Production filters and empty calendar lists remain to be designed. |
+| [FR-11](SRS.md#fr-11), US-11 / #25 | Both lesson calendars show the participant, time and status. The prototype uses a chronological list. Date/status filters, invalid ranges, loading, results, empty lists and retry states are connected for both roles. |
 | [FR-12](SRS.md#fr-12), US-12 / #26 | Show confirmation before a permitted cancellation and label the final state. The server enforces ownership and the strict before-start cutoff. |
 | [FR-13](SRS.md#fr-13), US-13 / #27 | Share homework → Homework shared or File could not be attached. Accept PDF, JPEG or PNG up to 10 MiB and restrict selection to connected students. |
 | [FR-14](SRS.md#fr-14), US-14 / #28 | Assignments → detail → download preview. Production checks access separately for metadata and file delivery. |
-| [FR-02](SRS.md#fr-02) and [FR-15](SRS.md#fr-15), US-02 / #16 and US-15 / #60 | The demo launcher lets reviewers inspect both workspaces. Production routing derives the role from the authenticated profile. Authentication and registration screens are outside this handoff. |
+| [FR-02](SRS.md#fr-02) and [FR-15](SRS.md#fr-15), US-02 / #16 and US-15 / #60 | The demo launcher lets reviewers inspect both workspaces. Production routing derives the role from the authenticated profile. Sign-in, registration, invalid credentials, password errors and separate teacher/student loading routes are connected. Demo presets simulate profile roles; authentication is not implemented by Figma. |
 
 Status is conveyed using text as well as color. The shared layout keeps the actor visible, presents the current task first and gives failed actions a recovery route. Demo dates and names are synthetic. Scenario jumps model separate actors and outcomes without shared runtime state. Dates use Europe/Istanbul. The prototype makes no cross-teacher conflict policy decision (SRS OD-06).
 
-## Verification and open work
+## Completed entry, recovery and calendar states — 23 November 2026
 
-- Figma document inspection confirmed 48 editable frames, three flow starting points, and all 152 configured click destinations.
-- Rendered and visually inspected the teacher workspace PNG. The Figma Starter connector limit prevented additional frame exports during this pass.
-- The Sprint 2 structural check, all 14 existing delivery-tool unit tests and the staged whitespace check passed locally. The Sprint 1 contract check stopped at import because PyYAML was unavailable in the local Python runtime.
-- Still to verify with a teammate: Present-mode playback, reviewer access to the design and prototype, and the remaining screen exports. In Figma, select the student workspace, lesson decision and assignment frames, then use **Export → PNG**.
-- Loading, unauthorized/forbidden screens, responsive widths, keyboard focus and accessibility testing need implementation or design follow-up. For production, show a loading state during mutations, preserve user input on recoverable errors and explain forbidden access without revealing protected records.
-- The prototype uses fixed demo scenarios. No backend behavior, live file transfer, stakeholder feedback or end-to-end product tests were exercised. AI, parents, payments and video calls are outside scope.
+Toprak added 25 editable frames to the shared Figma file: seven authentication frames, two recovery frames, and eight calendar states per role. The original journeys remain available. A named Figma version records this completion.
+
+- [Editable local Figma backup](ui-ux/completion/TutorBridge-Sprint2-2026-11-23.fig)
+- Entry: [sign in](ui-ux/completion/auth-sign-in.png), [registration](ui-ux/completion/auth-create-account.png), [password error](ui-ux/completion/auth-registration-error.png).
+- Recovery: [session expired](ui-ux/completion/auth-session-expired.png), [access denied](ui-ux/completion/s-access-denied.png).
+- Calendar: [teacher filters](ui-ux/completion/t-calendar-filters.png), [student filters](ui-ux/completion/s-calendar-filters.png), [empty result](ui-ux/completion/s-calendar-empty.png), [retry](ui-ux/completion/s-calendar-retry.png).
+- The completion folder contains 29 PNG exports: 25 new frames and four updated original screens. The editable design is the current source; older PNGs show earlier snapshots.
+
+Sign-in uses explicitly labelled teacher/student demo accounts. Each passes through a separate progress screen and reaches the corresponding workspace after a 1.2-second prototype delay. The registration form shows the role field and 12–128-character password rule, with password-error and confirmation routes. Registration is a static scenario and does not persist a selected role or account.
+
+Both calendars offer From, To and status presets, Europe/Istanbul (UTC+03:00), invalid-range feedback, loading with inactive Apply, results, empty results, Clear filters and recovery after a failed request. Loading uses an explicit Continue demo control. Retry retains the matching preset. These are fixed prototype scenarios, not working editable filters or API calls.
+
+Session expiry leads to sign-in and then the role workspace, requiring deliberate re-entry instead of replaying a write. The denied-access screen contains no protected title, participant, filename or file URL. Both metadata and download-denial previews return to Assignments.
+
+## Verification — 23 November 2026
+
+Toprak's account had edit access to the shared design. The following paths were clicked in the Figma player:
+
+| Path | Observed result |
+| --- | --- |
+| Start → Sign in → teacher preset | Progress → teacher workspace |
+| Teacher calendar → Filters → no matches → Continue → Clear | Empty state → original teacher calendar |
+| Teacher calendar → expired session → Sign in → student preset | Student workspace; no pending write replayed in the prototype |
+| Student calendar → Filters → invalid range → Edit dates | Returned to the filter form |
+| Student filters → failed request → Continue → Retry → Continue → Open lesson | Retry/loading/results → existing pending request |
+| Start → Create account → password error → Edit details → Create account | Error recovery → confirmation → sign-in |
+| Sign in → invalid credentials → Try again | Generic error → sign-in |
+| Assignments → access denied → Back to assignments | Neutral denial → list |
+| Assignment detail → download denied | Same neutral denial, without protected details |
+
+All calendar button destinations were inspected in the editor; the table records representative clicked paths rather than claiming every combination was exercised. These checks are prototype navigation checks. No backend authorization, real login, file download, accessibility audit or user study was performed. A teammate must review the latest changes before merge; the author does not approve their own work.
