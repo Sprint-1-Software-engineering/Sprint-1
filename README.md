@@ -8,6 +8,7 @@ A web platform for private tutors and their existing students. The first release
 - [System Boundary](docs/diagrams/system-boundary.svg)
 - [Roles and RACI](docs/Team-Members-and-RACI.md)
 - [OpenAPI Draft](docs/Openapi.yaml)
+- [Sprint 2 Architecture and diagrams](docs/sprint-2/Architecture.md)
 - [Git-Flow Workflow](docs/Git-Flow-Workflow.md)
 - [Initial Product Backlog](docs/Initial-Product-Backlog.md)
 - [Individual Contributions](CONTRIBUTIONS.md)
@@ -15,7 +16,19 @@ A web platform for private tutors and their existing students. The first release
 
 The Sprint 1 documents originated from the team's three original drafts. Historical snapshot: [v0.1.0-sprint1](https://github.com/Sprint-1-Software-engineering/Sprint-1/tree/v0.1.0-sprint1). Current Sprint 2 work remains subject to its own review and release gates.
 
-Validation tools stay in the repository. The develop baseline does not yet include a backend. Unmerged PR #58 contains a local Python/SQLite authentication prototype and sample dashboard; it is not the complete MVP. AI and parent features are deferred.
+Validation tools stay in the repository. PR #58's local Python/SQLite authentication prototype is present on this feature branch, while the complete MVP backend is not implemented. Dashboard and announcement content is sample data and is not connected to the database. AI and parent features are deferred.
+
+## Yerel giriş ve kayıt sunucusu
+
+Bu feature branch'teki geçici HTTP sunucusunu proje kökünde çalıştırın:
+
+```powershell
+python src/server.py
+```
+
+Ardından `http://127.0.0.1:8000/register.html` veya `http://127.0.0.1:8000/login.html` adresini açın. Hesaplar `data/tutorbridge.db` dosyasındaki `users` tablosuna, oturumlar geçici olarak `auth_tokens` tablosuna kaydedilir. Oturum değeri veritabanında tutulan rastgele bearer token'dır; JWT seçimi yapılmamıştır. Kayıt ve giriş minimum 12 karakterlik şifreyi doğrular.
+
+The current local auth smoke checks cover registration and login. They do not verify the complete booking, invitation or assignment workflows.
 
 ## Sprint 2 requirements draft
 
@@ -29,13 +42,12 @@ These requirements are prepared for peer review under [Issue #59](https://github
 
 - [Local Development and Delivery](docs/sprint-2/Local-Development-and-Delivery.md): exact reference setup, storage, commands and known gaps.
 - [Deployment and Recovery Handoff](docs/sprint-2/Deployment-and-Recovery.md): current local behavior and proposed deployment/data decisions.
-- [Verification Report](docs/sprint-2/Verification-Report.md): actual checks and their limits, including two failing input probes.
+- [Verification Report](docs/sprint-2/Verification-Report.md): actual checks and their limits, including the remaining input and browser validation scope.
 - [Submission Checklist](docs/sprint-2/Submission-Checklist.md): required groups, owners, access, reviews and release gates.
 
 The existing Sprint 1 checks validates documents/contracts. Sprint 2 structural validation and local auth smoke have separate scopes; an absent backend is not reported as tested. The supplied Sprint 2 Teams text does not mandate ZIP; confirm live instructions before submission.
 
 ## Sprint 1 Teams submission (historical)
-
 
 One team member submits one ZIP containing all Sprint 1 documents and includes the repository URL in the Teams description. Proposal and Vision share one file; the diagram, contribution records and license are included. Check that the ZIP opens and matches the reviewed release tag.
 

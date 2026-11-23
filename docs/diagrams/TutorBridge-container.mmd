@@ -1,0 +1,15 @@
+C4Container
+  title TutorBridge Container View
+  Person(teacher, "Teacher")
+  Person(student, "Student")
+  System_Boundary(tb, "TutorBridge") {
+    Container(browser, "Browser UI", "HTML/CSS/JavaScript", "Login, registration and role-oriented navigation")
+    Container(api, "Local HTTP API", "Python standard library", "Auth and future domain operations")
+    ContainerDb(sqlite, "SQLite", "SQLite", "Users, bearer tokens and planned MVP records")
+    Container(files, "Private file storage", "Filesystem", "Protected assignment files")
+  }
+  Rel(teacher, browser, "Uses")
+  Rel(student, browser, "Uses")
+  Rel(browser, api, "HTTP/JSON")
+  Rel(api, sqlite, "SQL")
+  Rel(api, files, "Stores/streams authorized files")

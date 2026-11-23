@@ -8,6 +8,12 @@ Role: Architecture. Responsibilities: Backend & frontend; architecture and API d
 Recorded work: initial repository files, team/API drafts and license; foundation and workflow reviews.
 Evidence: [initial API commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/64c108d59211a057da41a80237c72e89d48a19e7), [Issue #50](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/50), [review #43](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/43#pullrequestreview-5782968240), [review #49](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/49#pullrequestreview-5783564271), [review #51](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/51#pullrequestreview-5783740927). Early direct work has no issue-first record.
 
+### Sprint 2 - Architecture and auth
+
+Prepared the architecture baseline and database-plan separation in [Architecture.md](docs/sprint-2/Architecture.md). Reconciled the local Python/SQLite implementation with the API draft and documented the random database-backed bearer token as the implemented auth choice; JWT adoption remains a separate team decision. Local HTTP API registration validation and UI password wording were corrected and focused auth regression tests were added.
+
+Evidence: [Sprint 2 architecture and auth commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/9bb15e7) and the open feature branch PR workflow remain pending teammate review.
+
 ## Toprak Daldal
 Student ID: 260201315 · GitHub: [@toprakdaldal](https://github.com/toprakdaldal)
 Role: Product. Responsibilities: Backend & frontend; scope and backlog.

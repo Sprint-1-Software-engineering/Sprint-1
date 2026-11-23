@@ -1,0 +1,21 @@
+sequenceDiagram
+  actor Student
+  participant API as Booking API
+  participant DB as Relational Database
+  Student->>API: POST /bookings availabilityId
+  API->>DB: Verify role, relationship, future slot
+  API->>DB: Create pending booking
+  DB-->>API: Booking
+  API-->>Student: 201 pending
+  actor Teacher
+  Teacher->>API: PATCH /bookings/{id}/status approved
+  API->>DB: BEGIN transaction
+  API->>DB: Verify ownership and pending state
+  API->>DB: Recheck teacher approved overlaps
+  alt Conflict
+    API->>DB: Rollback
+    API-->>Teacher: 409 conflict
+  else Available
+    API->>DB: Commit approved state
+    API-->>Teacher: 200 approved booking
+  end

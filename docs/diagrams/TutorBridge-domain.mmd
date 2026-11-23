@@ -1,0 +1,16 @@
+classDiagram
+  class User
+  class AuthToken
+  class Invitation
+  class Relationship
+  class Availability
+  class Booking
+  class Assignment
+  User "1" -- "0..*" AuthToken
+  User "1" -- "0..*" Invitation : teacher
+  User "1" -- "0..*" Relationship : teacher/student
+  User "1" -- "0..*" Availability : owns
+  Availability "1" -- "0..*" Booking
+  User "1" -- "0..*" Booking : participant
+  Relationship "1" -- "0..*" Assignment : authorizes
+  User "1" -- "0..*" Assignment : teacher/student
