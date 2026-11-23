@@ -16,11 +16,11 @@ A web platform for private tutors and their existing students. The first release
 
 The Sprint 1 documents originated from the team's three original drafts. Historical snapshot: [v0.1.0-sprint1](https://github.com/Sprint-1-Software-engineering/Sprint-1/tree/v0.1.0-sprint1). Current Sprint 2 work remains subject to its own review and release gates.
 
-Validation tools stay in the repository. PR #58's local Python/SQLite authentication prototype is present on this feature branch, while the complete MVP backend is not implemented. Dashboard and announcement content is sample data and is not connected to the database. AI and parent features are deferred.
+Validation tools stay in the repository. PR #58's local Python/SQLite authentication prototype is merged into `develop`; the complete MVP backend is not implemented. Dashboard and announcement content are sample data and are not connected to the database. PR #69 completed and merged the Sprint 2 Figma/UI-UX handoff. AI and parent features are deferred.
 
 ## Yerel giriş ve kayıt sunucusu
 
-Bu feature branch'teki geçici HTTP sunucusunu proje kökünde çalıştırın:
+Geliştirme ortamında geçici HTTP sunucusunu proje kökünde çalıştırın:
 
 ```powershell
 python src/server.py
@@ -36,7 +36,7 @@ The current local auth smoke checks cover registration and login. They do not ve
 - [Refined product backlog](docs/Initial-Product-Backlog.md)
 - [Stakeholder validation guide](docs/sprint-2/Stakeholder-Validation-Guide.md)
 
-These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 remains a separate, unmerged implementation input. The profile addition and unresolved technology decisions are identified in the SRS. The architecture proposal and editable diagrams are submitted for review, not presented as approved or implemented; NFR and Figma deliverables remain outstanding.
+These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 is merged and provides the local auth implementation input. The profile addition and unresolved technology decisions are identified in the SRS. The architecture proposal and editable diagrams are under review in [PR #70](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/70), not presented as approved or implemented. The Figma/UI-UX work is complete via merged [PR #69](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/69); remaining Sprint 2 work includes NFR, test and traceability deliverables.
 
 ## Sprint 2 environment and delivery
 

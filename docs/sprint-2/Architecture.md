@@ -1,6 +1,6 @@
 # TutorBridge Sprint 2 Architecture
 
-Status: architecture proposal for peer review. The diagrams describe the Sprint 2 MVP target, not a fully implemented or team-approved production system. PR #58 is the reference for the local authentication prototype; invitations, bookings, assignments and deployment remain design scope.
+Status: architecture proposal under peer review in [PR #70](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/70). The diagrams describe the Sprint 2 MVP target, not a fully implemented or team-approved production system. PR #58 is merged into `develop` and provides the local authentication prototype; PR #69 completed the Figma/UI-UX handoff. Invitations, bookings, assignments and deployment remain design scope.
 
 ## 1. Technology choices and rationale
 
@@ -216,7 +216,7 @@ sequenceDiagram
   actor Teacher
   Teacher->>API: PATCH /bookings/{id}/status (approved), bearer token
   API->>API: Authenticate teacher
-  API->>DB: BEGIN transaction; verify booking ownership and pending state
+  API->>DB: Begin transaction and verify booking ownership and pending state
   API->>DB: Check for overlapping approved bookings
   alt Conflict exists
     API->>DB: ROLLBACK
@@ -245,7 +245,7 @@ sequenceDiagram
 - `bookings`: student, teacher and availability references, copied UTC start/end and lifecycle status. On approval, detect overlap using `startTime < otherEnd && endTime > otherStart` within a transaction.
 - `assignments` and `assignment_files`: teacher/student scope, instructions and private storage metadata. Never expose a filesystem path or public static URL.
 
-The OpenAPI draft is the interface contract for these future operations. Its `localhost:3000` and JWT references are legacy draft values: the implemented local prototype listens on `127.0.0.1:8000` and uses opaque database-backed bearer tokens. The contract should be reconciled with the implemented reference before these interfaces are treated as approved. Persist instants in UTC, retain offset-aware input validation, use foreign keys and parameterized queries, and return a resource only after checking the caller's role and ownership. Only registration, login and current-user lookup are represented as implemented in the prototype reference; the remaining API operations are planned.
+The OpenAPI draft is the interface contract for these future operations. The implemented local prototype listens on `127.0.0.1:8000` and uses opaque database-backed bearer tokens; the contract must be reconciled with this implementation before these interfaces are treated as approved. Persist instants in UTC, retain offset-aware input validation, use foreign keys and parameterized queries, and return a resource only after checking the caller's role and ownership. Only registration, login and current-user lookup are represented as implemented in the prototype reference; the remaining API operations are planned.
 
 ## 9. Open decisions and links
 
