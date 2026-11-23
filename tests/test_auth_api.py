@@ -56,14 +56,16 @@ class AuthApiTests(unittest.TestCase):
         self.assertEqual(body["code"], "invalid_input")
 
     def test_register_rejects_malformed_email(self):
-        status, body = self.request("POST", "/api/v1/auth/register", {
-            "name": "Valid Name",
-            "email": "invalid@",
-            "password": "Example-only-123",
-            "role": "student",
-        })
-        self.assertEqual(status, 400)
-        self.assertEqual(body["code"], "invalid_input")
+        for email in ("invalid@", "bad@@example.com", ".bad@example.com", "bad..name@example.com"):
+            with self.subTest(email=email):
+                status, body = self.request("POST", "/api/v1/auth/register", {
+                    "name": "Valid Name",
+                    "email": email,
+                    "password": "Example-only-123",
+                    "role": "student",
+                })
+                self.assertEqual(status, 400)
+                self.assertEqual(body["code"], "invalid_input")
 
     def test_register_rejects_wrong_json_types(self):
         cases = [

@@ -126,7 +126,7 @@ def main():
                 check("expired token rejected", request("/api/v1/users/me", token=token)[0] == 401)
                 check("database is outside served static directory", request("/data/tutorbridge.db")[0] == 404)
                 if args.validation_probes:
-                    check("invalid email rejected (acceptance probe)", request("/api/v1/auth/register", dict(account, email="invalid@"))[0] == 400)
+                    check("invalid email rejected (acceptance probe)", request("/api/v1/auth/register", dict(account, email="bad@@example.com"))[0] == 400)
                     check("null name rejected (acceptance probe)", request("/api/v1/auth/register", dict(account, email="null@example.test", name=None))[0] == 400)
                 stop(process)
                 process = start(log)

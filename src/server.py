@@ -15,7 +15,8 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = ROOT.parent
 DATABASE_PATH = PROJECT_ROOT / "data" / "tutorbridge.db"
-EMAIL_PATTERN = re.compile(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$")
+EMAIL_LOCAL_PATTERN = re.compile(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$")
+EMAIL_DOMAIN_PATTERN = re.compile(r"^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$")
 
 
 def connect_database():
@@ -175,7 +176,20 @@ class TutorBridgeHandler(SimpleHTTPRequestHandler):
             self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir e-posta girin."})
             return
         email = email.strip().lower()
-        if not 3 <= len(email) <= 254 or not EMAIL_PATTERN.fullmatch(email):
+        if not 3 <= len(email) <= 254 or email.count("@") != 1:
+            self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir e-posta girin."})
+            return
+        local_part, domain = email.rsplit("@", 1)
+        if (not 1 <= len(local_part) <= 64
+                or local_part.startswith(".")
+                or local_part.endswith(".")
+                or ".." in local_part
+                or not EMAIL_LOCAL_PATTERN.fullmatch(local_part)
+                or not EMAIL_DOMAIN_PATTERN.fullmatch(domain)):
+            self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir e-posta girin."})
+            return
+        domain_labels = domain.split(".")
+        if any(not label or len(label) > 63 or label.startswith("-") or label.endswith("-") for label in domain_labels):
             self.send_json(400, {"code": "invalid_input", "message": "Geçerli bir e-posta girin."})
             return
         if not isinstance(password, str):
