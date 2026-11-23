@@ -239,7 +239,7 @@ Columns: **Type** is N (normal), X (negative) or B (boundary). **Requirement** g
 | UI-04 | X | Trigger validation errors with a screen reader or the accessibility tree | Message text is announced | NFR USE-03 | Planned. Static: Not met (F-3) |
 | UI-05 | N | Check that all form fields have labels | Every input has a label | NFR USE-03 | Static: Pass for `login.html` and `register.html`; browser scan Planned |
 | UI-06 | X | Open the dashboard with an expired token | Redirect to the login page | FR-02 AC-02.3 | Planned in a browser. Static: the script redirects on 401 |
-| UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Partly reviewed from the repository exports (10 of 37 PNGs viewed, all 37 hash-compared); findings in F-6 / Issue #76. Planned for the live Figma file, which was not opened |
+| UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Partly reviewed from the repository exports (10 of 37 PNGs viewed, all 37 hash-compared); findings in F-6 / Issue #76. The text of the states named in the handoff was found in the local `.fig` backup (strings only; layout and connections not checked). Planned for the live Figma file, which was not opened |
 | UI-08 | N | Student requests a lesson in the prototype | At least 80% of 5 or more participants finish within 120 s without help | SRS section 7, NFR USE-01 | Planned. No session held |
 
 ## 5. Requirement coverage
