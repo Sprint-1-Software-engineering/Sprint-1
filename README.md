@@ -8,6 +8,7 @@ A web platform for private tutors and their existing students. The first release
 - [System Boundary](docs/diagrams/system-boundary.svg)
 - [Roles and RACI](docs/Team-Members-and-RACI.md)
 - [OpenAPI Draft](docs/Openapi.yaml)
+- [Sprint 2 Architecture and diagrams](docs/sprint-2/Architecture.md)
 - [Git-Flow Workflow](docs/Git-Flow-Workflow.md)
 - [Initial Product Backlog](docs/Initial-Product-Backlog.md)
 - [Individual Contributions](CONTRIBUTIONS.md)
@@ -23,7 +24,7 @@ Validation tools stay in the repository. The develop baseline does not yet inclu
 - [Refined product backlog](docs/Initial-Product-Backlog.md)
 - [Stakeholder validation guide](docs/sprint-2/Stakeholder-Validation-Guide.md)
 
-These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 remains a separate, unmerged implementation input. The profile addition and unresolved architecture decisions are identified in the SRS; NFR, Figma and architecture deliverables are not marked complete here.
+These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 remains a separate, unmerged implementation input. The profile addition and unresolved technology decisions are identified in the SRS. The architecture proposal and editable diagrams are submitted for review, not presented as approved or implemented; NFR and Figma deliverables remain outstanding.
 
 ## Sprint 2 environment and delivery
 

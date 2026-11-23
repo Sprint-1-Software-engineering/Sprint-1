@@ -1,0 +1,23 @@
+sequenceDiagram
+  actor Student
+  participant API as TutorBridge API
+  participant DB as Relational database
+  Student->>API: POST /bookings (availabilityId), bearer token
+  API->>API: Authenticate student and validate request
+  API->>DB: Verify relationship, slot ownership and future time
+  API->>DB: Create pending booking
+  DB-->>API: Pending booking
+  API-->>Student: 201 pending booking
+  actor Teacher
+  Teacher->>API: PATCH /bookings/{id}/status (approved), bearer token
+  API->>API: Authenticate teacher
+  API->>DB: BEGIN transaction; verify booking ownership and pending state
+  API->>DB: Check for overlapping approved bookings
+  alt Conflict exists
+    API->>DB: ROLLBACK
+    API-->>Teacher: 409 conflict
+  else No conflict
+    API->>DB: Update status and COMMIT
+    DB-->>API: Approved booking
+    API-->>Teacher: 200 approved booking
+  end
