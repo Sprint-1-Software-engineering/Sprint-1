@@ -1,0 +1,31 @@
+flowchart TD
+  M0["Teacher enters a future slot"]
+  M1{"Valid time with no overlap?"}
+  M2["Publish slot; student selects it"]
+  M3{"Slot still available?"}
+  M4["Request sent as Pending"]
+  M5{"Teacher chooses an outcome"}
+  M6{"Approved and before start?"}
+  M7{"Participant confirms cancellation?"}
+  M8["Booking cancelled"]
+  B0["Correct the interval, then retry"]
+  B1["Refresh availability and choose again"]
+  B2["Rejected; student can choose a new slot"]
+  B3["Approval conflict; review current calendar"]
+  B4["Keep existing status"]
+  B5["Keep lesson or request"]
+  M0 --> M1
+  M1 -->|"Yes"| M2
+  M2 --> M3
+  M3 -->|"Yes"| M4
+  M4 --> M5
+  M5 -->|"Approve"| M6
+  M6 -->|"Yes"| M7
+  M7 -->|"Yes"| M8
+  M1 -->|"No"| B0
+  M3 -->|"Conflict"| B1
+  M5 -->|"Reject"| B2
+  M5 -->|"Conflict"| B3
+  M6 -->|"No"| B4
+  M7 -->|"Keep"| B5
+  M4 -->|"Participant cancels before start"| M7

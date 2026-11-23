@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#183c68">
+  <title>TutorBridge | Öğrenci Bilgi Sistemi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="body">
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Menüyü aç" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <a class="brand" href="main_page.html">
+      <span class="brand-mark" aria-hidden="true">TB</span>
+      <span><strong>TutorBridge</strong><small>Öğrenci Bilgi Sistemi</small></span>
+    </a>
+    <div class="topbar-right">
+      <span class="academic-year">2026–2027 Akademik Yılı</span>
+      <button class="icon-button" type="button" aria-label="Bildirimler">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+        <span class="notification-dot"></span>
+      </button>
+      <div class="user-chip">
+        <span class="avatar" data-user-initial>Ö</span>
+        <span class="user-name" data-user-name>Öğrenci</span>
+      </div>
+      <button class="logout" id="logoutButton" type="button">Çıkış</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="obsSidebar">
+      <div class="sidebar-heading">ÖĞRENCİ MENÜSÜ</div>
+      <nav class="nav" aria-label="Ana menü">
+        <a class="nav-link active" href="#overview" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Genel Bakış
+        </a>
+        <a class="nav-link" href="#courses">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5zM4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8M8 10h6"/></svg>
+          Derslerim
+        </a>
+        <a class="nav-link" href="#schedule">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/></svg>
+          Ders Programı
+        </a>
+        <a class="nav-link" href="#announcements">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11v2a2 2 0 0 0 2 2h2l9 5V4l-9 5H6a2 2 0 0 0-2 2ZM8 15l2 6M17 9a4 4 0 0 1 0 6"/></svg>
+          Duyurular
+          <span class="nav-count">2</span>
+        </a>
+        <a class="nav-link" href="#documents">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8"/></svg>
+          Belge İşlemleri
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="help-icon" aria-hidden="true">?</div>
+        <div><strong>Yardıma mı ihtiyacınız var?</strong><small>Bizimle iletişime geçin.</small></div>
+        <a href="mailto:ogrenciisleri@example.edu.tr">İletişim <span aria-hidden="true">→</span></a>
+      </div>
+    </aside>
+
+    <main class="main" id="overview">
+      <div class="breadcrumb"><span>Öğrenci</span><span aria-hidden="true">/</span><strong>Genel Bakış</strong></div>
+      <section class="welcome">
+        <div>
+          <p class="date" id="todayDate">2026–2027 Güz Dönemi</p>
+          <h1>Hoş geldin, <span data-user-name>Öğrenci</span> <span class="welcome-wave" aria-hidden="true">👋</span></h1>
+          <p class="name-error" id="userNameError" role="status" aria-live="polite"></p>
+          <p>Akademik durumunu ve yaklaşan derslerini buradan takip edebilirsin.</p>
+        </div>
+        <a class="primary-link" href="#schedule">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4M16 2v4M3 9h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"/></svg>
+          Ders programım
+        </a>
+      </section>
+
+      <div class="demo-note">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+        Bu sayfa örnek OBS görünümüdür; ders bilgileri henüz sisteme bağlı değildir.
+      </div>
+
+      <section class="stats" aria-label="Akademik özet">
+        <article class="stat-card">
+          <span class="stat-icon amber">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+          </span>
+          <div><span class="stat-label">Kayıtlı dersler</span><strong>4 <small>ders</small></strong><span class="stat-foot">Güz dönemi</span></div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon purple">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </span>
+          <div><span class="stat-label">Bugünkü dersler</span><strong>2 <small>ders</small></strong><span class="stat-foot">Ders programına göz at</span></div>
+        </article>
+      </section>
+
+      <div class="content-grid">
+        <section class="panel courses" id="courses">
+          <div class="panel-heading">
+            <div><h2>Derslerim</h2><p>2026–2027 Güz Dönemi</p></div>
+            <a href="#courses">Tüm dersler <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>DERS</th><th>DERS KODU</th><th>ÖĞRETİM ELEMANI</th><th>DURUM</th></tr></thead>
+              <tbody>
+                <tr><td><span class="course-color c1"></span><strong>Yazılım Mühendisliğine Giriş</strong></td><td>YMH 101</td><td>Dr. A. Yılmaz</td><td><span class="status-badge">Kayıtlı</span></td></tr>
+                <tr><td><span class="course-color c2"></span><strong>Programlama Temelleri</strong></td><td>BLM 103</td><td>Öğr. Gör. E. Kaya</td><td><span class="status-badge">Kayıtlı</span></td></tr>
+                <tr><td><span class="course-color c3"></span><strong>Lineer Cebir</strong></td><td>MAT 105</td><td>Dr. S. Demir</td><td><span class="status-badge">Kayıtlı</span></td></tr>
+                <tr><td><span class="course-color c4"></span><strong>Akademik İngilizce I</strong></td><td>İNG 107</td><td>Öğr. Gör. M. Arslan</td><td><span class="status-badge">Kayıtlı</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="right-column">
+          <section class="panel agenda" id="schedule">
+            <div class="panel-heading">
+              <div><h2>Yaklaşan dersler</h2><p>Bugün · 18 Kasım</p></div>
+              <a href="#schedule" aria-label="Ders programının tamamı">Tümü</a>
+            </div>
+            <div class="agenda-list">
+              <article class="agenda-item">
+                <div class="agenda-time">10:00<small>11:30</small></div>
+                <span class="agenda-line blue-line"></span>
+                <div><strong>Programlama Temelleri</strong><small>BLM 103 · B-204</small><span class="class-status">Başlıyor</span></div>
+              </article>
+              <article class="agenda-item">
+                <div class="agenda-time">13:00<small>14:30</small></div>
+                <span class="agenda-line green-line"></span>
+                <div><strong>Lineer Cebir</strong><small>MAT 105 · A-112</small></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel announcements" id="announcements">
+            <div class="panel-heading">
+              <div><h2>Duyurular</h2><p>Üniversiteden haberler</p></div>
+
+            </div>
+            <article class="announcement">
+              <span class="announcement-mark">AK</span>
+              <div><span class="announcement-date">17 KASIM 2026</span><h3>Final sınavı takvimi yayımlandı</h3><p>Güz dönemi final sınavı programını kontrol etmeyi unutmayın.</p></div>
+            </article>
+            <article class="announcement">
+              <span class="announcement-mark gold">Öİ</span>
+              <div><span class="announcement-date">15 KASIM 2026</span><h3>Ders değerlendirme anketi</h3><p>Ders değerlendirme anketleri 30 Kasım'a kadar açık.</p></div>
+            </article>
+          </section>
+        </aside>
+      </div>
+      <footer class="footer">TutorBridge Öğrenci Bilgi Sistemi <span>·</span> 2026–2027</footer>
+    </main>
+  </div>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  <script src="script.js"></script>
+</body>
+</html>

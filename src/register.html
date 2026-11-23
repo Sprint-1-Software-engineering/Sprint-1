@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TutorBridge | Kayıt Ol</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="login-page">
+    <section class="brand-panel" aria-label="TutorBridge tanıtımı">
+      <a class="brand" href="login.html" aria-label="TutorBridge giriş sayfası">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" role="img">
+            <path d="M20 6 34 12v9c0 8-5.7 12.5-14 14-8.3-1.5-14-6-14-14v-9L20 6Z"/>
+            <path d="m13 20 4.5 4.5L27 15"/>
+          </svg>
+        </span>
+        <span>TutorBridge</span>
+      </a>
+
+      <div class="brand-content">
+        <p class="eyebrow">ÖĞRENMENİN EŞİKLERİNİ AŞ</p>
+        <h1>Yeni bir öğrenme yolculuğu.</h1>
+        <p class="brand-description">
+          Öğretmen veya öğrenci olarak TutorBridge'e katılın, derslerinizi ve materyallerinizi tek bir yerde yönetin.
+        </p>
+
+        <div class="feature-list" aria-label="Öne çıkan özellikler">
+          <div class="feature">
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <div><strong>Kolay bağlantı</strong><small>Dilediğiniz öğretmenle güvenle buluşun</small></div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 9h18M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/></svg>
+            </span>
+            <div><strong>Dersleri organize edin</strong><small>Planlarınızın hepsini tek yerden görün</small></div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+            </span>
+            <div><strong>Materyale ulaşın</strong><small>Ödevlerinizi kaybetmeyin</small></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="brand-footer">Öğrenmeyi birlikte yönetiyoruz.</p>
+    </section>
+
+    <section class="form-panel">
+      <div class="mobile-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><path d="M20 6 34 12v9c0 8-5.7 12.5-14 14-8.3-1.5-14-6-14-14v-9L20 6Z"/><path d="m13 20 4.5 4.5L27 15"/></svg>
+        </span>
+        <span>TutorBridge</span>
+      </div>
+
+      <div class="form-card register-card">
+        <div class="form-heading">
+          <p class="welcome">TutorBridge'e katılın</p>
+          <h2>Yeni hesap oluşturun</h2>
+        </div>
+
+        <form id="registerForm" novalidate>
+          <div class="name-row">
+            <div class="field">
+              <label for="firstName">Ad</label>
+              <div class="input-wrap">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                <input id="firstName" name="firstName" type="text" placeholder="Adınız" autocomplete="given-name" required>
+              </div>
+              <p class="error" id="firstNameError"></p>
+            </div>
+            <div class="field">
+              <label for="lastName">Soyad</label>
+              <div class="input-wrap">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                <input id="lastName" name="lastName" type="text" placeholder="Soyadınız" autocomplete="family-name" required>
+              </div>
+              <p class="error" id="lastNameError"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="registerEmail">E-posta adresi</label>
+            <div class="input-wrap">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              <input id="registerEmail" name="email" type="email" placeholder="ornek@eposta.com" autocomplete="email" required>
+            </div>
+            <p class="error" id="registerEmailError"></p>
+          </div>
+
+          <fieldset class="role-field">
+            <legend>Hesap türü</legend>
+            <div class="role-options">
+              <label class="role-option">
+                <input type="radio" name="role" value="teacher" required>
+                <span>
+                  <strong>Öğretmen</strong>
+                  <small>Ders ve ödevleri yönetirim</small>
+                </span>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="student" required>
+                <span>
+                  <strong>Öğrenci</strong>
+                  <small>Derslere ve ödevlere katılırım</small>
+                </span>
+              </label>
+            </div>
+            <p class="error" id="roleError"></p>
+          </fieldset>
+
+          <div class="name-row">
+            <div class="field">
+              <label for="registerPassword">Şifre</label>
+              <div class="input-wrap">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                <input id="registerPassword" name="password" type="password" placeholder="En az 12 karakter" autocomplete="new-password" minlength="12" maxlength="128" required>
+                <button class="password-toggle" id="registerPasswordToggle" type="button" aria-label="Şifreyi göster">
+                  <svg class="eye-open" aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+                  <svg class="eye-off" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7M9.9 5.2A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a15 15 0 0 1-2.1 3M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7a9.8 9.8 0 0 0 4-.8"/></svg>
+                </button>
+              </div>
+              <p class="error" id="registerPasswordError"></p>
+            </div>
+            <div class="field">
+              <label for="confirmPassword">Şifre tekrar</label>
+              <div class="input-wrap">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Şifrenizi tekrar girin" autocomplete="new-password" required>
+              </div>
+              <p class="error" id="confirmPasswordError"></p>
+            </div>
+          </div>
+
+          <label class="remember terms">
+            <input type="checkbox" name="terms" id="terms" required>
+            <span class="checkmark" aria-hidden="true">
+              <svg viewBox="0 0 12 12"><path d="m2.5 6 2.2 2.2 4.8-5"/></svg>
+            </span>
+            <span><a href="#">Kullanım koşullarını</a> ve <a href="#">gizlilik politikasını</a> kabul ediyorum.</span>
+          </label>
+          <p class="error" id="termsError"></p>
+
+          <button class="submit-button" type="submit">
+            <span>Hesap oluştur</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+
+        <p class="signup">Zaten hesabınız var mı? <a href="login.html">Giriş yapın</a></p>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
