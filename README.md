@@ -41,7 +41,6 @@ The existing Sprint 1 checks validates documents/contracts. Sprint 2 structural 
 
 ## Sprint 1 Teams submission (historical)
 
-
 One team member submits one ZIP containing all Sprint 1 documents and includes the repository URL in the Teams description. Proposal and Vision share one file; the diagram, contribution records and license are included. Check that the ZIP opens and matches the reviewed release tag.
 
 Keep `mhmttemin` and `goksuyldrm` access, and add `nedima68` as required by the extra announcement. All three need at least Read access to this organization repository. Confirm that invitations are accepted, even though the repository is public.
