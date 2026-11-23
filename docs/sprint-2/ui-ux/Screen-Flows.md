@@ -1,10 +1,10 @@
 # TutorBridge prototype transitions
 
-Each action moves to the named destination frame. Screens after the launcher also offer **Switch demo journey** to return to Start.
+Each action moves to the named destination frame. Original journey screens offer **Switch demo journey** to return to Start. New authentication and calendar screens use the recovery routes below.
 
 | Frame | Click target → destination |
 | --- | --- |
-| Start · One place for tutoring | Teacher workspace → T Home<br>Student workspace → S Home |
+| Start · One place for tutoring | Teacher workspace → T Home<br>Student workspace → S Home<br>Sign in → Auth Sign in<br>Create account → Auth Create account |
 | T Home · Your workspace | Review request → T Request<br>Students → T Students<br>Availability → T Availability<br>Lesson calendar → T Calendar<br>Share homework → T Homework |
 | T Students · Students | Invite a student → T Invite<br>Workspace → T Home |
 | T Invite · Invite a student | Create invitation → T Code<br>Back to students → T Students |
@@ -15,7 +15,7 @@ Each action moves to the named destination frame. Screens after the launcher als
 | T Removed · Slot removed | Back to availability → T Availability |
 | T Slot Locked · Slot could not be removed | Review request → T Request<br>Back to availability → T Availability |
 | T Slot Conflict · Slot overlaps | Edit times → T Slot |
-| T Calendar · Lesson calendar | Review Maya’s request → T Request<br>Open Leo’s lesson → T Leo<br>Workspace → T Home |
+| T Calendar · Lesson calendar | Review Maya’s request → T Request<br>Open Leo’s lesson → T Leo<br>Workspace → T Home<br>Filters → T Calendar filters<br>Preview expired session → Auth Session expired |
 | T Leo · Lesson with Leo | Cancel lesson → T Cancel<br>Back to calendar → T Calendar |
 | T Request · Lesson request from Maya | Approve → T Approved<br>Reject → T Rejected<br>Cancel request → T Cancel Pending<br>Preview approval conflict → T Conflict<br>Back to calendar → T Calendar |
 | T Approved · Lesson approved | Cancel lesson → T Cancel Approved<br>Back to workspace → T Home<br>See student’s approved state → S Approved |
@@ -41,7 +41,7 @@ Each action moves to the named destination frame. Screens after the launcher als
 | S Pending · Request sent | Open lesson calendar → S Calendar<br>Cancel request → S Cancel |
 | S Pending Fri · Friday request sent | Cancel request → S Cancel Fri<br>Back to workspace → S Home |
 | S Conflict · Request could not be sent | Refresh availability → S Slots |
-| S Calendar · Lesson calendar | Open Thursday request → S Pending<br>Workspace → S Home |
+| S Calendar · Lesson calendar | Open Thursday request → S Pending<br>Workspace → S Home<br>Filters → S Calendar filters<br>Preview expired session → Auth Session expired |
 | S Approved · Lesson with Elif | Cancel lesson → S Cancel Approved<br>Workspace → S Home |
 | S Rejected · Request declined | View available times → S Slots<br>Workspace → S Home |
 | S Cancel · Cancel your request? | Confirm cancellation → S Cancelled<br>Keep request → S Pending |
@@ -49,10 +49,34 @@ Each action moves to the named destination frame. Screens after the launcher als
 | S Cancel Fri · Cancel your Friday request? | Confirm cancellation → S Cancelled Fri<br>Keep request → S Pending Fri |
 | S Cancelled · Booking cancelled | View available times → S Slots<br>Workspace → S Home |
 | S Cancelled Fri · Friday request cancelled | View available times → S Slots<br>Workspace → S Home |
-| S Homework · Assignments | Open Linear equations → S Assignment<br>Workspace → S Home |
-| S Assignment · Linear equations | Preview download outcome → S Download<br>Back to assignments → S Homework |
+| S Homework · Assignments | Open Linear equations → S Assignment<br>Workspace → S Home<br>Preview access denied → S Access denied |
+| S Assignment · Linear equations | Preview download outcome → S Download<br>Back to assignments → S Homework<br>Preview expired session → Auth Session expired<br>Preview download denied → S Access denied |
 | S Download · Download preview | Back to assignment → S Assignment |
 
-## Follow-up review
+## Added frames — 23 November 2026
 
-The original transition table remains the inventory of wired Figma screens. The [Figma construction instructions](Figma-Completion.md) define the pending frames, labels, buttons and destinations. The [handoff](../UI-UX.md#pending-figma-states-and-entry-flows) lists the pending authentication, calendar, loading and access-recovery transitions. Use the [invitation](invitation-flow.svg), [lesson](lesson-flow.svg), and [homework](homework-flow.svg) diagrams to review the SRS decision paths.
+| Frame | Action → destination |
+| --- | --- |
+| Auth Sign in | Demo teacher sign in → Auth Signing in teacher; Demo student sign in → Auth Signing in student; Preview invalid credentials → Auth Sign in error; Create account → Auth Create account |
+| Auth Sign in error | Try again → Auth Sign in; Create account → Auth Create account |
+| Auth Signing in teacher / student | After 1.2 seconds → T Home / S Home respectively |
+| Auth Create account | Create account → Auth Account created; Preview password error → Auth Registration error; Sign in → Auth Sign in |
+| Auth Registration error | Edit details → Auth Create account |
+| Auth Account created | Sign in → Auth Sign in |
+| Auth Session expired | Sign in again → Auth Sign in |
+| S Access denied | Back to assignments → S Homework |
+
+The following eight states exist separately for **T** and **S**. Each destination keeps the same role prefix.
+
+| Calendar state | Action → destination |
+| --- | --- |
+| filters | Apply filters → load-results; Preview no matches → load-empty; Preview failed request → load-failure; Preview invalid range → invalid; Clear filters → original calendar |
+| invalid | Edit dates → filters; Clear filters → original calendar |
+| load-results | Continue demo → results |
+| load-empty | Continue demo → empty |
+| load-failure | Continue demo → retry |
+| results | Open lesson → T Request / S Pending; Edit filters → filters; Clear filters → original calendar |
+| empty | Edit filters → filters; Clear filters → original calendar |
+| retry | Retry → load-results; Edit filters → filters; Clear filters → original calendar |
+
+See the [handoff verification table](../UI-UX.md#verification--23-november-2026) for actual clicked paths and limits. The [invitation](invitation-flow.svg), [lesson](lesson-flow.svg) and [homework](homework-flow.svg) diagrams describe domain decisions; they do not claim runtime implementation.

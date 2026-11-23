@@ -18,6 +18,10 @@ Evidence: [Issue #1](https://github.com/Sprint-1-Software-engineering/Sprint-1/i
 
 Prepared the detailed SRS, refined the existing backlog and added a stakeholder-validation guide under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). Linked the proposed own-profile behavior through [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61). Estimates remain initial; implementation acceptance and new user feedback are not claimed. Evidence: [requirements commit](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/182354e69448c3bc713e3d6bd80c207d48f29e83), [PR #62](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/62). Structural/API/link checks passed; technical and quality peer review is pending. The 39 live backlog records were synchronized and verified against the same SRS baseline; implementation acceptance remains open.
 
+### Sprint 2 - Figma completion, 23 November 2026
+
+Added 25 editable entry, recovery and calendar frames in the shared Figma design; connected the new routes, preserved original journeys, exported 29 PNGs and a local Figma backup, and updated the transition and verification records. Used computer assistance on Toprak's account. Actual clicked paths and limits are recorded in the [UI/UX handoff](docs/sprint-2/UI-UX.md). Tracking: [Issue #66](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/66), [PR #69](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/69). This extends Kemal's initial design and does not attribute these additions to Kemal. Latest authored commit is linked in PR #69; independent peer review is pending.
+
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)
 Role: Quality. Responsibilities: Backend & testing; QA and acceptance criteria.
