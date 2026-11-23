@@ -11,11 +11,12 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 
 | Status | Meaning |
 |---|---|
-| Pass / Fail | Executed on 23 November 2026 against `develop` at `ec696e3`, local API only. |
-| Expected failure | Executed; fails because of a known defect that has an Issue. CI treats it as expected. |
+| Pass / Fail | Executed on 23 November 2026 against `develop` at `ec696e3`; re-tested at `7fccc47` where the text says so. Local API only. |
+| Expected failure | Executed; fails because of a known defect that has an Issue. CI treats it as expected. No case has this status at `7fccc47`; P-01 had it until #71 was fixed. |
 | Observation | Executed; the specification gives no expected value, so the observed behavior is recorded. |
 | Planned | Not executed. The feature, the browser session or the Figma review does not exist yet. |
 | Static | Judged by reading the source files; no browser was used. |
+| Browser | Executed in headless Chromium 159 (Playwright) on 23 November 2026 against the `develop` front end at `7fccc47`, served by the local handler. The scripts are not committed (they need Playwright). Not a test on a real desktop browser, a device or assistive technology. |
 
 ## 2. Environment and how to run
 
@@ -23,17 +24,18 @@ Only registration, login and `GET /users/me` exist in the code today. Every othe
 - Repeatable suite: `python -m unittest tests.test_auth_quality -v` (cases below marked "QA suite"). Whole suite: `python -m unittest discover -s tests`; the delivery-tool tests need `git` on `PATH`.
 - Latency baseline: `python scripts/measure_auth_latency.py`.
 - No real token, password or personal data is written to any report or log. Test passwords are synthetic.
-- Not covered: browser behavior, Figma, a hosted environment, load beyond 10 concurrent users, code coverage.
+- Not covered: real desktop browsers, devices and assistive technology (only a headless Chromium run was done), the live Figma file, a hosted environment, load beyond 10 concurrent users, code coverage.
 
 ## 3. Results executed so far (23 November 2026)
 
 | Run | Scope | Result |
 |---|---|---|
-| QA suite, `tests/test_auth_quality.py` (committed) | Registration, login, token and profile, hashing, simultaneous registration | 23 tests: 22 pass, 1 expected failure (P-01, Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). About 6.4 s; identical result in 4 consecutive runs. |
+| QA suite, `tests/test_auth_quality.py` (committed) | Registration, login, token and profile, hashing, simultaneous registration | At `ec696e3`: 23 tests, 22 pass, 1 expected failure (P-01, Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71)). At `7fccc47`, after the fix in PR #79: 23 tests, all pass; P-01 is now a normal test that the code owner extended in PR #79 to cover `abc` and `-1` on both auth endpoints. About 6.4 s; identical result in 4 consecutive runs at `ec696e3` and 2 at `7fccc47`. The CI log of Sprint 2 validation [run 45250755596](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/45250755596) for `develop` at commit [`7fccc47`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7fccc473ad1647a880125de14c4a5c01b19e2f04) lists all 23 QA tests passing on `ubuntu-26.04` and ends with "Ran 42 tests". |
 | Existing `tests/test_auth_api.py` (written by the team) | 5 registration and login cases | Executed by QA as part of the whole suite: pass. Not counted as new QA cases. |
-| Whole suite, `unittest discover -s tests` | 42 tests including DevOps delivery-tool tests | OK with 1 expected failure. Needs `git` on `PATH`; without it 14 delivery-tool tests error with `FileNotFoundError`, which is an environment gap, not an application result. |
-| Exploratory run (script not committed) | The same cases plus probes: 77 checks | 66 pass, 1 fail (P-01), 10 observations. Identical result in two runs. Source of the Observations in section 4.8. |
-| Mutation check | Three deliberately broken copies of `server.py` (password minimum 8, two-hour sessions, login accepts any password) | All three were detected by the QA suite (R-05, T-06, L-03). The repository files were not changed. |
+| Whole suite, `unittest discover -s tests` | 42 tests including DevOps delivery-tool tests | At `ec696e3`: OK with 1 expected failure. At `7fccc47`: 42 tests OK, no expected failures (also in CI). Needs `git` on `PATH`; without it 14 delivery-tool tests error with `FileNotFoundError`, which is an environment gap, not an application result. |
+| Exploratory run (script not committed) | The same cases plus probes: 77 checks | At `ec696e3`: 66 pass, 1 fail (P-01), 10 observations, identical in two runs. At `7fccc47`: 67 pass, 0 fail, 10 observations, 0 unhandled server exceptions, identical in two runs. Source of the Observations in section 4.8. |
+| Mutation check | Three deliberately broken copies of `server.py` (password minimum 8, two-hour sessions, login accepts any password) | All three were detected by the QA suite (R-05, T-06, L-03). A fourth copy with the #71 fix reverted made the new P-01 test fail (2 sub-cases). The repository files were not changed. |
+| Headless browser runs (Playwright, Chromium 159; scripts not committed) | Login and registration pages, dashboards, Tab order and focus | Main script, 30 checks: 14 pass, 2 fail (error messages not announced, UI-04), 14 observations. Two follow-up scripts compared the teacher and student dashboards (2 of 77 text lines differ after the name is replaced; the difference is the avatar initial) and the Tab order (login 8 stops, register 13 plus the radio group; every stop is `:focus-visible` and changes style on focus). The first run of the main script contained script errors (reversed expected and observed values, a wrong Tab-order assumption); they were corrected and the results here come from the corrected script. Source of UI-01 to UI-06 and UI-09 to UI-11 in section 4.9. |
 
 ### Re-test of the defects reproduced on 19 November
 
@@ -47,21 +49,37 @@ QA ran the same checks on the PR #58 snapshot (`7f3fa77`, from the team's refere
 | R-11 name `null` and R-12 name of another JSON type | 201 | 400 |
 | R-20 unknown request property on registration | 201 | 400 |
 | L-05 missing password, L-06 e-mail `null`, L-07 unknown property on login | 401, 401, 200 | 400, 400, 400 |
-| P-01 non-numeric `Content-Length` | no response | no response (Issue #71) |
+| P-01 non-numeric `Content-Length` | no response | no response at `ec696e3` (Issue #71); 400 with the JSON error body at `7fccc47` |
 
-Of 15 checks that failed on the snapshot, 14 pass on `develop`. Twelve of the failing checks are additional to the two defects named in the SRS (other malformed e-mails, other name types, unknown properties, login validation). The fixes arrived in the two later commits to `src/server.py` on `develop`; this document does not attribute them further. P-01 exists in both versions, so it is not a regression.
+Of 15 checks that failed on the snapshot, 14 passed on `develop` at `ec696e3` and all 15 pass at `7fccc47`. Twelve of the failing checks are additional to the two defects named in the SRS (other malformed e-mails, other name types, unknown properties, login validation). The fixes arrived in the two later commits to `src/server.py` on `develop`; this document does not attribute them further. P-01 existed in both versions, so it was not a regression; it was fixed in PR #79 and QA re-tested it at `7fccc47` (Issue #71 closed).
+
+### Re-test of #71 and #74 at `develop` `7fccc47` (expected and observed)
+
+Expected values come from the SRS and the OpenAPI draft, not from the fix. The method column says how each case was run; "API only" means no browser was involved.
+
+| Case | Expected | Observed | Method |
+|---|---|---|---|
+| #71: `Content-Length: abc` on `POST /auth/register` | `400` with a `{code, message}` body | `400`, body `{"code": "invalid_input", "message": "Geçersiz istek."}` | Raw HTTP request to the local handler; API only |
+| #71: same request on `POST /auth/login` | `400` with a `{code, message}` body | `400` with the same body | Raw HTTP request; API only |
+| #71: `Content-Length: -1` on both endpoints | `400` with a `{code, message}` body | `400` with the same body | Repository test `test_p01_invalid_content_length_returns_400_on_auth_endpoints` (2 endpoints, 2 values); API only |
+| #71: unhandled server exceptions in the 77-check run | 0 | 0, identical in two runs | API only |
+| #74: login with an empty password | A "required" message, no password-length rule | "&#350;ifrenizi girin." | Headless Chromium |
+| #74: login with a wrong 3-character password | A generic failure message, no password-length rule | "E-posta veya şifre hatalı." | Headless Chromium |
+| #74: login with the correct password | Login succeeds | Login succeeded and the dashboard greeted the user by name | Headless Chromium |
+
+The #74 cases were not run on a real desktop browser or with assistive technology.
 
 ### Defects and findings
 
 | ID | Finding | Severity | Record |
 |---|---|---|---|
-| BUG-1 | A non-numeric `Content-Length` closes the connection without a response | Low | Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71), open |
-| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding. Issue [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) (see [NFR](NFR-and-Quality-Measures.md) USE-04) |
-| F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); QA note added to #61; not confirmed in a browser |
-| F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75), awaiting a team decision |
+| BUG-1 | A non-numeric `Content-Length` closes the connection without a response | Low | Issue [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71): fixed in PR #79, re-tested by QA at `7fccc47` (400 with the JSON error body on register and login), closed |
+| F-1 | Login form states a 6-character minimum; registration and API require 12 | Low | Static finding. Issue [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) (see [NFR](NFR-and-Quality-Measures.md) USE-04). PR #79 removed the 6-character check; browser re-test at `7fccc47` passed (empty password, wrong short password, correct password); Issue closed |
+| F-2 | Login redirects every role to `main_page.html`; no role routing found | Medium | Static finding, covered by US-15 / [#60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) and T-15 / [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); confirmed in a browser at `7fccc47` (comment on #61): both roles land on `/main_page.html`, the "Öğrenci Bilgi Sistemi" dashboard |
+| F-3 | Form error messages are not announced (no `aria-live` or `aria-describedby`) | Low | Static finding, confirmed in a browser (the message has no `role` or `aria-live`; the password input has `aria-invalid="false"` after a server-side error). Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75), awaiting a team decision |
 | F-4 | `GET /server.py` is served by the static handler | Low | Observation. Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75). A `GET` to an unknown API path returning an HTML 404 has no Issue |
 | F-5 | No limit on repeated failed logins | Low | Observation; scope decision needed (NFR SEC-10). Proposal Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75) |
-| F-6 | Figma exports: two pairs of byte-identical files named "failure" and "results", unclear role field on registration, missing input limits and timezone on two screens | Low | Issue [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76); exports only, the live Figma file was not opened |
+| F-6 | Figma exports, naming and clarity suggestions (not defects): the loading frames `load-results` and `load-failure` look the same, so their PNG exports are byte-identical, which [Screen-Flows](ui-ux/Screen-Flows.md) explains (each "Continue demo" leads to a different outcome); unclear role field on registration; no input limits on the share-homework screen; no timezone on the request-a-lesson screen | Low | Issue [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76). Based on the exports and the flow document only; the live prototype was not opened, so no conclusion is drawn about its interactions |
 
 F-1 and F-6 and BUG-1 are Issues for the code and design owners. F-3, F-4 and F-5 are proposals, not violations of the current SRS, so they were opened as one proposal Issue for a team decision.
 
@@ -227,20 +245,23 @@ Columns: **Type** is N (normal), X (negative) or B (boundary). **Requirement** g
 | O-05 | 12 consecutive wrong passwords for one account all returned 401 | SEC-10 |
 | O-06 | `GET /server.py` returned 200; `GET /tutorbridge.db`, `/../data/tutorbridge.db` and the encoded form returned 404 | SEC-09 |
 | P-02 | A 3 MiB request body was read in full and then rejected by field validation (400) | REL-03 |
-| P-01 | Non-numeric `Content-Length`: no response, unhandled `ValueError`. Expected 400. | REL-03, Issue #71 |
+| P-01 | Non-numeric `Content-Length`: no response, unhandled `ValueError`. Expected 400. Fixed in PR #79; at `7fccc47` it returns 400 on register and login. | REL-03, Issue #71 |
 
 ### 4.9 Interface and prototype checks (browser or Figma needed)
 
 | ID | Type | Case | Expected | Requirement | Status |
 |---|---|---|---|---|---|
-| UI-01 | N | Log in as a teacher and as a student | Each lands on their own entry screen | FR-02 AC-02.4, FR-15 AC-15.3 | Planned in a browser. Static: Not met (F-2) |
-| UI-02 | X | Read the login and registration password messages | Both state 12 characters | BR-02 | Static: Not met (F-1); browser check Planned |
-| UI-03 | N | Complete login and registration using only the keyboard | Logical Tab order, visible focus, Enter submits | NFR USE-03 | Planned |
-| UI-04 | X | Trigger validation errors with a screen reader or the accessibility tree | Message text is announced | NFR USE-03 | Planned. Static: Not met (F-3) |
-| UI-05 | N | Check that all form fields have labels | Every input has a label | NFR USE-03 | Static: Pass for `login.html` and `register.html`; browser scan Planned |
-| UI-06 | X | Open the dashboard with an expired token | Redirect to the login page | FR-02 AC-02.3 | Planned in a browser. Static: the script redirects on 401 |
-| UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Partly reviewed from the repository exports (10 of 37 PNGs viewed, all 37 hash-compared); findings in F-6 / Issue #76. Planned for the live Figma file, which was not opened |
+| UI-01 | N | Log in as a teacher and as a student | Each lands on their own entry screen | FR-02 AC-02.4, FR-15 AC-15.3 | Fail in a browser (F-2): a teacher and a student both land on `/main_page.html`, a student-information (OBS) sample dashboard; after the user's name is replaced, 2 of 77 text lines differ |
+| UI-02 | X | Read the login and registration password messages | Both state 12 characters | BR-02 | Pass in a browser: registration says 12 characters; login states no minimum (empty: "&#350;ifrenizi girin.", wrong: "E-posta veya şifre hatalı.") |
+| UI-03 | N | Complete login and registration using only the keyboard | Logical Tab order, visible focus, Enter submits | NFR USE-03 | Pass in a browser: login has 8 Tab stops in logical order, register has 13 plus the radio group; every stop is `:focus-visible` and changes style on focus; keyboard-only login (type, Tab twice past the "forgot password" link, type, Enter) succeeded. Choosing an option with the arrow keys inside the radio group was not tested |
+| UI-04 | X | Trigger validation errors with a screen reader or the accessibility tree | Message text is announced | NFR USE-03 | Fail in a browser (F-3): no live region or `role` on the message; the password input has `aria-invalid="false"` and no `aria-describedby` after a server-side error. Not tested with a screen reader |
+| UI-05 | N | Check that all form fields have labels | Every input has a label | NFR USE-03 | Pass in a browser: the accessibility tree gives every input reached by Tab an accessible name (for example "E-posta adresi", "&#350;ifre", "Beni hatırla", "Ad", "Soyad"). No automated accessibility scan was run |
+| UI-06 | X | Open the dashboard with an expired token | Redirect to the login page | FR-02 AC-02.3 | Pass in a browser: the dashboard redirected to `/login.html` and the token was removed from `localStorage` |
+| UI-07 | N | Review the Figma prototype for error, empty, loading and success states on the three required journeys | No journey step without its applicable state | BR-12, NFR USE-02 | Partly reviewed from the repository exports (10 of 37 PNGs viewed, all 37 hash-compared); findings in F-6 / Issue #76. The text of the states named in the handoff was found in the local `.fig` backup (strings only; layout and connections not checked). Planned for the live Figma file, which was not opened |
 | UI-08 | N | Student requests a lesson in the prototype | At least 80% of 5 or more participants finish within 120 s without help | SRS section 7, NFR USE-01 | Planned. No session held |
+| UI-09 | X | Submit the registration form empty, with a short password and a mismatching confirmation, and with an e-mail that already exists | One message per problem; the password message states the 12-character rule | FR-01 AC-01.3, BR-02 | Pass in a browser: seven field messages when empty; "&#350;ifre en az 12 karakter olmalıdır."; "&#350;ifreler eşleşmiyor."; "Bu e-posta zaten kayıtlı." |
+| UI-10 | N | Open `/main_page.html` with no token | Not specified for the static dashboard (SRS BR-01 covers API operations) | BR-12 | Observation: the page stays open and shows sample content with a banner that it is not connected to real data; there is no redirect to login |
+| UI-11 | N | Log in as each role and check where the access token is kept | Not specified; recorded for the security discussion | NFR SEC-01 | Observation: the token is stored in `localStorage` for both roles; no console or page errors on the dashboards |
 
 ## 5. Requirement coverage
 
@@ -277,14 +298,14 @@ These cases have no expected value in the SRS or OpenAPI. The Product Owner (Top
 
 ## 7. Hand-off to CI
 
-- The QA suite `tests/test_auth_quality.py` should run inside the existing "Sprint 2 document and hygiene checks" job, because that job already runs `python -m unittest discover -s tests`. This has not been confirmed on CI yet; the first CI run of the pull request is the evidence. Its step title says "not application tests", but the folder now contains application API checks. Osman Berke (DevOps owner) decides whether to rename the step or add a separate job. This plan does not edit the workflow.
-- P-01 is marked as an expected failure. When Issue #71 is fixed the test reports an unexpected success and fails the run; the fix then needs to remove the marker.
+- The QA suite `tests/test_auth_quality.py` should run inside the existing "Sprint 2 document and hygiene checks" job, because that job already runs `python -m unittest discover -s tests`. CI confirms it: the log of Sprint 2 validation [run 45250755596](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/45250755596) for `develop` at commit [`7fccc47`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/7fccc473ad1647a880125de14c4a5c01b19e2f04) (`ubuntu-26.04`) lists the QA tests, including P-01, and ends with "Ran 42 tests ... OK". Sprint 1 validation [run 45250755760](https://github.com/Sprint-1-Software-engineering/Sprint-1/actions/runs/45250755760) for the same commit also succeeded. The DevOps owner has since renamed the step to "Python unittest suite (auth API, QA, and delivery tooling)". This plan does not edit the workflow.
+- P-01 was an expected failure until #71 was fixed; PR #79 turned it into a normal test, so no expected-failure marker remains.
 - Not suitable for CI yet: the browser checks, the real one-hour wait (T-09), the Figma review and the usability session.
 
 ## 8. Limits of this plan
 
 - Only the registration, login and profile cases were executed. The remaining cases describe expected behavior and are not results.
-- All executed results are local API checks against the Python handler. No browser, Figma or end-to-end run is included.
+- The executed results are local API checks against the Python handler and a headless Chromium run of the login and registration pages. No real desktop browser, assistive technology, live Figma file or end-to-end run is included.
 - Coverage was not measured; the 50% unit-test coverage target belongs to Sprint 3.
 - Re-run the QA suite after any change to `src/server.py`.
 
