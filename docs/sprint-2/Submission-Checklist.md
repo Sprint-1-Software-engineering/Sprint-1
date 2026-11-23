@@ -16,12 +16,12 @@ The supplied BM321 semester rubric places first working MVP and 50% unit-test co
 | Detailed SRS and refined backlog | Toprak | [#59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59), [PR #62](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/62); open, awaiting review/integration |
 | NFR and quality-measure specification | Berat | Separate artifact not in reviewed develop/PR branches; real methods, thresholds, environment and result status needed |
 | Figma prototype and user flows | Kemal with Arda | No Figma file/prototype link or Sprint 2 flow sources found in reviewed trees; actual accessible Figma and flows required |
-| C4/UML architecture | Mehmet with Osman's deployment support | Full Architecture.md/C4/UML/schema set not in reviewed trees; [deployment handoff](Deployment-and-Recovery.md) is available but does not satisfy this entire group |
+| C4/UML architecture | Mehmet with Osman's deployment support | [Architecture proposal](Architecture.md) and editable Mermaid sources are added in the develop-targeted architecture PR; peer review, team stack decision and integration remain pending |
 
 - [ ] Integrate reviewed SRS and backlog; preserve existing Issue identities and resolve scope decisions.
 - [ ] Integrate NFR/quality and real test plan/report; distinguish targets, planned tests and observations.
 - [ ] Add real Figma file and prototype URLs and verify access as a reviewer; include user flows and readable exports.
-- [ ] Integrate C4/UML, database schema, interfaces and architecture decisions; pair diagram exports with editable sources.
+- [ ] Review and integrate the C4/UML diagrams, database schema, interfaces and architecture decisions; retain the linked editable Mermaid sources.
 - [ ] Resolve Python/Express, opaque-token/JWT and 8000/3000 mismatches with owners; update SRS/OpenAPI/architecture/runbook consistently.
 
 ## Team, contributions and review

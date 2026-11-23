@@ -1,6 +1,12 @@
-flowchart LR
-  Teacher[Teacher] -->|Uses| TutorBridge[TutorBridge]
-  Student[Student] -->|Uses| TutorBridge
-  TutorBridge -->|Connection and schedule data| SQL[(SQLite)]
-  Teacher -->|Existing workflow| WhatsApp[WhatsApp]
-  Teacher -->|Outside lesson tool| Meet[Google Meet]
+C4Context
+  title TutorBridge - System Context
+  Person(teacher, "Teacher", "Invites existing students, publishes lesson times and shares assignments")
+  Person(student, "Student", "Accepts a teacher invitation, requests lessons and views assignments")
+  System(tutorbridge, "TutorBridge", "Coordinates teacher-student connections, lesson bookings and assignment sharing")
+  System_Ext(whatsapp, "WhatsApp", "Existing channel for sharing invitation codes or messages; not integrated")
+  System_Ext(meet, "Google Meet", "External lesson meeting tool; not integrated")
+  Rel(teacher, tutorbridge, "Manages connections, availability and assignments")
+  Rel(student, tutorbridge, "Accepts invitations, requests bookings and views assignments")
+  Rel(teacher, whatsapp, "May share invitation code outside the MVP")
+  Rel(teacher, meet, "May conduct a lesson outside TutorBridge")
+  Rel(student, meet, "May join a lesson outside TutorBridge")
