@@ -46,7 +46,7 @@ Prepared [Team and Process](docs/sprint-2/Team-and-Process.md) and [Traceability
 
 ### Sprint 2 - Final delivery preparation
 
-Refreshed integrated run instructions and release evidence under [Issue #83](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/83), aligned the architecture booking-state term with the existing API/SRS, and recorded Toprak's explicit planned-target and Sprint 3 scope decisions of 24 November 2026. No unexecuted user study, hosted deployment, coverage or teammate approval is claimed. Final preparation PR and verification evidence are linked from Issue #83.
+Refreshed integrated run instructions and release evidence under [Issue #83](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/83), aligned the architecture booking-state term with the existing API/SRS, and recorded Toprak's explicit planned-target and Sprint 3 scope decisions of 24 November 2026. No unexecuted user study, hosted deployment, coverage or teammate approval is claimed. Evidence: [PR #87](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/87), [authored commit 8e44cff](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/8e44cffe12c3ea8561e87a5baf93a1a5a261fb5a). Independent review and release integration remain pending.
 
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)

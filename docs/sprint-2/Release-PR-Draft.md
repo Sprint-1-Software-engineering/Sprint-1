@@ -11,7 +11,7 @@ Base: main. Head: develop. Keep the release PR draft until final-preparation Iss
 - Quality measures, API tests, browser observations and re-tests: #73, #77, #80.
 - CI/environment and dated evidence: #64, #78.
 - Process and cross-artifact traceability: #82.
-- Final terminology, runbook, product decisions and submission overview: #83 task; integrate its reviewed preparation PR before ready-for-review.
+- Final terminology, runbook, product decisions and submission overview: [PR #87](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/87); integrate the reviewed preparation PR before ready-for-review.
 
 See [Submission-Overview.md](Submission-Overview.md), [Verification-Report.md](Verification-Report.md) and [Submission-Checklist.md](Submission-Checklist.md). Candidate checks passed locally: 42 automated tests, 17 isolated environment/validation probes, structural release-ready, OpenAPI and whitespace checks. Check exact release-commit CI and peer review before merge. Current local results are not full MVP or hosted acceptance.
 
