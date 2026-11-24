@@ -1,23 +1,20 @@
-# Prepared release PR description
+# Sprint 2 release candidate
 
-Status: local preparation only; no release PR or Sprint 2 tag exists yet. Develop currently has no content difference against main. Use after reviewed feature integration creates a real release candidate. Replace pending fields with verified evidence before marking the PR ready.
+Base: main. Head: develop. Keep the release PR draft until final-preparation Issue #83 is reviewed and integrated and evaluator/Figma access is confirmed. Proposed version v0.2.0-sprint2 is not yet created. Do not move existing tags.
 
-Suggested title: `Sprint 2: requirements and architecture submission`
-Base: `main`. Head: `develop`. Create as draft while any gate is unresolved.
+## Included work
 
-## Description to use
+- Requirements/backlog: PR #62.
+- Auth/profile and corrections: #58, #79.
+- Editable Figma, flows and exports: #67, #69.
+- C4/UML architecture: #70.
+- Quality measures, API tests, browser observations and re-tests: #73, #77, #80.
+- CI/environment and dated evidence: #64, #78.
+- Process and cross-artifact traceability: #82.
+- Final terminology, runbook, product decisions and submission overview: [PR #87](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/87); integrate the reviewed preparation PR before ready-for-review.
 
-TutorBridge's Sprint 2 release consolidates the reviewed requirements, quality measures, Figma/user flows and C4/UML architecture, with repeatable local setup and delivery evidence. This candidate remains pending until the linked submission gates are satisfied; it does not claim the entire MVP is implemented.
+See [Submission-Overview.md](Submission-Overview.md), [Verification-Report.md](Verification-Report.md) and [Submission-Checklist.md](Submission-Checklist.md). Candidate checks passed locally: 42 automated tests, 17 isolated environment/validation probes, structural release-ready, OpenAPI and whitespace checks. Check exact release-commit CI and peer review before merge. Current local results are not full MVP or hosted acceptance.
 
-Delivery groups:
-- SRS/backlog: #59 / #62; integration and latest review pending.
-- NFR/quality: pending Berat's actual artifact, Issue/PR and review links.
-- Figma/user flows: pending Kemal/Arda's accessible file, prototype, source/export and review links.
-- Architecture/schema: pending Mehmet's actual C4/UML/schema and reviewed decisions.
-- Environment/CI/deployment/checklist: #63; add the reviewed DevOps PR and exact release-check logs.
+Remaining user/admin action: accepted evaluator access for goksuyldrm and nedima68; confirm actual Figma reviewer access. No security settings were changed. Remaining runtime and production decisions are explicitly recorded, not silently marked done. A real usability session and code coverage were not measured.
 
-Validation on candidate SHA: pending. Link structural/OpenAPI results, actual runtime suite results, known failures and their disposition. Do not reuse a PR #58 reference check as evidence that the candidate backend was tested.
-
-Remaining gates: see `docs/sprint-2/Submission-Checklist.md`; include evaluator/Figma access, independent reproduction, contribution records, technology/token consistency and latest-push approval.
-
-Release steps after approval: merge using protected workflow; create an unused Sprint 2 tag from the resulting main SHA; build and inspect matching local package; verify live Teams format and submit. No moved historical tags or public ZIP asset upload.
+After approval and release merge: fetch main, create unused v0.2.0-sprint2 on the reviewed final main SHA, build/verify the matching local package and submit through Teams with repository/tag/artifact links. No public ZIP asset upload.

@@ -4,7 +4,7 @@ Owner: Osman Berke Özdemir. Architecture handoff for Mehmet; proposed decisions
 
 ## Current environment versus target
 
-The only verified environment is the pinned local PR #58 Python/SQLite auth reference, started with `python3 src/server.py`, bound to `127.0.0.1:8000`. Python serves static files from `src`; account/session data is in `data/tutorbridge.db` outside that directory. It has no container, reverse proxy, public TLS endpoint, hosting service, migration framework or implemented assignment storage. [Verification](Verification-Report.md) covers local operation only.
+The integrated local environment contains the Python/SQLite auth implementation merged through PR #58 and corrected in PR #79; the earlier pinned reference remains historical evidence. The local implementation is, started with `python3 src/server.py`, bound to `127.0.0.1:8000`. Python serves static files from `src`; account/session data is in `data/tutorbridge.db` outside that directory. It has no container, reverse proxy, public TLS endpoint, hosting service, migration framework or implemented assignment storage. [Verification](Verification-Report.md) covers local operation only.
 
 Proposed demonstration target: one host, one application instance and persistent local SQLite storage. Keep SQLite on the application's local persistent disk; do not assume a shared network filesystem or multi-replica deployment is supported. Hosting provider, OS, domain, budget, capacity and retention remain open decisions (OD-04 in the requirements draft). No production deployment has been carried out.
 
@@ -26,7 +26,7 @@ A Docker volume, if adopted, must preserve SQLite and future protected uploads a
 
 ## Backup and restore approach
 
-Proposed starting policy for team approval: take a consistent backup before deployments and before schema changes; consider daily backups only once real usage requires them. Proposed recovery goals are at most 24 hours of data loss and restoration within one hour, unmeasured and unapproved. These are discussion targets, not achieved NFRs. Berat should reconcile any accepted values with the NFR specification.
+Proposed starting policy for team approval: take a consistent backup before deployments and before schema changes; consider daily backups only once real usage requires them. On 24 November 2026 Toprak accepted planned recovery targets of at most 24 hours of data loss and restoration within one hour. They remain unmeasured against a hosted target, not achieved NFRs or a production backup policy. See NFR section 7; Berke and Mehmet still own operational design.
 
 For a local SQLite snapshot, stop the demo server for the simplest quiescent procedure, or use Python's SQLite backup API rather than copying an active database file. Supply a private destination outside the checkout:
 

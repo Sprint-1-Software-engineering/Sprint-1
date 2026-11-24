@@ -1,7 +1,7 @@
 # Sprint 2 Submission Checklist
 
 Owner: Osman Berke Özdemir (@makucheez). Tracking: [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). DevOps implementation: [PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64), merged into `develop` at [`defcf75`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/defcf7549109c20a39eb7fa23ce986df5115076a).
-Readiness: **not ready for final submission**. Review date: 23 November 2026. Repository evidence reflects the reviewed develop baseline in the [verification report](Verification-Report.md).
+Readiness: **candidate prepared; final peer review, access checks and release tag pending**. Review date: 24 November 2026. Repository evidence reflects the reviewed develop baseline in the [verification report](Verification-Report.md).
 
 ## Source and deadline
 
@@ -41,13 +41,13 @@ Student IDs and RACI are in [the team record](../Team-Members-and-RACI.md). Actu
 - [ ] Each member records their own real Issue, commit, PR and review links; assignment alone is not completed-work evidence.
 - [ ] Every release-bound PR has another person's review of its latest changes; no self-approval or bypass merge.
 - [ ] Mehmet and Berat independently reproduce/check the [local procedure](Local-Development-and-Delivery.md); QA re-test evidence is in the [test plan](Review-and-Test-Plan.md); verify the exact local-delivery procedure separately before claiming independent reproduction.
-- [ ] Review the new [team/process record](Team-and-Process.md) and [traceability matrix](Traceability.md) under Issue #81. They link existing artifacts and record remaining decisions; their presence alone does not establish final release readiness. Toprak owns this handover.
+- [x] Process handover: [team/process record](Team-and-Process.md) and [traceability matrix](Traceability.md) were reviewed by Berke and merged in PR #82. Their presence does not establish final release readiness. Toprak owns the handover.
 
 ## Access and CI gates
 
 23 November branch summaries using makucheez: both branches report protected; their branch summaries retain required context `Sprint 1 checks`, enforcement `everyone`. Confirm the full approval and conversation rules with a repository administrator.
 
-The 19 November collaborator listing contained `mhmttemin` with Read; `goksuyldrm` and `nedima68` were absent at that check. Reconfirm their current access before submission. The existing README asks for all three. An administrator must resolve the stated evaluator-access requirement and verify acceptance. No permissions were modified.
+On 24 November 2026 the accepted collaborator list contains `mhmttemin` with Read, but not `goksuyldrm` or `nedima68`. The pending repository invitation list is empty. Explicit evaluator access for those two accounts still needs user/admin action before submission; public visibility is not a recorded named-account grant. The existing README asks for all three. An administrator must resolve the stated evaluator-access requirement and verify acceptance. No permissions were modified.
 
 - [ ] Preserve required `Sprint 1 checks`, PR/review/conversation requirements and administrator enforcement.
 - [ ] Review successful CI logs on the exact integrated/release SHA, not an old feature or reference SHA.
@@ -58,7 +58,7 @@ The 19 November collaborator listing contained `mhmttemin` with Read; `goksuyldr
 
 ## Release and package procedure
 
-The 23 November develop baseline includes merged Sprint 2 work. Process/traceability documents are added under #81; obtain their peer review. Complete the outstanding evidence and decisions, including the architecture BookingStatus naming inconsistency recorded in Traceability.md, before preparing the develop-to-main release. Refresh the [draft description](Release-PR-Draft.md) using the reviewed release candidate.
+The 23 November develop baseline includes merged Sprint 2 work. Process/traceability documents were reviewed and merged via #82. Record remaining technical deferrals and complete access/evidence checks, with the BookingStatus naming correction in this final-preparation candidate reviewed, before preparing the develop-to-main release. Refresh the [draft description](Release-PR-Draft.md) using the reviewed release candidate.
 
 - [ ] Integrate team artifacts via independently reviewed feature PRs into develop.
 - [ ] Refresh refs and open a **draft** develop -> main release PR with the prepared description and actual evidence. Fill in real Issue/PR/review, Figma and CI links.

@@ -1,7 +1,7 @@
 # TutorBridge - Non-Functional Requirements and Quality Measures
 
-Version: 0.1 draft, 23 November 2026. Owner: Berat Erdem Yalçın (Quality / Testing). Tracking: [Issue #72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72).
-Review state: prepared for peer review. No team or stakeholder approval is claimed. Thresholds marked "Proposed" are QA suggestions that the team still has to accept, change or reject.
+Version: 0.2 delivery candidate, 24 November 2026. Owner: Berat Erdem Yalçın (Quality / Testing). Tracking: [Issue #72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72).
+Product decisions on 24 November 2026 are recorded in section 7. Earlier measurements remain tied to their stated commits. Acceptance of a target is not evidence that its test passed or that all technical owners approved a production design.
 
 ## 1. Purpose and how to read this document
 
@@ -52,7 +52,7 @@ Owners are proposed assignments. "Verify" means designing and running the check;
 
 ### 3.2 Performance
 
-All thresholds in this section are **Proposed** for the small course deployment in section 2. The team must accept or change them. The measured values are a baseline from one machine, not an acceptance result.
+Toprak accepted PERF-01 to PERF-04 as **planned verification targets** on 24 November 2026 for the small course deployment in section 2. The measured values remain a baseline from one machine, not acceptance results.
 
 | ID | Requirement and rationale | Threshold | Method | Environment / load | Owner | Source | Status |
 |---|---|---|---|---|---|---|---|
@@ -119,27 +119,27 @@ These behaviors were seen during the 23 November checks. None is a defect agains
 
 ## 6. Open points and limits of this document
 
-- Performance numbers, the usability sample (5 participants, 80%), brute-force limits and recovery objectives are proposals. Section 7 lists the targets that still wait for a team decision.
+- Section 7 records accepted planned performance/usability/recovery targets and Sprint 3 hardening scope. Exact throttling policy and production decisions remain open. No new runtime behavior or unexecuted measurement is claimed.
 - The browser results (USE-03, USE-04, USE-05) come from a headless Chromium run, not from a real desktop browser, a screen reader or a user. Nothing here is a live Figma or end-to-end result. USE-01 (usability session) and USE-02 (live Figma review) are still to be done.
 - The 50% coverage target and the working MVP belong to Sprint 3.
 - Statuses refer to `develop` at `ec696e3`, except where `7fccc47` is stated. Re-check them after any change to `src/server.py`.
 
-## 7. Targets still awaiting a team decision
+## 7. Product decisions and outstanding technical choices
 
-Status on 23 November 2026. No target below is accepted. The only responses on record are the approvals of the pull requests that merged this document, which labels these targets as proposals, a note by Mehmet that records technical proposals for #75 as "pending team decision" and says the 10 failures in 15 minutes value "remains a discussion starting point", and a review by Toprak that confirms the proposals are not marked as accepted. Until Toprak or Mehmet records an explicit decision (for example in a comment on the Issue or in this file), each item stays Proposed.
+On 24 November 2026, Toprak explicitly accepted the following as planned verification targets. This records the product owner's decision, not a stakeholder study, a successful measurement or unanimous team approval.
 
-| Target | What is proposed | Decision needed from |
-|---|---|---|
-| PERF-01 to PERF-04 | p95 thresholds at 10 concurrent users (200 ms reads, 1 s login, 500 ms writes) and a 5 s transfer of a 10 MiB file | Toprak, Mehmet |
-| USE-01 | At least 80% of 5 or more participants finish within 120 s (the two-minute figure itself is from the SRS; the sample and the 80% are QA proposals) | Toprak, Kemal |
-| USE-03 and Issue [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75) item 1 | Associate each form error with its field and announce it | Mehmet |
-| SEC-09 and Issue #75 item 2 | Serve only an explicit allow-list of front-end assets; `/server.py` returns 404 | Mehmet |
-| SEC-10 and Issue #75 item 3 | Login throttling or a `429` policy; whether to add this behavior at all is a scope decision | Mehmet, Toprak |
-| REL-04 | Restore within 1 h and at most 24 h of data loss (from [Deployment and Recovery](Deployment-and-Recovery.md), marked unapproved there) | Osman, Mehmet, Toprak |
-| MNT-02 to MNT-05 | Traceability, repeatability and defect-tracking thresholds | Toprak |
-| SEC-01 follow-up and SRS OD-02 | Whether a second login should keep the first session (observed: it ends it) and how revocation works | Mehmet, Toprak |
-| SEC-08 and SRS OD-04 | HTTPS and hosting; no hosted environment exists to measure | Osman, Mehmet |
+| Item | Recorded decision | Result / next action |
+| --- | --- | --- |
+| PERF-01 to PERF-04 | Adopt QA's scoped targets: p95 reads <=200 ms at 10 users; auth <=1 s at 5 concurrent logins; booking writes <=500 ms at 10 users; 10 MiB loopback upload/download <=5 s | Preserve existing baseline numbers; verify each endpoint when implemented |
+| USE-01 | Plan a study with at least 5 participants; at least 80% finish the lesson-request task within 120 s without help | Not run; no usability result claimed |
+| REL-04 | Plan recovery with at most 24 h of data loss and restoration within 1 h | QA timed target verification remains planned; historical synthetic rehearsal is separate |
+| USE-03, SEC-09, SEC-10 / #75 | Plan field-linked error announcements, frontend-only static serving and login-attempt limiting for Sprint 3 | Planned implementation Issues: [#84](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/84), [#85](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/85), [#86](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/86). No implementation in this delivery change. Exact account/IP limits, delay and recovery policy require technical refinement; 10 failures/15 minutes remains a proposal |
+| MNT-02 to MNT-05 | Use traceability, repeatable checks, consistency review and defect records as release-review practices | Evidence is linked; a mapped or passing automated check is not full product acceptance |
 
-MNT-01 (50% unit-test coverage) is a course requirement for Sprint 3, not a team decision.
+Historical requirement-table source cells labelled Proposed identify where QA originally suggested the target. PERF-01 to PERF-04, USE-01 and REL-04 now have the planned-target disposition above; their observed-result cells are not upgraded by this decision.
 
-References: [SRS](SRS.md), [Review and Test Plan](Review-and-Test-Plan.md), [Architecture](Architecture.md), [Deployment and Recovery](Deployment-and-Recovery.md), [Verification Report](Verification-Report.md), [OpenAPI draft](../Openapi.yaml), [backlog](../Initial-Product-Backlog.md).
+Still open: session concurrency and server revocation (OD-02), hosted platform/TLS and storage/retention (OD-04), cross-teacher student conflicts (OD-06), pagination beyond 200 items (OD-07), and the four input/lifecycle questions listed in the test plan. Owners remain those in the SRS. The integrated local demonstration baseline is Python/SQLite, opaque one-hour bearer tokens and port 8000. It is not a production deployment.
+
+MNT-01 (50% unit-test coverage) belongs to Sprint 3. Sprint 2 has no measured coverage claim.
+
+References: [SRS](SRS.md), [Review and Test Plan](Review-and-Test-Plan.md), [Architecture](Architecture.md), [Deployment and Recovery](Deployment-and-Recovery.md), [backlog](../Initial-Product-Backlog.md).
