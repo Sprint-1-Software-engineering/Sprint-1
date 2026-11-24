@@ -37,6 +37,8 @@ class QuietHandler(server.TutorBridgeHandler):
 
 
 class QuietServer(ThreadingHTTPServer):
+    # The DB race test launches eight clients; the default accept backlog is five.
+    request_queue_size = 32
     daemon_threads = True
 
     def handle_error(self, request, client_address):

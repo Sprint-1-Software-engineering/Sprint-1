@@ -48,6 +48,10 @@ Prepared [Team and Process](docs/sprint-2/Team-and-Process.md) and [Traceability
 
 Refreshed integrated run instructions and release evidence under [Issue #83](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/83), aligned the architecture booking-state term with the existing API/SRS, and recorded Toprak's explicit planned-target and Sprint 3 scope decisions of 24 November 2026. No unexecuted user study, hosted deployment, coverage or teammate approval is claimed. Evidence: [PR #87](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/87), [authored commit 8e44cff](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/8e44cffe12c3ea8561e87a5baf93a1a5a261fb5a). Independent review and release integration remain pending.
 
+### Sprint 2 - Final QA fixture correction
+
+Under [Issue #89](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/89), reproduced a local connection reset in the eight-client registration race and increased only the temporary QA server's accept backlog from five to 32. The application and all outcome assertions are unchanged. Three isolated race repeats, the 23-test QA suite and all 42 tests passed after correction. Updated final access verification: Figma source/launcher opened unsigned-in; evaluator Read invitations sent with Toprak's explicit authorization, acceptance pending. The new correction requires independent review before release.
+
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)
 Role: Quality. Responsibilities: Backend & testing; QA and acceptance criteria.
