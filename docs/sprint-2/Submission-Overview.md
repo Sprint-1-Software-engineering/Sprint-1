@@ -27,4 +27,4 @@ Toprak accepted performance/usability/recovery targets as future verification ta
 
 Before Teams submission, record the actual release tag and main commit in the submission description and verify they match the package manifest. Proposed unused version: v0.2.0-sprint2; this overview does not create that tag. Include the repository URL, team details and artifact links. The supplied Sprint 2 instructions do not explicitly require ZIP; confirm live Teams attachment requirements.
 
-Named evaluator access for goksuyldrm and nedima68 is not recorded in the accepted collaborators or pending invitations as of 24 November. mhmttemin has Read. The submitting member must resolve named-account access and confirm Figma access; no permissions were changed here.
+On 24 November Toprak explicitly authorized Read invitations for goksuyldrm and nedima68; both were sent and await acceptance. mhmttemin has Read. Figma source view and prototype launcher were opened in an unsigned-in browser during the final check. Invitation acceptance is still pending; it is not represented as accepted access.

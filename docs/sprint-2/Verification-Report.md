@@ -126,3 +126,15 @@ Operator: Toprak Daldal, under Issue #83. Source baseline: develop 14974d7 with 
 - Local source/diagram consistency and required-artifact checks passed. The package manifest identifies the exact archived candidate; do not treat a DRAFT archive as a final tagged release.
 
 No new browser, user-study, coverage, hosted performance or production-security test was run in this preparation. Existing SQLite connection ResourceWarnings remain a maintenance observation; they did not fail the automated suite. Exact candidate CI links and independent final review belong in the preparation/release PRs. Named evaluator access and final tag remain pending.
+
+## Final repeat on 24 November - QA fixture queue
+
+The exact release candidate 27d5469 passed GitHub CI, but two local macOS/Python 3.14.5 repeats exposed one connection reset during the eight-client duplicate-registration case. The first full run had 41 passes and one failure; the isolated QA suite reproduced the same race failure. Earlier passing results above remain historical results, not erased failures.
+
+Issue #89 records the diagnosis and narrow correction: the temporary QuietServer inherited an accept backlog of five while the race case launches eight clients. Its test-only request_queue_size is now 32. Production server source, eight parallel requests and the exact expected one 201 plus seven 409 responses are unchanged. This does not establish production concurrency capacity.
+
+After the correction, the isolated race test passed three repetitions; the full QA suite passed all 23 tests; and full discovery passed all 42 tests in 10.017 seconds with no expected failures. CI and independent review of this correction are required before final release merge.
+
+The Figma source and prototype URLs were opened in an unsigned-in browser during this final repeat: the editable-source canvas was visible in view mode and the prototype launcher rendered. No new full journey, accessibility or user-study test is claimed.
+
+Toprak explicitly authorized Read invitations for goksuyldrm and nedima68; both invitations were sent. Acceptance is pending, not claimed as accepted access. mhmttemin already has Read.
