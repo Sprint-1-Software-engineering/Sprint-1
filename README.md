@@ -30,8 +30,9 @@ Ardından `http://127.0.0.1:8000/register.html` veya `http://127.0.0.1:8000/logi
 
 The current local auth smoke checks cover registration and login. They do not verify the complete booking, invitation or assignment workflows.
 
-## Sprint 2 requirements draft
+## Sprint 2 requirements and delivery candidate
 
+- [Sprint 2 submission overview](docs/sprint-2/Submission-Overview.md)
 - [Detailed SRS](docs/sprint-2/SRS.md)
 - [Refined product backlog](docs/Initial-Product-Backlog.md)
 - [Stakeholder validation guide](docs/sprint-2/Stakeholder-Validation-Guide.md)

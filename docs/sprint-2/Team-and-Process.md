@@ -1,6 +1,6 @@
 # Sprint 2 team and process
 
-Updated: 24 November 2026. Process record owner: Toprak Daldal (@toprakdaldal). Tracking: [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81). Source baseline: develop at `1897f24` (PR #80 integrated).
+Updated: 24 November 2026. Process record owner: Toprak Daldal (@toprakdaldal). Tracking: [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81). Final preparation uses develop at `14974d7` (PR #82 integrated), with candidate changes under #83.
 
 ## Team and responsibility
 
@@ -15,7 +15,7 @@ Toprak has taken responsibility for the remaining Sprint 2 process and traceabil
 | Figma and user flows | Kemal; Toprak authored the completion | Berat for quality checks | [PR #67](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/67), [PR #69](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/69) |
 | NFR and test plan | Berat | Toprak for targets; Mehmet for technical decisions | [PR #73](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/73), [PR #77](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/77), [PR #80](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/80) |
 | CI and delivery evidence | Berke | Mehmet / another teammate for review | [PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64), [PR #78](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/78) |
-| Process, cross-artifact traceability and submission coordination | Toprak | Independent teammate review of this change | [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81) |
+| Process, cross-artifact traceability and submission coordination | Toprak | Berke reviewed PR #82; final release changes need fresh review | [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81) |
 
 The owner does the work and owns the result; named input/review roles are requests, not invented approvals. Each release-bound PR needs one actual teammate approval of the latest push. Toprak cannot approve this process-documentation PR.
 
@@ -55,8 +55,8 @@ The [quality report](Review-and-Test-Plan.md) records 42 passing automated tests
 
 | Item | Decision / action owner | Current disposition |
 | --- | --- | --- |
-| Quality thresholds and validation sample | Toprak with Mehmet / Kemal as listed in the NFR | Still Proposed; review [NFR section 7](NFR-and-Quality-Measures.md) |
-| Input errors, static asset serving and login throttling | Mehmet with Toprak for scope | [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75); proposals, not implemented requirements |
+| Quality thresholds and validation sample | Toprak with Mehmet / Kemal as listed in the NFR | Planned targets accepted by Toprak on 24 November; review [NFR section 7](NFR-and-Quality-Measures.md) |
+| Input errors, static asset serving and login throttling | Mehmet with Toprak for scope | [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75); planned Sprint 3 scope, not implemented behavior |
 | Teacher/student runtime entry | Mehmet, Toprak | [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61); headless checks show both roles reach the sample student dashboard |
 | Figma naming and clarity | Kemal / Toprak | [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76); shared loading visuals are intentional, clarity suggestions remain |
 | Backend, tokens, hosting, recovery and dataset growth | Owners listed in SRS OD-01 to OD-07 | Record decisions or explicit deferrals; do not invent approval |

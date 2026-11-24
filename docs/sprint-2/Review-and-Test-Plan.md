@@ -1,7 +1,7 @@
 # TutorBridge - Review and Test Plan
 
-Version: 0.1 draft, 23 November 2026. Owner: Berat Erdem Yalçın (Quality / Testing). Tracking: [Issue #72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72). Quality targets: [NFR and Quality Measures](NFR-and-Quality-Measures.md).
-Review state: prepared for peer review. No team approval is claimed.
+Version: 0.1 draft, 23 November 2026. Owner: Berat Erdem Yalçın (Quality / Testing). Tracking: [Issue #72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72). Quality targets: [NFR and Quality Measures](NFR-and-Quality-Measures.md), including the product decisions of 24 November in section 7.
+QA documentation was reviewed and merged through PR #80. Product decisions in NFR section 7 do not imply completed tests or unanimous production sign-off.
 
 ## 1. Purpose, scope and status values
 

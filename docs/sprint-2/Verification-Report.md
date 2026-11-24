@@ -114,3 +114,15 @@ Reviewed `develop` at [`67e3ebf`](https://github.com/Sprint-1-Software-engineeri
 The expected failure is `test_p01_non_numeric_content_length_returns_400`. The known defect in [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71) remains open. This is one of the 23 QA tests, leaving 22 QA passes. The older malformed-email and null-name failures above apply to the reference snapshot. The integrated auth API CI log shows that both corresponding rejection tests pass on develop. The run covers local API behavior and delivery tools. Browser behavior, Figma access, booking/assignment implementation, performance thresholds and coverage require their own evidence.
 
 The old step label excluded application tests even though discovery already ran them. The updated label describes auth API, QA and delivery tooling, with the same discovery command and check names. The [submission checklist](Submission-Checklist.md) tracks the remaining evidence, decisions and release gates. A local `--release-ready` run reported two missing proposed team paths, `Team-and-Process.md` and `Traceability.md`. The team can supply equivalent documents under agreed names and update the paths accordingly.
+
+## 24 November 2026 - Final preparation checks
+
+Operator: Toprak Daldal, under Issue #83. Source baseline: develop 14974d7 with documentation/terminology-only candidate changes. Application and tests are unchanged from the integrated #79/#80 source.
+
+- `python3 -m unittest discover -s tests -q`: 42 tests passed, no expected failures, 9.978 seconds on macOS / Python 3.14.5.
+- `python3 scripts/check_auth_environment.py --validation-probes`: 17 passed, 0 failed; isolated startup, registration/login/profile, storage/restart and malformed-email/null-name probes. Disposable data removed.
+- Structural `--release-ready`, OpenAPI/document validation and `git diff --check`: passed.
+- The domain .mmd, embedded class diagram and SVG use `rejected`, matching OpenAPI. The updated SVG thumbnail was viewed and remained readable.
+- Local source/diagram consistency and required-artifact checks passed. The package manifest identifies the exact archived candidate; do not treat a DRAFT archive as a final tagged release.
+
+No new browser, user-study, coverage, hosted performance or production-security test was run in this preparation. Existing SQLite connection ResourceWarnings remain a maintenance observation; they did not fail the automated suite. Exact candidate CI links and independent final review belong in the preparation/release PRs. Named evaluator access and final tag remain pending.

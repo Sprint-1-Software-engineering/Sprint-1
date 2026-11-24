@@ -151,7 +151,7 @@ classDiagram
     <<enumeration>>
     pending
     approved
-    declined
+    rejected
     cancelled
   }
   User "1" --> "0..*" AuthToken : owns

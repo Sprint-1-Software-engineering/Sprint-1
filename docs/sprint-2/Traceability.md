@@ -80,13 +80,13 @@ Every ID from the NFR is included below. Numeric targets, owners, environments a
 | Architecture | [PR #70](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/70) | C4/UML design and editable/readable diagrams |
 | Quality and re-tests | [PR #73](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/73), [PR #77](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/77), [PR #80](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/80) / [#72](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/72) | Planned versus executed cases, all-pass auth regression results, headless findings |
 | Environment/CI | [PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64) and [PR #78](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/78) / [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63) | Integrated API/QA/tooling checks; not hosted acceptance |
-| Process and cross-artifact matrix | [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81) | This new change requires independent review |
+| Process and cross-artifact matrix | [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81) | Reviewed and merged in PR #82; final-candidate updates require fresh review |
 
 ## Open consistency and decision notes
 
-1. The architecture UML BookingStatus says `declined`, but SRS FR-10/11 and OpenAPI use `rejected`. Mehmet and Toprak should align the model and regenerate the readable export before final consistency sign-off. The contract remains the reference; this matrix does not silently introduce a new state.
+1. Final-candidate correction under #83: the UML BookingStatus, its readable SVG and the SRS/OpenAPI now all use `rejected`. This is a terminology correction, not a new lifecycle state.
 2. QA identifies four unresolved expected behaviors: INV-05 repeated active invitation; BKG-05 requesting a past slot; BKG-11 approving after the start; ASG-04 empty-file rejection/status. Toprak and Mehmet must record decisions and update SRS/contract/tests together. No test result is invented for these cases.
-3. Proposed NFR targets, session concurrency/revocation, hosting/recovery, cross-teacher student conflicts and pagination remain in the owners' decision registers. Open design questions are not implementation completion.
+3. Product-owner decisions on planned quality targets and Sprint 3 hardening are recorded in NFR section 7. Other session concurrency/revocation, hosting/recovery, cross-teacher student conflicts and pagination remain in the owners' decision registers. Open design questions are not implementation completion.
 4. Role-specific auth routing remains a runtime gap (#61). Figma role routes do not close it. The shared loading exports intentionally show the same progress state with different outgoing destinations (#76 clarity suggestions).
 5. Team roster and contribution history remain unchanged. Toprak authored this process/matrix handover; future implementation owners remain those in the backlog.
 

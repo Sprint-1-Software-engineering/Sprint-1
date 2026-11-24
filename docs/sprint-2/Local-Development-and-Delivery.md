@@ -1,83 +1,46 @@
-# Local Development and Delivery
+# Local development and delivery
 
-Owner: Osman Berke Özdemir (@makucheez). Tracking: [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63).
-Status: verified local reference procedure; backend adoption and integration await team review.
+Updated: 24 November 2026 under #83. Original DevOps owner: Osman Berke Ozdemir; integrated instructions refreshed by Toprak. Historical reference checks remain in [Verification-Report.md](Verification-Report.md).
 
-## Baselines and technology decision
+## Current baseline
 
-- `develop` at `1e50523cda7b06ece5b5be4927353390c4aab562` has static frontend files and document validation, but no `src/server.py`.
-- [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58), pinned at `7f3fa7735987dc59bc54be5257f9e2145c529a1c`, contains the local Python/SQLite auth prototype. It is not merged into develop. Its target was main at the 19 November review; the author needs to reconcile this with the documented feature -> develop workflow.
-- Recommendation for architecture review: keep Python/SQLite for the small local prototype to reuse the working auth code. This is Osman's proposal, not an approved team technology change. Mehmet and Toprak own resolution of OD-01/OD-02 in the [requirements PR #62](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/62).
-- Current executable behavior is Python standard-library HTTP + SQLite, opaque database-backed bearer sessions, `http://127.0.0.1:8000/api/v1`. Node/Express, JWT and port 3000 remain conflicting historical design descriptions, not a second running backend. Update SRS/OpenAPI/architecture together after approval; do not silently overwrite those owners' work.
+The reviewed develop branch includes the local Python standard-library HTTP server, SQLite, static HTML/CSS/JavaScript, opaque one-hour bearer sessions and `/api/v1/users/me`. Auth corrections are merged in PR #79; QA re-tests are merged in #80. There is no external database service, API key, npm runtime dependency or loaded `.env`. Python includes `sqlite3`; CI targets Python 3.12. Local checks have also used Python 3.14 on macOS and Python 3.12 on Windows. This is not a supported production-version matrix.
 
-## Requirements and dependencies
+## Clean local start
 
-Git, a browser and Python 3 are needed. The reference was actually verified with Python 3.9.6 / SQLite supplied by Python on macOS; The pinned reference smoke also passed in CI with Python 3.12.16 on Ubuntu; CI tooling targets Python 3.12. See [actual results](Verification-Report.md) for the CI evidence and its scope. No supported-version matrix beyond tested environments is claimed. Python must include `sqlite3`; check with:
+Use a new folder; do not reset another contributor's checkout. Before release, the branch is a moving candidate:
 
 ```sh
-python3 --version
-python3 -c "import sqlite3; print(sqlite3.sqlite_version)"
-```
-
-The application imports only the Python standard library: no npm install, external database server, API key or third-party runtime package is required. `.env` is not loaded; `.env.example` intentionally contains comments only. Host, port and database path are hard-coded in this reference; setting PORT or DATABASE_URL has no effect.
-
-## Obtain a clean reference and run it
-
-Use a fresh destination; do not replace an existing checkout or reset another member's work. These commands intentionally reproduce the unmerged PR snapshot, rather than claiming develop already includes the server.
-
-```sh
-git clone https://github.com/Sprint-1-Software-engineering/Sprint-1.git TutorBridge-auth-reference
-cd TutorBridge-auth-reference
-git switch --detach 7f3fa7735987dc59bc54be5257f9e2145c529a1c
+git clone --branch develop https://github.com/Sprint-1-Software-engineering/Sprint-1.git TutorBridge-sprint2
+cd TutorBridge-sprint2
 python3 src/server.py
 ```
 
-Windows: use `py -3` instead of `python3` if that is your installed launcher. It has not been independently tested on Windows. Once #58 is reviewed and integrated, use the reviewed develop/release commit instead of the pinned reference and rerun verification.
+On Windows, use `py -3` if that is the installed launcher. After the release tag exists, checkout the actual submitted tag in this fresh clone to reproduce the final source. Do not use the old pinned PR #58 reference as the final product.
 
-Open [registration](http://127.0.0.1:8000/register.html), then [login](http://127.0.0.1:8000/login.html). Use synthetic data, a teacher/student role and a 12-128-character password. Current screen text is inconsistent about password length; the server enforces 12-128 at registration. The dashboard contains sample data. These steps are for local demonstration, not a production deployment.
+Open `http://127.0.0.1:8000/register.html`, then `login.html`. Use synthetic accounts. Registration enforces a 12-128-character password; login checks submitted credentials without stating a conflicting minimum. The fixed port is 8000; environment variables do not change it. Keep the terminal open; Ctrl+C stops the server. Do not stop an unknown process if the port is occupied.
 
-## Startup, storage, shutdown and reset
+## Storage and limitations
 
-The server creates `data/tutorbridge.db` relative to the checkout, including its parent directory, on the first start. It initializes `users`, `auth_tokens` and an index. Accounts persist on disk. Tokens are stored with expiry; they are valid for one hour and remain on disk across restart until expired/cleaned. A successful login invalidates earlier tokens for that user. Database files are outside the served `src` directory.
+Startup creates `data/tutorbridge.db` outside the served `src` directory, with users and auth_tokens. Accounts persist across restart. A successful login replaces earlier tokens for that account; expiry is one hour. Logout removes the browser token only; server revocation is not implemented. Never commit the database, tokens, uploads or backups. For a disposable demo reset, stop the server and move its DB to private backup storage. Do not reset real data.
 
-The listener binds only `127.0.0.1:8000`. Keep the server terminal open; use Ctrl+C to stop it. If port 8000 is occupied, stop the known existing process or use a different isolated machine. There is no supported port configuration in this snapshot. Do not kill unknown processes.
+Implemented operations are registration, login and own profile. Connections, availability, bookings and assignments are planned. Both roles currently reach the same sample student dashboard (#61); Figma has separate designed role routes. The dashboard does not show live lesson or assignment data. Field error announcements, serving only frontend assets and login throttling are planned Sprint 3 work (#75). API source is currently accessible through `/server.py`; the source is also public in GitHub. No hosted-security or full-MVP acceptance is claimed.
 
-Restart with the same command to retain accounts. To reset a disposable demo, stop the server and move `data/tutorbridge.db` to a private backup outside the repository; startup creates a new database. Do not reset real user data. See [backup/restore design](Deployment-and-Recovery.md). Never commit databases, tokens, uploads or backups.
+## Repeatable checks
 
-## Implemented HTTP operations and limitations
-
-| Operation (prefix `/api/v1`) | Current reference behavior |
-|---|---|
-| POST /auth/register | Creates teacher/student accounts; salted PBKDF2 password hash; duplicate email 409 |
-| POST /auth/login | Valid credentials return opaque bearer token and expiresIn 3600; wrong password 401 |
-| GET /users/me | Returns own public profile; missing/invalid/expired bearer token 401 |
-
-Other designed invitation/availability/booking/assignment operations are not implemented here. Do not infer implementation from OpenAPI. The sample dashboard, teacher routing, placeholder links and browser-only logout are not accepted full product flows. Invalid email and null-name validation defects remain open in #58's source; the current contract says JWT although the code uses opaque tokens. The frontend assumes the fixed local address and has CORS limitations outside the documented same-origin URL. No browser E2E, production security or deployed-system success is claimed.
-
-## Repeatable checks from the DevOps branch
-
-Keep the auth reference in a separate directory. From the checkout containing this DevOps change:
+From the checkout, use a temporary environment for documentation dependencies:
 
 ```sh
 python3 -m venv /tmp/tutorbridge-docs-venv
 /tmp/tutorbridge-docs-venv/bin/python -m pip install -r requirements-docs.txt
 /tmp/tutorbridge-docs-venv/bin/python scripts/check_submission.py
-python3 scripts/check_sprint2.py
+python3 scripts/check_sprint2.py --release-ready
 python3 -m unittest discover -s tests -v
-python3 scripts/check_auth_environment.py --source-root ../TutorBridge-auth-reference --report /tmp/auth-environment.json
-python3 scripts/check_auth_environment.py --source-root ../TutorBridge-auth-reference --validation-probes --report /tmp/auth-validation.json
+python3 scripts/check_auth_environment.py --validation-probes --report /tmp/tutorbridge-auth-validation.json
 ```
 
-Use a user-selected temporary directory and its Python executable on Windows. The last command is expected to exit 1 while the two input defects remain; this is an actual failed acceptance probe, not a passing test. The checker copies only `src` into new temporary storage, starts the real server, uses synthetic accounts, stops it and removes generated data. It does not touch the reference checkout's database. Port 8000 must be free. Without `--source-root`, the script requires a server in the current checkout and exits with an error when absent.
+Use a suitable temporary path on Windows. Documentation checking needs the packages in requirements-docs.txt; application code itself has only standard-library dependencies. Git must be on PATH for delivery-tool tests. The auth runner copies source into temporary storage and uses synthetic accounts; port 8000 must be free. It does not use the real checkout's database. Current QA records 42 passing automated tests without expected failures; that is separate from the 15-check startup/storage/restart smoke and extra validation probes. Run checks again for the actual release commit and preserve the report.
 
-The unchanged `Sprint 1 checks` remains the existing required context. Sprint 2 structural checks do not imply complete team deliverables; `python3 scripts/check_sprint2.py --release-ready` also fails on missing proposed team document paths. The check does not inspect external-link access or prose quality. CI's integrated auth job is skipped explicitly when `src/server.py` is absent. A separately named pinned PR #58 job checks only the reference snapshot. No Berat/Mehmet automated test suite existed in the reviewed trees; integrate their agreed test command when one is actually authored, including its dependencies. This environment smoke is Osman's infrastructure verification and does not replace QA acceptance or coverage.
+## Final handoff
 
-## Independent reproduction and delivery
-
-Mehmet should repeat the clean-start procedure and Berat should inspect the failed probes and smoke/acceptance boundary. No independent teammate run has yet been recorded. Record actual name, date, commit, environment and observations after it happens. Review [submission gates](Submission-Checklist.md) before release. Never publish a reference snapshot as the final Sprint 2 submission.
-
-## Artifact source checks
-
-`check_sprint2.py` distinguishes artifact purposes. Put architecture and user-flow exports in Sprint 2 subdirectories named `diagrams`, `architecture`, `flows` or `user-flows`; their PNG/SVG/PDF exports require a same-stem `.mmd`, `.puml` or `.drawio` source. Images embedded in Architecture.md or User-Flows.md are checked too. Ordinary linked PDF reports are not classified as diagrams.
-
-Put Figma exports in `figma`, `screens`, `screenshots`, `ui`, `ui-ux` or `prototypes`, or reference screen images from UI-UX.md. They do not need Mermaid/PlantUML/draw.io siblings. Instead UI-UX.md must link to an HTTPS `figma.com/design/<file-key>` or `figma.com/file/<file-key>` source (www is accepted), or to a nonempty local `.fig` file. A `/proto/` preview alone is insufficient. PDF screen exports belong in a Figma directory or may be embedded as such; a plain PDF report link is exempt. Release-ready mode also requires the Figma source reference when UI-UX.md exists. This is a structural source-reference check: permissions, actual editability and `.fig` validity still need human verification. These directory conventions make classification explicit; adapt them deliberately if the team reorganizes artifacts.
+Use [Submission-Checklist.md](Submission-Checklist.md) and [Traceability.md](Traceability.md). Review a develop-to-main PR; after independent approval and merge, tag the final main commit with an unused Sprint 2 version. Build with `scripts/build_delivery.py` using that exact tag. Preview packages are labelled DRAFT. Keep ZIP delivery local/chat; no public asset upload. Verify live Teams attachment requirements and evaluator/Figma access before submission.
