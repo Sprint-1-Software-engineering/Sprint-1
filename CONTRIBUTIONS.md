@@ -42,7 +42,7 @@ Added 25 editable entry, recovery and calendar frames in the shared Figma design
 
 ### Sprint 2 - Process and traceability handover
 
-Prepared [Team and Process](docs/sprint-2/Team-and-Process.md) and [Traceability](docs/sprint-2/Traceability.md) on 24 November 2026 under [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81). Linked all 15 functional and 28 quality requirements to existing artifacts and evidence; updated stale integration notes and navigation. Toprak authored this handed-over documentation with computer assistance. No work or approval is attributed to an unavailable teammate. This does not reassign future implementation Issues. Independent review of this change and final release gates remain pending; the commit and PR are linked from Issue #81.
+Prepared [Team and Process](docs/sprint-2/Team-and-Process.md) and [Traceability](docs/sprint-2/Traceability.md) on 24 November 2026 under [#81](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/81). Linked all 15 functional and 28 quality requirements to existing artifacts and evidence; updated stale integration notes and navigation. Toprak authored this handed-over documentation with computer assistance. No work or approval is attributed to an unavailable teammate. This does not reassign future implementation Issues. Independent review of this change and final release gates remain pending; Evidence: [authored commit 76d93b9](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/76d93b994ccfa3784e61f5e793f04f49041dd16f), [PR #82](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/82).
 
 ## Berat Erdem Yalçın
 Student ID: 220201052 · GitHub: [@SunsetEva](https://github.com/SunsetEva)
