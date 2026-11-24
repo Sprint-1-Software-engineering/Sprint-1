@@ -35,9 +35,9 @@ Epic/Feature acceptance means all linked child criteria pass; their dependencies
 
 | Order | Story | Priority | SP | Owner | Prerequisites | Status |
 |---|---|---|---|---|---|---|
-| 1 | [US-01](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/15) Register an account | High | 3 | Mehmet Ali Demircioğlu | None | Partial code in unmerged PR #58; acceptance pending |
-| 2 | [US-02](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/16) Sign in | High | 3 | Mehmet Ali Demircioğlu | US-01 | Partial code in unmerged PR #58; acceptance pending |
-| 3 | [US-15](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) Read my current profile | High | 2 | Mehmet Ali Demircioğlu | US-02 | Partial code in unmerged PR #58; acceptance pending |
+| 1 | [US-01](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/15) Register an account | High | 3 | Mehmet Ali Demircioğlu | None | Auth code merged via PR #58/#79; QA evidence recorded; full story acceptance pending |
+| 2 | [US-02](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/16) Sign in | High | 3 | Mehmet Ali Demircioğlu | US-01 | Auth code merged via PR #58/#79; QA evidence recorded; full story acceptance pending |
+| 3 | [US-15](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) Read my current profile | High | 2 | Mehmet Ali Demircioğlu | US-02 | Auth code merged via PR #58/#79; QA evidence recorded; full story acceptance pending |
 | 4 | [US-03](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/17) Invite an existing student | High | 3 | Toprak Daldal | US-02 | Planned implementation |
 | 5 | [US-04](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/18) Accept a teacher invitation | High | 3 | Toprak Daldal | US-03 | Planned implementation |
 | 6 | [US-05](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/19) View my connections | High | 2 | Arda Demir | US-04 | Planned implementation |
@@ -60,7 +60,7 @@ Parent: [F-01](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/
 Depends: None
 Requirement: [FR-01](sprint-2/SRS.md#fr-01)
 API: `POST /auth/register`
-Status: Partial code in unmerged PR #58; acceptance pending.
+Status: Auth code merged via PR #58/#79; QA evidence recorded; full story acceptance pending.
 
 Acceptance criteria (not passed results):
 - **AC-01.1:** Given a string name (1-100 non-blank characters), a valid email (at most 254 characters), a string password (12-128 characters) and teacher/student role, registration creates one account and returns 201 with id, name, email and role only.
@@ -77,7 +77,7 @@ Parent: [F-01](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/
 Depends: [US-01](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/15)
 Requirement: [FR-02](sprint-2/SRS.md#fr-02)
 API: `POST /auth/login`
-Status: Partial code in unmerged PR #58; acceptance pending.
+Status: Auth code merged via PR #58/#79; QA evidence recorded; full story acceptance pending.
 
 Acceptance criteria (not passed results):
 - **AC-02.1:** Valid credentials return 200 with a bearer accessToken, tokenType Bearer and expiresIn 3600; the token identifies the account and its stored role.
@@ -292,8 +292,8 @@ As a signed-in teacher or student, I want to read my own profile so that the int
 Parent: [F-01](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/9) · Owner: Mehmet Ali Demircioğlu · Priority: High · Order: 3 · 2 SP
 Depends: [US-02](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/16)
 Requirement: [FR-15](sprint-2/SRS.md#fr-15)
-Contract addition awaiting [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58): `GET /users/me`. It is absent from the current develop contract; [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61) tracks integration.
-Status: Partial code in unmerged PR #58; acceptance pending.
+Contract operation integrated through [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58): `GET /users/me`. It is present in the develop contract; [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61) tracks remaining profile/role-entry acceptance.
+Status: Auth code merged via PR #58/#79; QA evidence recorded; full story acceptance pending.
 
 Acceptance criteria (not passed results):
 - **AC-15.1:** A valid session returns 200 with only the signed-in user id, name, email and teacher/student role, matching the User schema.
@@ -311,4 +311,4 @@ Release backlog: 15 stories, 15 tasks, 6 features and 3 epics. Profile addition 
 
 The previous API/backlog document consistency review in [PR #54](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/54) is historical evidence. It is not a runtime test result. This revision preserves the response-code intent and expands traceable acceptance criteria.
 
-Architecture/token/deployment decisions remain in SRS section 9. Figma, the dedicated NFR specification and Arda's broader traceability work remain separate team deliverables. AI, parents, payments, university OBS, teacher discovery, integrated video/chat, analytics and homework submission/feedback remain outside the MVP.
+Architecture/token/deployment decisions remain in SRS section 9. Figma, the dedicated NFR specification and the [cross-artifact traceability matrix](sprint-2/Traceability.md) remain separate team deliverables. AI, parents, payments, university OBS, teacher discovery, integrated video/chat, analytics and homework submission/feedback remain outside the MVP.

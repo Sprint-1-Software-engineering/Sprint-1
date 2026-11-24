@@ -35,8 +35,13 @@ The current local auth smoke checks cover registration and login. They do not ve
 - [Detailed SRS](docs/sprint-2/SRS.md)
 - [Refined product backlog](docs/Initial-Product-Backlog.md)
 - [Stakeholder validation guide](docs/sprint-2/Stakeholder-Validation-Guide.md)
+- [NFR and quality measures](docs/sprint-2/NFR-and-Quality-Measures.md)
+- [Review and test plan](docs/sprint-2/Review-and-Test-Plan.md)
+- [UI/UX handoff](docs/sprint-2/UI-UX.md)
+- [Team and process](docs/sprint-2/Team-and-Process.md)
+- [Cross-artifact traceability](docs/sprint-2/Traceability.md)
 
-These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 is merged and provides the local auth implementation input. The profile addition and unresolved technology decisions are identified in the SRS. The architecture proposal and editable diagrams are under review in [PR #70](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/70), not presented as approved or implemented. The Figma/UI-UX work is complete via merged [PR #69](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/69); remaining Sprint 2 work includes NFR, test and traceability deliverables.
+These requirements are prepared for peer review under [Issue #59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59). PR #58 is merged and provides the local auth implementation input. The profile addition and unresolved technology decisions are identified in the SRS. The architecture proposal and editable diagrams were merged in [PR #70](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/70), not presented as a fully implemented or production-approved system. The Figma/UI-UX work is complete via merged [PR #69](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/69); NFR and test records are integrated through PR #73/#77/#80. Final decisions and release checks remain open.
 
 ## Sprint 2 environment and delivery
 

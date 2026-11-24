@@ -40,8 +40,8 @@ Student IDs and RACI are in [the team record](../Team-Members-and-RACI.md). Actu
 
 - [ ] Each member records their own real Issue, commit, PR and review links; assignment alone is not completed-work evidence.
 - [ ] Every release-bound PR has another person's review of its latest changes; no self-approval or bypass merge.
-- [ ] Mehmet and Berat independently reproduce/check the [local procedure](Local-Development-and-Delivery.md); no teammate run is recorded yet.
-- [ ] Complete or locate the team/process record and cross-artifact traceability from FR/NFR to Issues, Figma, API, architecture and verification. The readiness tool currently reports `Team-and-Process.md` and `Traceability.md` missing. If equivalent evidence uses different team-agreed paths, link it and align the tooling before release.
+- [ ] Mehmet and Berat independently reproduce/check the [local procedure](Local-Development-and-Delivery.md); QA re-test evidence is in the [test plan](Review-and-Test-Plan.md); verify the exact local-delivery procedure separately before claiming independent reproduction.
+- [ ] Review the new [team/process record](Team-and-Process.md) and [traceability matrix](Traceability.md) under Issue #81. They link existing artifacts and record remaining decisions; their presence alone does not establish final release readiness. Toprak owns this handover.
 
 ## Access and CI gates
 
@@ -51,14 +51,14 @@ The 19 November collaborator listing contained `mhmttemin` with Read; `goksuyldr
 
 - [ ] Preserve required `Sprint 1 checks`, PR/review/conversation requirements and administrator enforcement.
 - [ ] Review successful CI logs on the exact integrated/release SHA, not an old feature or reference SHA.
-- [ ] Re-run integrated checks on the release candidate. The 23 November develop run discovered 42 tests (41 passed, one expected failure for #71) and passed the separate 15-check integrated smoke. See the [CI evidence](Verification-Report.md#23-november-2026--integrated-develop-verification).
+- [ ] Re-run integrated checks on the release candidate. The earlier 23 November develop run discovered 42 tests (41 passed, one expected failure for #71). After #79, QA records 42 passing tests with no expected failures and #71/#74 closed; #80 is merged. Preserve the older CI snapshot as history and add exact release-candidate runs. See the [CI evidence](Verification-Report.md#23-november-2026--integrated-develop-verification).
 - [ ] Run `python3 scripts/check_sprint2.py --release-ready`; adapt proposed file paths if the team agrees different names. This only checks structural integration, not full release approval.
 - [ ] Independently inspect Figma and remote document/diagram access; local-link validation is not permission verification.
 - [ ] Ensure no real secrets, student records, SQLite databases, uploads or backups are tracked or packaged.
 
 ## Release and package procedure
 
-The 23 November develop baseline includes merged Sprint 2 work. Complete the outstanding evidence and decisions before preparing the develop-to-main release. Refresh the [draft description](Release-PR-Draft.md) using the reviewed release candidate.
+The 23 November develop baseline includes merged Sprint 2 work. Process/traceability documents are added under #81; obtain their peer review. Complete the outstanding evidence and decisions, including the architecture BookingStatus naming inconsistency recorded in Traceability.md, before preparing the develop-to-main release. Refresh the [draft description](Release-PR-Draft.md) using the reviewed release candidate.
 
 - [ ] Integrate team artifacts via independently reviewed feature PRs into develop.
 - [ ] Refresh refs and open a **draft** develop -> main release PR with the prepared description and actual evidence. Fill in real Issue/PR/review, Figma and CI links.

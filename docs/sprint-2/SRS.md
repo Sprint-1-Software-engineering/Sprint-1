@@ -59,6 +59,8 @@ Other transitions are invalid. A malformed status value returns 400; an otherwis
 Each FR maps to an existing product story or the explicitly proposed profile story. Actor, precondition, trigger and acceptance criteria define its behavior; shared rules also apply. Acceptance criteria are requirements, not passed test results.
 
 <a id="fr-01"></a>
+<a id="fr-01"></a>
+
 ### FR-01: Register an account
 
 Actor: Teacher or student.
@@ -73,6 +75,8 @@ Contract operation(s): `POST /auth/register`.
 - **AC-01.4:** The password is stored as a salted hash; plaintext passwords, hashes and session secrets are absent from registration responses.
 
 <a id="fr-02"></a>
+<a id="fr-02"></a>
+
 ### FR-02: Sign in
 
 Actor: Registered user.
@@ -87,6 +91,8 @@ Contract operation(s): `POST /auth/login`.
 - **AC-02.4:** The client uses the authenticated profile to select the teacher or student journey; neither role is silently treated as the other. This UI requirement remains unaccepted in PR #58.
 
 <a id="fr-03"></a>
+<a id="fr-03"></a>
+
 ### FR-03: Invite an existing student
 
 Actor: Teacher.
@@ -101,6 +107,8 @@ Contract operation(s): `POST /invitations`.
 - **AC-03.4:** The teacher shares the code outside TutorBridge. Automatic email delivery is not required by this release.
 
 <a id="fr-04"></a>
+<a id="fr-04"></a>
+
 ### FR-04: Accept a teacher invitation
 
 Actor: Student.
@@ -115,6 +123,8 @@ Contract operation(s): `POST /invitations/accept`.
 - **AC-04.4:** A code is expired when server time reaches expiresAt. Invitations do not change the account role.
 
 <a id="fr-05"></a>
+<a id="fr-05"></a>
+
 ### FR-05: View my connections
 
 Actor: Teacher or student.
@@ -128,6 +138,8 @@ Contract operation(s): `GET /teachers/me/students; GET /students/me/teachers`.
 - **AC-05.3:** Results are ordered by name and contain at most 200 items. They contain no password, token or other account secret.
 
 <a id="fr-06"></a>
+<a id="fr-06"></a>
+
 ### FR-06: Publish availability
 
 Actor: Teacher.
@@ -141,6 +153,8 @@ Contract operation(s): `POST /availability`.
 - **AC-06.3:** An authenticated student receives 403. Adjacent intervals are permitted: one may end exactly when the next starts.
 
 <a id="fr-07"></a>
+<a id="fr-07"></a>
+
 ### FR-07: View teacher availability
 
 Actor: Connected student or owning teacher.
@@ -155,6 +169,8 @@ Contract operation(s): `GET /availability`.
 - **AC-07.4:** If date filters are supplied, apply the common half-open overlap rule in BR-06. Dates include offsets.
 
 <a id="fr-08"></a>
+<a id="fr-08"></a>
+
 ### FR-08: Remove an unused slot
 
 Actor: Teacher.
@@ -168,6 +184,8 @@ Contract operation(s): `DELETE /availability/{id}`.
 - **AC-08.3:** Wrong owner returns 403, unknown slot 404 and malformed id 400. Student accounts cannot delete teacher slots.
 
 <a id="fr-09"></a>
+<a id="fr-09"></a>
+
 ### FR-09: Request a lesson
 
 Actor: Connected student.
@@ -182,6 +200,8 @@ Contract operation(s): `POST /bookings`.
 - **AC-09.4:** An input/time conflict creates no extra booking. Cross-teacher student clashes remain an explicit decision in OD-06; this criterion does not claim their prevention.
 
 <a id="fr-10"></a>
+<a id="fr-10"></a>
+
 ### FR-10: Approve or reject a lesson
 
 Actor: Owning teacher.
@@ -196,6 +216,8 @@ Contract operation(s): `PATCH /bookings/{id}/status`.
 - **AC-10.4:** Overlap means start < otherEnd and end > otherStart. Adjacent lessons are allowed. The rule is checked at approval time, not only when the request is created.
 
 <a id="fr-11"></a>
+<a id="fr-11"></a>
+
 ### FR-11: View my lesson calendar
 
 Actor: Teacher or student.
@@ -209,6 +231,8 @@ Contract operation(s): `GET /bookings`.
 - **AC-11.3:** Results contain at most 200 items. Unrelated users cannot obtain another participant list by supplying their identity; ownership is session-derived.
 
 <a id="fr-12"></a>
+<a id="fr-12"></a>
+
 ### FR-12: Cancel a permitted lesson
 
 Actor: Booking participant.
@@ -222,6 +246,8 @@ Contract operation(s): `PATCH /bookings/{id}/status`.
 - **AC-12.3:** Rejected and cancelled are terminal states. A cancelled booking no longer blocks future approval or slot removal under the common rules.
 
 <a id="fr-13"></a>
+<a id="fr-13"></a>
+
 ### FR-13: Assign a homework file
 
 Actor: Teacher.
@@ -236,6 +262,8 @@ Contract operation(s): `POST /assignments`.
 - **AC-13.4:** Filenames are sanitized and files are stored outside public static paths. Responses expose protected metadata, not an unrestricted public storage URL.
 
 <a id="fr-14"></a>
+<a id="fr-14"></a>
+
 ### FR-14: Read my assignments
 
 Actor: Creating teacher or assigned student.
@@ -250,13 +278,15 @@ Contract operation(s): `GET /assignments; GET /assignments/{id}; GET /assignment
 - **AC-14.4:** Student homework submission, grading and feedback are outside this first release; retrieving an assigned file does not submit work.
 
 <a id="fr-15"></a>
+<a id="fr-15"></a>
+
 ### FR-15: Read my current profile
 
 Actor: Teacher or student.
 Precondition: The user has a valid authenticated session.
 Trigger: Request the current profile to initialize the user journey.
 Story: [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60). Owner: Mehmet Ali Demircioğlu.
-Proposed operation: `GET /users/me` is defined in unmerged [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58); develop contract integration is tracked in [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61).
+Integrated operation: `GET /users/me` was merged through [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58); remaining profile/role-entry acceptance is tracked in [T-15 / #61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61).
 
 - **AC-15.1:** A valid session returns 200 with only the signed-in user id, name, email and teacher/student role, matching the User schema.
 - **AC-15.2:** Missing, malformed, unknown or expired credentials return 401 and no profile. No password, hash or token is included in the profile.
@@ -297,7 +327,7 @@ Berat owns the separate Sprint 2 NFR and quality-measure specification: measurab
 
 Baseline reviewed for refinement: develop 1e50523cda7b06ece5b5be4927353390c4aab562 and unmerged PR #58 at 7f3fa7735987dc59bc54be5257f9e2145c529a1c (19 November 2026).
 
-PR #58 contains local Python/SQLite registration, login and profile code, plus static sample student dashboard content. An isolated review passed ten basic auth checks and reproduced two input failures: invalid@ email and JSON null name returned 201 rather than 400. Full browser behavior, teacher routing, Figma and the remaining domain operations are not accepted by that check. The bearer value is an opaque database-backed token although the old contract describes JWT; resolve OD-02.
+Historical review: the earlier PR #58 snapshot accepted invalid@ email and JSON null name with 201. Those failures are fixed in the integrated develop baseline. PR #58 and #79 are merged; OpenAPI now describes the local port 8000 and opaque bearer token. The [QA test plan](Review-and-Test-Plan.md) records 42 passing automated tests at 7fccc47 and a separate headless-browser review. Teacher routing still fails (#61); invitations, lessons and assignments remain unimplemented. Token concurrency/revocation decisions in OD-02 remain open. No broader product or usability acceptance is claimed.
 
 US-01, US-02 and US-15 therefore remain partial/unaccepted. Other stories remain planned implementation. Every accepted story needs its listed positive/error/boundary criteria, real evidence, contract alignment and peer review; a document addition or a proposed estimate does not satisfy implementation acceptance.
 
@@ -317,7 +347,7 @@ The following review also remains open: team confirmation of estimates/capacity.
 
 ## 10. Functional traceability and acceptance
 
-The table below is the requirements-side mapping. Arda's wider matrix will add real Figma, architecture and test artifact links when available. No missing artifact is replaced with an invented link.
+The table below is the requirements-side mapping. The [cross-artifact matrix](Traceability.md) adds Figma, architecture and test links; Toprak prepared this handover revision. No missing artifact is replaced with an invented link.
 
 | Requirement | Story / Issue | Contract operation(s) | Integration status |
 |---|---|---|---|
@@ -335,7 +365,7 @@ The table below is the requirements-side mapping. Arda's wider matrix will add r
 | [FR-12](#fr-12) | [US-12 / #26](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/26) | `PATCH /bookings/{id}/status` | Existing draft; runtime acceptance pending |
 | [FR-13](#fr-13) | [US-13 / #27](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/27) | `POST /assignments` | Existing draft; runtime acceptance pending |
 | [FR-14](#fr-14) | [US-14 / #28](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/28) | `GET /assignments; GET /assignments/{id}; GET /assignments/{id}/file` | Existing draft; runtime acceptance pending |
-| [FR-15](#fr-15) | [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) | `GET /users/me` | Proposed in #58; pending develop integration |
+| [FR-15](#fr-15) | [US-15 / #60](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/60) | `GET /users/me` | Integrated via #58; role-entry acceptance pending |
 
 A requirement is ready for implementation when its actor/value, rules, acceptance criteria, dependencies and contract impact are clear and blocking decisions have owners. Implementation is done only after criteria pass with actual evidence, correct contract/UI behavior, checks and teammate review. Sprint 2 document review alone does not close the implementation stories.
 
