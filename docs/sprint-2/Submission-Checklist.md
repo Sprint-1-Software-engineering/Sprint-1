@@ -1,7 +1,7 @@
 # Sprint 2 Submission Checklist
 
-Owner: Osman Berke Özdemir (@makucheez). Tracking: [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). DevOps implementation: [PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64), independent review pending.
-Readiness: **not ready for final submission**. Review date: 19 November 2026. These unchecked items are gates, not claims of completion.
+Owner: Osman Berke Özdemir (@makucheez). Tracking: [#63](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/63). DevOps implementation: [PR #64](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/64), merged into `develop` at [`defcf75`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/defcf7549109c20a39eb7fa23ce986df5115076a).
+Readiness: **candidate prepared; final peer review, access checks and release tag pending**. Review date: 24 November 2026. Repository evidence reflects the reviewed develop baseline in the [verification report](Verification-Report.md).
 
 ## Source and deadline
 
@@ -13,16 +13,15 @@ The supplied BM321 semester rubric places first working MVP and 50% unit-test co
 
 | Group | Owner / dependency | Current evidence and remaining gate |
 |---|---|---|
-| Detailed SRS and refined backlog | Toprak | [#59](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/59), [PR #62](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/62); open, awaiting review/integration |
-| NFR and quality-measure specification | Berat | Separate artifact not in reviewed develop/PR branches; real methods, thresholds, environment and result status needed |
-| Figma prototype and user flows | Kemal with Arda | No Figma file/prototype link or Sprint 2 flow sources found in reviewed trees; actual accessible Figma and flows required |
-| C4/UML architecture | Mehmet with Osman's deployment support | Full Architecture.md/C4/UML/schema set not in reviewed trees; [deployment handoff](Deployment-and-Recovery.md) is available but does not satisfy this entire group |
+| Detailed SRS and refined backlog | Toprak | [SRS](SRS.md) and [backlog](../Initial-Product-Backlog.md) merged in [PR #62](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/62) at [`ece4918`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/ece4918dbed158904ca31ce6bae0645549255633). Reconcile historical auth notes and close or explicitly defer the open SRS decisions. |
+| NFR and quality-measure specification | Berat | [NFRs](NFR-and-Quality-Measures.md), [review and test plan](Review-and-Test-Plan.md), auth QA suite and latency baseline script merged in [PR #73](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/73) at [`67e3ebf`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/67e3ebf67cbad5d3579907e5521328e9f137bb99). [PR #77](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/77) proposes follow-up documentation and review links and is still open at [`dedbfcb`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/dedbfcbc94a70dc24e83bb6e303e04a8c020ce3c). |
+| Figma prototype and user flows | Kemal with Arda | [UI/UX handoff](UI-UX.md) includes the editable design and prototype links, local .fig backup, PNG exports, editable Mermaid flows and SVGs. Completion merged in [PR #69](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/69) at [`fe10e2a`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/fe10e2ad107a72453ae3a0a88cc8cbbc51031e82). Confirm evaluator access and review export findings in [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76). |
+| C4/UML architecture | Mehmet with Osman's deployment support | [Architecture](Architecture.md) and editable Mermaid sources were introduced alongside the local auth prototype in [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58) at [`2bb7a4a`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/2bb7a4a5ee1cea2e73cc7a02f1acfbf42d797add), then updated in [PR #70](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/70) at [`ec696e3`](https://github.com/Sprint-1-Software-engineering/Sprint-1/commit/ec696e35de50affe53051a0f1aa45dab6160639c). C4 context/container, UML domain and auth/booking sequences are present. Stack and deployment choices still require a team decision. |
 
-- [ ] Integrate reviewed SRS and backlog; preserve existing Issue identities and resolve scope decisions.
-- [ ] Integrate NFR/quality and real test plan/report; distinguish targets, planned tests and observations.
-- [ ] Add real Figma file and prototype URLs and verify access as a reviewer; include user flows and readable exports.
-- [ ] Integrate C4/UML, database schema, interfaces and architecture decisions; pair diagram exports with editable sources.
-- [ ] Resolve Python/Express, opaque-token/JWT and 8000/3000 mismatches with owners; update SRS/OpenAPI/architecture/runbook consistently.
+- [x] Open the Figma design source and prototype in an unsigned-in browser: canvas and launcher rendered on 24 November. This is public-view verification, not authentication as a named evaluator. Review [#76](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/76) export findings and record their disposition. The handoff records representative prototype clicks by Toprak. QA full-journey review remains partial; the final access check is recorded in Verification-Report.md.
+- [ ] Review [PR #77](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/77) and resolve or explicitly defer open findings: [#71](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/71) expected auth failure, [#74](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/74) login password message, [#75](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/75) hardening/accessibility proposals and role routing in [#61](https://github.com/Sprint-1-Software-engineering/Sprint-1/issues/61). Keep QA baselines, proposed thresholds and planned browser, accessibility, usability and domain tests distinct.
+- [ ] Confirm the backend direction and local/hosted database choices, token lifecycle and logout/revocation, hosting/HTTPS, private file storage, monitoring, backup/recovery and migrations. Align the SRS, OpenAPI, architecture and runbook with recorded decisions. The integrated local baseline uses Python/SQLite and opaque bearer tokens at port 8000.
+- [ ] Record the disposition of remaining SRS decisions, including role entry, stakeholder validation, cross-teacher booking conflicts and pagination. Keep planned invitation, booking and assignment behavior distinct from the implemented auth slice.
 
 ## Team, contributions and review
 
@@ -41,26 +40,25 @@ Student IDs and RACI are in [the team record](../Team-Members-and-RACI.md). Actu
 
 - [ ] Each member records their own real Issue, commit, PR and review links; assignment alone is not completed-work evidence.
 - [ ] Every release-bound PR has another person's review of its latest changes; no self-approval or bypass merge.
-- [ ] Mehmet and Berat independently reproduce/check the [local procedure](Local-Development-and-Delivery.md); no teammate run is recorded yet.
-- [ ] Review [PR #58](https://github.com/Sprint-1-Software-engineering/Sprint-1/pull/58), reconcile its main target with Git-Flow, fix validation/role issues and integrate through the agreed workflow. Do not treat its basic smoke as complete story acceptance.
-- [ ] Check Arda's traceability from FR/NFR to Issue, Figma, API, architecture and verification; mark unimplemented runtime work honestly.
+- [ ] Mehmet and Berat independently reproduce/check the [local procedure](Local-Development-and-Delivery.md); QA re-test evidence is in the [test plan](Review-and-Test-Plan.md); verify the exact local-delivery procedure separately before claiming independent reproduction.
+- [x] Process handover: [team/process record](Team-and-Process.md) and [traceability matrix](Traceability.md) were reviewed by Berke and merged in PR #82. Their presence does not establish final release readiness. Toprak owns the handover.
 
 ## Access and CI gates
 
-19 November API observations using makucheez: both branches report protected; their branch summaries retain required context `Sprint 1 checks`, enforcement `everyone`. Detailed protection endpoints returned 404 with this Write account, and effective rules endpoints returned empty arrays. Exact approval settings could not be independently verified; the administrator must inspect them without weakening them. Historical workflow statements are not a fresh settings audit.
+23 November branch summaries using makucheez: both branches report protected; their branch summaries retain required context `Sprint 1 checks`, enforcement `everyone`. Confirm the full approval and conversation rules with a repository administrator.
 
-Accepted collaborator listing contains `mhmttemin` with Read; `goksuyldrm` and `nedima68` are absent. This confirms neither a pending invitation nor accepted access for those two accounts. The existing README asks for all three. An administrator must resolve the stated evaluator-access requirement and verify acceptance. No permissions were modified.
+On 24 November 2026 the accepted collaborator list contains `mhmttemin` with Read, but not `goksuyldrm` or `nedima68`. Toprak subsequently authorized Read invitations for both accounts and they were sent on 24 November. Confirm acceptance; public visibility is not a recorded named-account grant. The existing README asks for all three. An administrator must resolve the stated evaluator-access requirement and verify acceptance. No permissions were modified.
 
 - [ ] Preserve required `Sprint 1 checks`, PR/review/conversation requirements and administrator enforcement.
 - [ ] Review successful CI logs on the exact integrated/release SHA, not an old feature or reference SHA.
-- [ ] Run actual integrated auth/QA tests when present; skipped runtime checks do not establish tested application behavior.
+- [ ] Re-run integrated checks on the release candidate. The earlier 23 November develop run discovered 42 tests (41 passed, one expected failure for #71). After #79, QA records 42 passing tests with no expected failures and #71/#74 closed; #80 is merged. Preserve the older CI snapshot as history and add exact release-candidate runs. See the [CI evidence](Verification-Report.md#23-november-2026--integrated-develop-verification).
 - [ ] Run `python3 scripts/check_sprint2.py --release-ready`; adapt proposed file paths if the team agrees different names. This only checks structural integration, not full release approval.
 - [ ] Independently inspect Figma and remote document/diagram access; local-link validation is not permission verification.
 - [ ] Ensure no real secrets, student records, SQLite databases, uploads or backups are tracked or packaged.
 
 ## Release and package procedure
 
-At this review develop is an ancestor of main with no release content difference; Sprint 2 feature PRs are not integrated. GitHub cannot create a meaningful develop -> main release PR yet. [A concrete draft description](Release-PR-Draft.md) is prepared; do not create an empty placeholder PR or merge features just to make it possible.
+The 23 November develop baseline includes merged Sprint 2 work. Process/traceability documents were reviewed and merged via #82. Record remaining technical deferrals and complete access/evidence checks, with the BookingStatus naming correction in this final-preparation candidate reviewed, before preparing the develop-to-main release. Refresh the [draft description](Release-PR-Draft.md) using the reviewed release candidate.
 
 - [ ] Integrate team artifacts via independently reviewed feature PRs into develop.
 - [ ] Refresh refs and open a **draft** develop -> main release PR with the prepared description and actual evidence. Fill in real Issue/PR/review, Figma and CI links.

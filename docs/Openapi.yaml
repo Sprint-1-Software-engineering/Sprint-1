@@ -6,7 +6,7 @@ info:
     parent API. Not an implemented service.
   license: {name: MIT, url: 'https://github.com/Sprint-1-Software-engineering/Sprint-1/blob/develop/LICENSE.md'}
 servers:
-- {url: 'http://localhost:3000/api/v1', description: Planned local development server; not deployed.}
+- {url: 'http://127.0.0.1:8000/api/v1', description: Local development server implemented for auth; not deployed.}
 security:
 - {bearerAuth: []}
 tags:
@@ -52,6 +52,17 @@ paths:
         required: true
         content:
           application/json: {schema: {$ref: '#/components/schemas/Login'}}
+  /users/me:
+    get:
+      operationId: getCurrentUser
+      tags: [Accounts]
+      summary: Get the signed-in user's profile
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json: {schema: {$ref: '#/components/schemas/User'}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
   /invitations:
     post:
       operationId: createInvitation
@@ -243,7 +254,7 @@ paths:
       summary: Assign a PDF or image
       description: Teacher only; student must be connected. Require multipart studentId, title and file. Accept PDF/JPEG/PNG
         up to 10 MiB. Check actual type, sanitize names and store outside public static files. Do not expose an unrestricted
-        URL.
+        URL. An unknown referenced student returns 404.
       responses:
         '201':
           description: Assign a PDF or image
@@ -317,8 +328,8 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
-      description: One-hour token from login. Authentication does not replace role/relationship checks.
+      bearerFormat: Opaque
+      description: One-hour random database-backed bearer token from login. Authentication does not replace role/relationship checks.
   schemas:
     Register:
       type: object
@@ -352,7 +363,7 @@ components:
       additionalProperties: false
       required: [accessToken, tokenType, expiresIn]
       properties:
-        accessToken: {type: string, description: Signed token. Do not log it.}
+        accessToken: {type: string, description: Random opaque bearer token stored in the local implementation. Do not log it.}
         tokenType: {type: string, enum: [Bearer]}
         expiresIn: {type: integer, enum: [3600]}
       example: {accessToken: example-token-not-a-credential, tokenType: Bearer, expiresIn: 3600}

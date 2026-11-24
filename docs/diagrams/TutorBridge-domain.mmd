@@ -1,0 +1,77 @@
+classDiagram
+  class User {
+    +UUID id
+    +string name
+    +string email
+    +Role role
+    +datetime createdAt
+  }
+  class AuthToken {
+    +string token
+    +UUID userId
+    +datetime expiresAt
+  }
+  class Invitation {
+    +UUID id
+    +UUID teacherId
+    +string studentEmail
+    +string code
+    +datetime expiresAt
+    +boolean used
+  }
+  class Relationship {
+    +UUID teacherId
+    +UUID studentId
+    +datetime createdAt
+  }
+  class Availability {
+    +UUID id
+    +UUID teacherId
+    +datetime startTime
+    +datetime endTime
+  }
+  class Booking {
+    +UUID id
+    +UUID teacherId
+    +UUID studentId
+    +UUID availabilityId
+    +datetime startTime
+    +datetime endTime
+    +BookingStatus status
+  }
+  class Assignment {
+    +UUID id
+    +UUID teacherId
+    +UUID studentId
+    +string title
+    +string instructions
+    +datetime createdAt
+  }
+  class AssignmentFile {
+    +UUID id
+    +UUID assignmentId
+    +string storageKey
+    +string fileName
+    +string mediaType
+    +integer sizeBytes
+  }
+  class Role {
+    <<enumeration>>
+    teacher
+    student
+  }
+  class BookingStatus {
+    <<enumeration>>
+    pending
+    approved
+    rejected
+    cancelled
+  }
+  User "1" --> "0..*" AuthToken : owns
+  User "1" --> "0..*" Invitation : teacher
+  User "1" --> "0..*" Relationship : teacher or student
+  User "1" --> "0..*" Availability : publishes
+  Availability "1" --> "0..*" Booking : requested slot
+  User "1" --> "0..*" Booking : teacher or student
+  Relationship "1" --> "0..*" Assignment : authorizes access
+  Assignment "1" *-- "0..*" AssignmentFile : contains

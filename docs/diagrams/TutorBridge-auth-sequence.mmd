@@ -1,0 +1,23 @@
+sequenceDiagram
+  actor User
+  participant Browser as Browser UI
+  participant API as TutorBridge API
+  participant DB as SQLite database
+  User->>Browser: Submit registration details
+  Browser->>API: POST /api/v1/auth/register (JSON)
+  API->>API: Validate fields and hash password with random salt
+  API->>DB: Insert user and password hash
+  DB-->>API: User record
+  API-->>Browser: 201 user profile (no password hash)
+  User->>Browser: Submit email and password
+  Browser->>API: POST /api/v1/auth/login (JSON)
+  API->>DB: Find user by normalized email
+  DB-->>API: User record and password hash
+  API->>API: Verify password and create random opaque token
+  API->>DB: Store token with expiry
+  DB-->>API: Token record
+  API-->>Browser: 200 opaque bearer token
+  Browser->>API: GET /api/v1/users/me (Authorization: Bearer token)
+  API->>DB: Look up token, expiry and associated user
+  DB-->>API: Public user profile
+  API-->>Browser: 200 public user profile

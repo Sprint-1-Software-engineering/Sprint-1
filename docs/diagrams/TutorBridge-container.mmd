@@ -1,0 +1,19 @@
+C4Container
+  title TutorBridge - Container View
+  Person(teacher, "Teacher")
+  Person(student, "Student")
+  System_Boundary(tb, "TutorBridge") {
+    Container(browser, "Browser UI", "HTML, CSS, JavaScript", "Registration, sign-in, role-oriented views and lesson/assignment screens")
+    Container(api, "TutorBridge API", "Python 3 standard-library HTTP server", "Validates requests, authenticates users and applies domain authorization")
+    ContainerDb(db, "Application database", "SQLite (local baseline)", "Accounts, tokens and planned connection, availability, booking and assignment metadata")
+    Container(files, "Private assignment storage", "Filesystem (local baseline)", "Assignment bytes, not publicly served static assets")
+  }
+  System_Ext(whatsapp, "WhatsApp", "Optional external invitation/message channel")
+  System_Ext(meet, "Google Meet", "External lesson meeting tool")
+  Rel(teacher, browser, "Uses")
+  Rel(student, browser, "Uses")
+  Rel(browser, api, "HTTPS/JSON in deployment; HTTP on localhost")
+  Rel(api, db, "Reads and writes through parameterized SQL and transactions")
+  Rel(api, files, "Stores and streams files after authorization")
+  Rel(teacher, whatsapp, "May share an invitation outside the system")
+  Rel(teacher, meet, "May hold a lesson outside the system")
